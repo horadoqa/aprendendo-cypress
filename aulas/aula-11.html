@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 11 — Estrutura de uma Spec</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 11 • ESTRUTURA DE UMA SPEC
+            </span>
+
+            <h1>
+                Estrutura de uma Spec
+            </h1>
+
+            <p>
+                Aprenda como organizar arquivos de teste no Cypress
+                utilizando describe, it, context e hooks.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+         OBJETIVOS DA AULA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Na aula anterior, criamos nosso primeiro teste e
+                entendemos como o Cypress executa uma especificação.
+            </p>
+
+            <p>
+                Agora vamos aprofundar a estrutura de uma spec e
+                aprender como organizar cenários, agrupamentos e
+                comportamentos que precisam ser executados antes
+                ou depois dos testes.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📄
+                    </div>
+
+                    <h3>
+                        Entender uma Spec
+                    </h3>
+
+                    <p>
+                        Compreender o que é um arquivo de especificação
+                        e qual é sua responsabilidade.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🗂️
+                    </div>
+
+                    <h3>
+                        Organizar testes
+                    </h3>
+
+                    <p>
+                        Utilizar describe e context para organizar
+                        cenários relacionados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Criar casos de teste
+                    </h3>
+
+                    <p>
+                        Utilizar it para representar comportamentos
+                        que devem ser validados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔄
+                    </div>
+
+                    <h3>
+                        Utilizar hooks
+                    </h3>
+
+                    <p>
+                        Executar ações antes ou depois dos testes
+                        utilizando before, beforeEach, after e afterEach.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         O QUE É SPEC
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é uma Spec?
+            </h2>
+
+            <p>
+                No Cypress, uma <strong>spec</strong> é um arquivo
+                que contém testes automatizados relacionados a
+                determinado comportamento ou funcionalidade.
+            </p>
+
+            <p>
+                Normalmente, as specs ficam dentro do diretório
+                <strong>cypress/e2e</strong>.
+            </p>
+
+            <pre><code>cypress/
+
+└── e2e/
+
+├── login.cy.js
+├── cadastro.cy.js
+└── produtos.cy.js</code></pre>
+
+            <p>
+                Cada arquivo pode representar uma funcionalidade,
+                fluxo ou conjunto de cenários relacionados.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    📄 <strong>Spec</strong>
+                    → arquivo que contém os testes.
+                </p>
+
+                <p>
+                    🧪 <strong>Teste</strong>
+                    → cenário que valida um comportamento.
+                </p>
+
+                <p>
+                    🗂️ <strong>Grupo</strong>
+                    → conjunto de testes relacionados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ESTRUTURA BÁSICA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Estrutura básica de uma Spec
+            </h2>
+
+            <p>
+                Uma spec simples pode possuir um agrupamento
+                <strong>describe</strong> e um ou mais testes
+                utilizando <strong>it</strong>.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve realizar login com sucesso'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'[data-cy="email"]'</span>)
+        .type(<span class="sql-string">'usuario@email.com'</span>)
+
+    cy.get(<span class="sql-string">'[data-cy="senha"]'</span>)
+        .type(<span class="sql-string">'123456'</span>)
+
+    cy.get(<span class="sql-string">'[data-cy="entrar"]'</span>)
+        .click()
+
+})
+
+})</code></pre>
+
+            <p>
+                Nesse exemplo temos dois elementos principais:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🗂️
+                    </div>
+
+                    <h3>
+                        describe()
+                    </h3>
+
+                    <p>
+                        Agrupa testes que possuem uma relação
+                        entre si.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        it()
+                    </h3>
+
+                    <p>
+                        Representa um caso de teste específico.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         DESCRIBE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Utilizando describe()
+            </h2>
+
+            <p>
+                O <strong>describe()</strong> é utilizado para criar
+                um agrupamento de testes.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+// testes relacionados ao login
+
+})</code></pre>
+
+            <p>
+                Podemos utilizar o nome da funcionalidade como
+                identificação do grupo.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Cadastro de usuário'</span>, () =&gt; {
+
+})
+
+describe(<span class="sql-string">'Login de usuário'</span>, () => {
+
+})
+
+describe(<span class="sql-string">'Produtos'</span>, () => {
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Utilize nomes que deixem claro qual funcionalidade
+                    ou comportamento está sendo testado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         IT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Utilizando it()
+            </h2>
+
+            <p>
+                O <strong>it()</strong> representa um caso de teste.
+            </p>
+
+            <p>
+                Dentro dele colocamos as ações e validações que
+                devem ser executadas.
+            </p>
+
+            <pre><code>it(<span class="sql-string">'deve exibir a página inicial'</span>, () =&gt; {
+
+cy.visit(<span class="sql-string">'/'</span>)
+
+cy.get(<span class="sql-string">'h1'</span>)
+    .should(<span class="sql-string">'be.visible'</span>)
+
+})</code></pre>
+
+            <p>
+                Podemos criar vários testes dentro de um mesmo
+                <strong>describe()</strong>.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Página inicial'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve carregar a página'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/'</span>)
+
+})
+
+it(<span class="sql-string">'deve exibir o título'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/'</span>)
+
+    cy.get(<span class="sql-string">'h1'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+
+})
+
+})</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+         DESCRIBE E IT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Relação entre describe() e it()
+            </h2>
+
+            <p>
+                Podemos pensar no <strong>describe()</strong> como
+                um grupo e no <strong>it()</strong> como um teste
+                pertencente a esse grupo.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🗂️ <strong>describe</strong>
+                    → funcionalidade.
+                </p>
+
+                <p>
+                    🧪 <strong>it</strong>
+                    → comportamento que será validado.
+                </p>
+
+            </div>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve permitir login válido'</span>, () =&gt; {
+
+})
+
+it(<span class="sql-string">'deve impedir login com senha inválida'</span>, () =&gt; {
+
+})
+
+it(<span class="sql-string">'deve exibir mensagem de erro'</span>, () =&gt; {
+
+})
+
+})</code></pre>
+
+            <p>
+                Dessa forma, conseguimos organizar vários cenários
+                relacionados à mesma funcionalidade.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         CONTEXT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Utilizando context()
+            </h2>
+
+            <p>
+                O <strong>context()</strong> também pode ser utilizado
+                para organizar testes relacionados a uma determinada
+                situação ou contexto.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+context(<span class="sql-string">'quando o usuário informa dados válidos'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve realizar login'</span>, () =&gt; {
+
+    })
+
+})
+
+})</code></pre>
+
+            <p>
+                Podemos criar diferentes contextos dentro de uma
+                mesma funcionalidade.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+context(<span class="sql-string">'com dados válidos'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve realizar login'</span>, () =&gt; {
+
+    })
+
+})
+
+context(<span class="sql-string">'com dados inválidos'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve exibir mensagem de erro'</span>, () =&gt; {
+
+    })
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    O <strong>context()</strong> é uma forma de
+                    organizar semanticamente os testes. Ele não
+                    cria uma execução especial diferente do
+                    <strong>describe()</strong>.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CONTEXT NA PRÁTICA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Organizando cenários com context()
+            </h2>
+
+            <p>
+                Imagine que estamos testando uma tela de login.
+                Podemos separar os cenários de acordo com os dados
+                utilizados.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+context(<span class="sql-string">'usuário válido'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve acessar o sistema'</span>, () =&gt; {
+
+        cy.visit(<span class="sql-string">'/login'</span>)
+
+        // teste
+
+    })
+
+})
+
+context(<span class="sql-string">'usuário inválido'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve impedir o acesso'</span>, () =&gt; {
+
+        cy.visit(<span class="sql-string">'/login'</span>)
+
+        // teste
+
+    })
+
+})
+
+})</code></pre>
+
+            <p>
+                Essa estrutura facilita a leitura da spec e ajuda
+                a identificar rapidamente qual cenário está sendo
+                validado.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         HOOKS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                7. O que são Hooks?
+            </h2>
+
+            <p>
+                Hooks são funções utilizadas para executar
+                determinadas ações antes ou depois dos testes.
+            </p>
+
+            <p>
+                Os principais hooks do Cypress são:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⏮️
+                    </div>
+
+                    <h3>
+                        before()
+                    </h3>
+
+                    <p>
+                        Executado uma vez antes de todos os testes
+                        do grupo.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔄
+                    </div>
+
+                    <h3>
+                        beforeEach()
+                    </h3>
+
+                    <p>
+                        Executado antes de cada teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔚
+                    </div>
+
+                    <h3>
+                        after()
+                    </h3>
+
+                    <p>
+                        Executado uma vez depois de todos os testes
+                        do grupo.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔁
+                    </div>
+
+                    <h3>
+                        afterEach()
+                    </h3>
+
+                    <p>
+                        Executado depois de cada teste.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         BEFORE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Utilizando before()
+            </h2>
+
+            <p>
+                O <strong>before()</strong> é executado uma vez antes
+                dos testes pertencentes ao grupo.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Produtos'</span>, () =&gt; {
+
+before(() =&gt; {
+
+    cy.visit(<span class="sql-string">'/produtos'</span>)
+
+})
+
+it(<span class="sql-string">'deve exibir os produtos'</span>, () =&gt; {
+
+    cy.get(<span class="sql-string">'.produto'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+
+})
+
+it(<span class="sql-string">'deve exibir o título'</span>, () =&gt; {
+
+    cy.get(<span class="sql-string">'h1'</span>)
+        .should(<span class="sql-string">'contain'</span>, <span class="sql-string">'Produtos'</span>)
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <strong>Atenção:</strong>
+
+                <p>
+                    O <strong>before()</strong> é executado uma vez
+                    por execução do grupo de testes. Ele não é
+                    repetido automaticamente antes de cada teste.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         BEFORE EACH
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Utilizando beforeEach()
+            </h2>
+
+            <p>
+                O <strong>beforeEach()</strong> é executado antes
+                de cada teste.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+beforeEach(() =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+})
+
+it(<span class="sql-string">'deve exibir o formulário'</span>, () =&gt; {
+
+    cy.get(<span class="sql-string">'form'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+
+})
+
+it(<span class="sql-string">'deve exibir o campo de email'</span>, () =&gt; {
+
+    cy.get(<span class="sql-string">'input[type="email"]'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+
+})
+
+})</code></pre>
+
+            <p>
+                Nesse exemplo, a página de login será acessada
+                antes de cada teste.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🔄 <strong>beforeEach()</strong>
+                    → executa novamente antes de cada teste.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         AFTER
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Utilizando after()
+            </h2>
+
+            <p>
+                O <strong>after()</strong> é executado uma vez
+                depois que todos os testes do grupo forem concluídos.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Cadastro'</span>, () =&gt; {
+
+after(() =&gt; {
+
+    cy.log(<span class="sql-string">'Finalizando testes de cadastro'</span>)
+
+})
+
+it(<span class="sql-string">'deve permitir cadastro'</span>, () =&gt; {
+
+    // teste
+
+})
+
+it(<span class="sql-string">'deve validar email'</span>, () =&gt; {
+
+    // teste
+
+})
+
+})</code></pre>
+
+            <p>
+                O hook será executado depois dos testes pertencentes
+                ao grupo.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         AFTER EACH
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Utilizando afterEach()
+            </h2>
+
+            <p>
+                O <strong>afterEach()</strong> é executado depois
+                de cada teste.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Produtos'</span>, () =&gt; {
+
+afterEach(() =&gt; {
+
+    cy.log(<span class="sql-string">'Teste finalizado'</span>)
+
+})
+
+it(<span class="sql-string">'deve listar produtos'</span>, () =&gt; {
+
+    // teste
+
+})
+
+it(<span class="sql-string">'deve permitir adicionar produto'</span>, () =&gt; {
+
+    // teste
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🔁 <strong>afterEach()</strong>
+                    → executa depois de cada teste.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CICLO DOS HOOKS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Ordem de execução
+            </h2>
+
+            <p>
+                Quando utilizamos hooks, é importante entender
+                a ordem em que eles são executados.
+            </p>
+
+            <pre><code>before()
+
+beforeEach()
+
+it()
+
+afterEach()
+
+beforeEach()
+
+it()
+
+afterEach()
+
+after()</code></pre>
+
+            <p>
+                Considerando dois testes dentro de um grupo,
+                temos aproximadamente esta sequência:
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    1️⃣ <strong>before()</strong>
+                </p>
+
+                <p>
+                    2️⃣ <strong>beforeEach()</strong>
+                </p>
+
+                <p>
+                    3️⃣ <strong>Primeiro teste</strong>
+                </p>
+
+                <p>
+                    4️⃣ <strong>afterEach()</strong>
+                </p>
+
+                <p>
+                    5️⃣ <strong>beforeEach()</strong>
+                </p>
+
+                <p>
+                    6️⃣ <strong>Segundo teste</strong>
+                </p>
+
+                <p>
+                    7️⃣ <strong>afterEach()</strong>
+                </p>
+
+                <p>
+                    8️⃣ <strong>after()</strong>
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         SPEC COMPLETA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Construindo uma Spec completa
+            </h2>
+
+            <p>
+                Agora podemos combinar describe, context, it e
+                beforeEach em uma mesma spec.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+beforeEach(() =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+})
+
+context(<span class="sql-string">'com dados válidos'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve realizar login com sucesso'</span>, () =&gt; {
+
+        cy.get(<span class="sql-string">'[data-cy="email"]'</span>)
+            .type(<span class="sql-string">'usuario@email.com'</span>)
+
+        cy.get(<span class="sql-string">'[data-cy="senha"]'</span>)
+            .type(<span class="sql-string">'123456'</span>)
+
+        cy.get(<span class="sql-string">'[data-cy="entrar"]'</span>)
+            .click()
+
+    })
+
+})
+
+context(<span class="sql-string">'com dados inválidos'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve exibir mensagem de erro'</span>, () =&gt; {
+
+        cy.get(<span class="sql-string">'[data-cy="email"]'</span>)
+            .type(<span class="sql-string">'email-invalido'</span>)
+
+        cy.get(<span class="sql-string">'[data-cy="senha"]'</span>)
+            .type(<span class="sql-string">'senha-incorreta'</span>)
+
+        cy.get(<span class="sql-string">'[data-cy="entrar"]'</span>)
+            .click()
+
+        cy.get(<span class="sql-string">'.mensagem-erro'</span>)
+            .should(<span class="sql-string">'be.visible'</span>)
+
+    })
+
+})
+
+})</code></pre>
+
+            <p>
+                Essa estrutura já permite criar suítes de testes
+                organizadas e fáceis de compreender.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         NESTING
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Agrupando testes
+            </h2>
+
+            <p>
+                Podemos criar grupos dentro de outros grupos quando
+                isso fizer sentido para representar a estrutura
+                funcional da aplicação.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'E-commerce'</span>, () =&gt; {
+
+describe(<span class="sql-string">'Produtos'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve listar produtos'</span>, () =&gt; {
+
+    })
+
+})
+
+describe(<span class="sql-string">'Carrinho'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve adicionar produto'</span>, () =&gt; {
+
+    })
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Evite criar muitos níveis de agrupamento.
+                    A estrutura deve facilitar a leitura, e não
+                    tornar o teste mais difícil de compreender.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         NOMES
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Como escrever bons nomes para os testes
+            </h2>
+
+            <p>
+                O nome do teste deve explicar claramente qual
+                comportamento está sendo validado.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Nome pouco descritivo
+                    </h3>
+
+                    <p>
+                        <strong>teste login</strong>
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Nome descritivo
+                    </h3>
+
+                    <p>
+                        <strong>
+                            deve realizar login com credenciais válidas
+                        </strong>
+                    </p>
+
+                </div>
+
+            </div>
+
+            <p>
+                Um bom nome ajuda a entender rapidamente o objetivo
+                do teste quando ele passa ou falha.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         ISOLAMENTO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                16. Evitando dependência entre testes
+            </h2>
+
+            <p>
+                Cada teste deve ser construído de forma que possa
+                ser executado de maneira independente sempre que
+                possível.
+            </p>
+
+            <p>
+                Evite criar uma situação em que um teste dependa
+                obrigatoriamente do resultado de outro teste.
+            </p>
+
+            <pre><code>it(<span class="sql-string">'deve criar usuário'</span>, () =&gt; {
+
+// cria usuário
+
+})
+
+it(<span class="sql-string">'deve editar usuário'</span>, () => {
+
+// não deve depender da execução anterior
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Cada teste deve preparar o estado necessário
+                    para validar seu próprio comportamento.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         SKIP E ONLY
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                17. Controle de execução dos testes
+            </h2>
+
+            <p>
+                Durante o desenvolvimento, o Cypress permite
+                controlar temporariamente quais testes serão
+                executados.
+            </p>
+
+            <p>
+                Podemos utilizar <strong>.skip()</strong> para
+                ignorar um teste.
+            </p>
+
+            <pre><code>it.skip(<span class="sql-string">'teste temporariamente ignorado'</span>, () =&gt; {
+
+// teste
+
+})</code></pre>
+
+            <p>
+                Também existe <strong>.only()</strong>, que pode
+                ser utilizada temporariamente para executar
+                apenas determinado teste ou grupo.
+            </p>
+
+            <pre><code>it.only(<span class="sql-string">'executar somente este teste'</span>, () =&gt; {
+
+// teste
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <strong>Atenção:</strong>
+
+                <p>
+                    O uso de <strong>.only()</strong> deve ser
+                    temporário. Antes de enviar o código para o
+                    repositório, verifique se nenhum teste ficou
+                    acidentalmente marcado como only.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ORGANIZAÇÃO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                18. Organização recomendada
+            </h2>
+
+            <p>
+                Uma spec pode ser organizada seguindo uma estrutura
+                semelhante a esta:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Funcionalidade'</span>, () =&gt; {
+
+before(() =&gt; {
+
+    // preparação geral
+
+})
+
+beforeEach(() =&gt; {
+
+    // preparação antes de cada teste
+
+})
+
+context(<span class="sql-string">'cenário 1'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve realizar comportamento esperado'</span>, () =&gt; {
+
+        // teste
+
+    })
+
+})
+
+context(<span class="sql-string">'cenário 2'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve apresentar comportamento esperado'</span>, () =&gt; {
+
+        // teste
+
+    })
+
+})
+
+afterEach(() =&gt; {
+
+    // limpeza após cada teste
+
+})
+
+after(() =&gt; {
+
+    // finalização
+
+})
+
+})</code></pre>
+
+            <p>
+                Nem toda spec precisa utilizar todos esses elementos.
+                Utilize apenas aqueles que realmente ajudam na
+                organização do teste.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         ERROS COMUNS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns na estrutura de uma Spec
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Testes sem organização
+                    </h3>
+
+                    <p>
+                        Colocar muitos testes diferentes no mesmo
+                        arquivo sem agrupamento adequado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Nomes genéricos
+                    </h3>
+
+                    <p>
+                        Utilizar nomes que não explicam o comportamento
+                        validado pelo teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Dependência entre testes
+                    </h3>
+
+                    <p>
+                        Fazer um teste depender obrigatoriamente
+                        do resultado de outro.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Uso excessivo de hooks
+                    </h3>
+
+                    <p>
+                        Colocar muita lógica em hooks e dificultar
+                        a compreensão do comportamento de cada teste.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         BOAS PRÁTICAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas para Specs
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Tenha um objetivo claro
+                    </h3>
+
+                    <p>
+                        Cada spec deve possuir um propósito relacionado
+                        às funcionalidades que está validando.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        Use nomes descritivos
+                    </h3>
+
+                    <p>
+                        Os nomes devem explicar claramente o cenário
+                        e o comportamento esperado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Organize por contexto
+                    </h3>
+
+                    <p>
+                        Utilize describe e context para separar
+                        cenários relacionados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔄
+                    </div>
+
+                    <h3>
+                        Use hooks com propósito
+                    </h3>
+
+                    <p>
+                        Utilize hooks para comportamentos realmente
+                        compartilhados entre os testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Mantenha os testes independentes
+                    </h3>
+
+                    <p>
+                        Evite que um teste dependa da execução
+                        anterior de outro teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧹
+                    </div>
+
+                    <h3>
+                        Evite complexidade desnecessária
+                    </h3>
+
+                    <p>
+                        Uma estrutura simples geralmente é mais
+                        fácil de entender e manter.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CHECKLIST
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o que é uma Spec.
+                </p>
+
+                <p>
+                    ☐ Sei onde ficam os arquivos E2E.
+                </p>
+
+                <p>
+                    ☐ Entendi o funcionamento do describe().
+                </p>
+
+                <p>
+                    ☐ Entendi o funcionamento do it().
+                </p>
+
+                <p>
+                    ☐ Sei utilizar context().
+                </p>
+
+                <p>
+                    ☐ Entendi o objetivo dos hooks.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar before().
+                </p>
+
+                <p>
+                    ☐ Sei utilizar beforeEach().
+                </p>
+
+                <p>
+                    ☐ Sei utilizar after().
+                </p>
+
+                <p>
+                    ☐ Sei utilizar afterEach().
+                </p>
+
+                <p>
+                    ☐ Entendi a ordem básica de execução dos hooks.
+                </p>
+
+                <p>
+                    ☐ Sei organizar cenários relacionados.
+                </p>
+
+                <p>
+                    ☐ Entendi a importância de testes independentes.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar skip e only temporariamente.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         RESUMO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    📄 <strong>Spec</strong>
+                    → arquivo que contém os testes.
+                </p>
+
+                <p>
+                    🗂️ <strong>describe()</strong>
+                    → agrupa testes relacionados.
+                </p>
+
+                <p>
+                    🧪 <strong>it()</strong>
+                    → representa um caso de teste.
+                </p>
+
+                <p>
+                    🧩 <strong>context()</strong>
+                    → organiza testes de acordo com um contexto.
+                </p>
+
+                <p>
+                    ⏮️ <strong>before()</strong>
+                    → executa uma vez antes dos testes do grupo.
+                </p>
+
+                <p>
+                    🔄 <strong>beforeEach()</strong>
+                    → executa antes de cada teste.
+                </p>
+
+                <p>
+                    🔚 <strong>after()</strong>
+                    → executa uma vez depois dos testes do grupo.
+                </p>
+
+                <p>
+                    🔁 <strong>afterEach()</strong>
+                    → executa depois de cada teste.
+                </p>
+
+                <p>
+                    ⏭️ <strong>.skip()</strong>
+                    → ignora temporariamente um teste.
+                </p>
+
+                <p>
+                    🎯 <strong>.only()</strong>
+                    → executa temporariamente apenas determinado
+                    teste ou grupo.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você já conhece os principais elementos utilizados
+                para estruturar uma spec no Cypress.
+            </p>
+
+            <p>
+                Você também aprendeu como organizar testes utilizando
+                describe, context e it, além de utilizar hooks para
+                compartilhar comportamentos entre os cenários.
+            </p>
+
+            <p>
+                Na próxima aula vamos conhecer com mais detalhes o
+                arquivo de configuração do Cypress e aprender a
+                configurar opções como baseUrl, viewport e retries.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         CHECKPOINT / QUIZ
+    ====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 11
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 11 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe como estruturar uma Spec,
+                organizar cenários com describe e context,
+                criar testes com it e utilizar hooks.
+            </p>
+
+            <a href="../aulas/aula-12.html" class="cta-button">
+                Aula 12 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+     FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 11 • Estrutura de uma Spec
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-11.js"></script>
+
+</body>
+
+</html>

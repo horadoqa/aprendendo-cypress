@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 25 — Validando Estados</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 25 • VALIDANDO ESTADOS
+            </span>
+
+            <h1>
+                Validando Estados
+            </h1>
+
+            <p>
+                Aprenda a validar estados de elementos utilizando
+                asserções do Cypress, verificando se componentes
+                estão visíveis, habilitados, desabilitados,
+                selecionados ou marcados.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS DA AULA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Nas aulas anteriores aprendemos a localizar elementos,
+                interagir com eles e validar textos, atributos e
+                propriedades da aplicação.
+            </p>
+
+            <p>
+                Agora vamos aprender a validar o estado dos elementos
+                da interface, verificando se eles estão disponíveis
+                para interação e se apresentam o comportamento esperado.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        👁️
+                    </div>
+
+                    <h3>
+                        Validar visibilidade
+                    </h3>
+
+                    <p>
+                        Verificar se um elemento está visível ou
+                        escondido na página.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🟢
+                    </div>
+
+                    <h3>
+                        Validar elementos habilitados
+                    </h3>
+
+                    <p>
+                        Verificar se um elemento está disponível
+                        para interação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🚫
+                    </div>
+
+                    <h3>
+                        Validar elementos desabilitados
+                    </h3>
+
+                    <p>
+                        Garantir que componentes bloqueados estejam
+                        realmente desabilitados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ☑️
+                    </div>
+
+                    <h3>
+                        Validar seleção
+                    </h3>
+
+                    <p>
+                        Validar checkboxes, radio buttons e opções
+                        selecionadas.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE SÃO ESTADOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que são estados de elementos?
+            </h2>
+
+            <p>
+                Um elemento da interface pode apresentar diferentes
+                estados dependendo da situação da aplicação.
+            </p>
+
+            <p>
+                Um botão, por exemplo, pode estar habilitado,
+                desabilitado, visível ou oculto.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    👁️ <strong>Visível</strong>
+                    → o elemento está sendo exibido na interface.
+                </p>
+
+                <p>
+                    🚫 <strong>Oculto</strong>
+                    → o elemento não está visível para o usuário.
+                </p>
+
+                <p>
+                    🟢 <strong>Habilitado</strong>
+                    → o elemento pode receber determinada interação.
+                </p>
+
+                <p>
+                    🔴 <strong>Desabilitado</strong>
+                    → o elemento não está disponível para interação.
+                </p>
+
+                <p>
+                    ☑️ <strong>Selecionado</strong>
+                    → o elemento possui uma seleção ativa.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     VISIBILITY
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Validando visibilidade
+            </h2>
+
+            <p>
+                Uma das validações mais utilizadas em testes E2E é
+                verificar se determinado elemento está visível.
+            </p>
+
+            <p>
+                Para isso, podemos utilizar a asserção:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'button'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                Nesse exemplo, o Cypress localiza um botão e verifica
+                se ele está visível na página.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Exemplo:</strong>
+
+                <pre><code>&lt;button id="salvar"&gt;
+Salvar
+
+</button></code></pre>
+
+                <p>
+                    Teste:
+                </p>
+
+                <pre><code>cy.get(<span class="sql-string">'#salvar'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     NOT VISIBLE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Validando elementos ocultos
+            </h2>
+
+            <p>
+                Também podemos verificar se um elemento não está
+                visível utilizando <strong>not.be.visible</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.modal'</span>)
+.should(<span class="sql-string">'not.be.visible'</span>)</code></pre>
+
+            <p>
+                Essa validação é útil quando esperamos que uma
+                mensagem, modal ou componente esteja escondido.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        👁️
+                    </div>
+
+                    <h3>
+                        be.visible
+                    </h3>
+
+                    <p>
+                        Espera que o elemento esteja visível.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🙈
+                    </div>
+
+                    <h3>
+                        not.be.visible
+                    </h3>
+
+                    <p>
+                        Espera que o elemento não esteja visível.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EXIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Validando existência
+            </h2>
+
+            <p>
+                Além da visibilidade, podemos verificar se um
+                elemento existe no DOM.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#mensagem'</span>)
+.should(<span class="sql-string">'exist'</span>)</code></pre>
+
+            <p>
+                Essa validação verifica a existência do elemento,
+                mas não significa necessariamente que ele esteja
+                visível para o usuário.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    <strong>exist</strong> e <strong>be.visible</strong>
+                    representam verificações diferentes.
+                </p>
+
+                <p>
+                    Um elemento pode existir no DOM e estar oculto
+                    visualmente.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     NOT EXIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Validando que um elemento não existe
+            </h2>
+
+            <p>
+                Também podemos verificar que determinado elemento
+                não está presente no DOM.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.mensagem-erro'</span>)
+.should(<span class="sql-string">'not.exist'</span>)</code></pre>
+
+            <p>
+                Essa validação pode ser útil depois de uma ação
+                que deveria remover um componente da página.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    Por exemplo, depois de fechar um modal:
+                </p>
+
+                <pre><code>cy.get(<span class="sql-string">'#fechar'</span>)
+.click()
+
+cy.get(<span class="sql-string">'.modal'</span>)
+.should(<span class="sql-string">'not.exist'</span>)</code></pre>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ENABLED
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Validando elementos habilitados
+            </h2>
+
+            <p>
+                Podemos verificar se um elemento está habilitado
+                utilizando <strong>be.enabled</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'button'</span>)
+.should(<span class="sql-string">'be.enabled'</span>)</code></pre>
+
+            <p>
+                Essa validação é especialmente útil para botões,
+                inputs e outros controles que podem ser desabilitados
+                em determinadas situações.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Exemplo:</strong>
+
+                <pre><code>&lt;button id="continuar"&gt;
+Continuar
+
+</button></code></pre>
+
+                <pre><code>cy.get(<span class="sql-string">'#continuar'</span>)
+.should(<span class="sql-string">'be.enabled'</span>)</code></pre>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     DISABLED
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Validando elementos desabilitados
+            </h2>
+
+            <p>
+                Para verificar se um elemento está desabilitado,
+                podemos utilizar <strong>be.disabled</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#continuar'</span>)
+.should(<span class="sql-string">'be.disabled'</span>)</code></pre>
+
+            <p>
+                Isso é útil em cenários nos quais um botão deve
+                permanecer indisponível até que determinada condição
+                seja atendida.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🟢
+                    </div>
+
+                    <h3>
+                        be.enabled
+                    </h3>
+
+                    <p>
+                        Valida que o elemento está habilitado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔴
+                    </div>
+
+                    <h3>
+                        be.disabled
+                    </h3>
+
+                    <p>
+                        Valida que o elemento está desabilitado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKED
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Validando checkboxes marcados
+            </h2>
+
+            <p>
+                Para checkboxes, podemos verificar se uma opção
+                está marcada utilizando <strong>be.checked</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#termos'</span>)
+.should(<span class="sql-string">'be.checked'</span>)</code></pre>
+
+            <p>
+                Exemplo de elemento:
+            </p>
+
+            <pre><code>&lt;input
+type="checkbox"
+id="termos"
+
+></code></pre>
+
+            <p>
+                Podemos combinar a interação com a validação:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#termos'</span>)
+.check()
+
+cy.get(<span class="sql-string">'#termos'</span>)
+.should(<span class="sql-string">'be.checked'</span>)</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+     NOT CHECKED
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Validando checkboxes desmarcados
+            </h2>
+
+            <p>
+                Também podemos verificar se um checkbox não está
+                marcado.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#termos'</span>)
+.should(<span class="sql-string">'not.be.checked'</span>)</code></pre>
+
+            <p>
+                Essa validação pode ser utilizada para garantir que
+                um formulário comece com determinadas opções
+                desmarcadas.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    ☑️ <strong>be.checked</strong>
+                    → checkbox marcado.
+                </p>
+
+                <p>
+                    ☐ <strong>not.be.checked</strong>
+                    → checkbox desmarcado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     SELECTED
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Validando opções selecionadas
+            </h2>
+
+            <p>
+                Em elementos como selects, podemos verificar se uma
+                determinada opção está selecionada.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'option:selected'</span>)
+.should(<span class="sql-string">'have.value'</span>, <span class="sql-string">'sp'</span>)</code></pre>
+
+            <p>
+                Também podemos validar o texto da opção selecionada:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'option:selected'</span>)
+.should(<span class="sql-string">'contain.text'</span>, <span class="sql-string">'São Paulo'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Exemplo:</strong>
+
+                <pre><code>&lt;select id="estado"&gt;
+
+&lt;option value="rj"&gt;
+    Rio de Janeiro
+&lt;/option&gt;
+
+&lt;option value="sp"&gt;
+    São Paulo
+&lt;/option&gt;
+
+</select></code></pre>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RADIO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Validando radio buttons
+            </h2>
+
+            <p>
+                Radio buttons também podem ser validados para
+                verificar qual opção está marcada.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'input[value="pix"]'</span>)
+.should(<span class="sql-string">'be.checked'</span>)</code></pre>
+
+            <p>
+                Podemos primeiro selecionar a opção e depois validar
+                o estado:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'input[value="pix"]'</span>)
+.check()
+
+cy.get(<span class="sql-string">'input[value="pix"]'</span>)
+.should(<span class="sql-string">'be.checked'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A mesma asserção <strong>be.checked</strong>
+                    pode ser utilizada para validar checkboxes e
+                    radio buttons.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     FOCUS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Validando foco
+            </h2>
+
+            <p>
+                Também podemos validar se determinado elemento
+                recebeu foco utilizando <strong>have.focus</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+.focus()
+
+cy.get(<span class="sql-string">'#email'</span>)
+.should(<span class="sql-string">'have.focus'</span>)</code></pre>
+
+            <p>
+                Esse tipo de validação pode ser útil em formulários
+                que direcionam automaticamente o foco para um campo.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Exemplo:</strong>
+
+                <p>
+                    Depois de abrir um formulário de login,
+                    podemos verificar se o campo de e-mail recebeu
+                    foco automaticamente.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     STATE COMBINADO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Combinando validações de estado
+            </h2>
+
+            <p>
+                Podemos realizar várias validações em sequência
+                para verificar o comportamento completo de um
+                componente.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#salvar'</span>)
+.should(<span class="sql-string">'be.visible'</span>)
+.should(<span class="sql-string">'be.enabled'</span>)</code></pre>
+
+            <p>
+                Também podemos escrever as validações em uma única
+                cadeia:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#salvar'</span>)
+.should(<span class="sql-string">'be.visible'</span>)
+.and(<span class="sql-string">'be.enabled'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O <strong>and()</strong> permite adicionar outra
+                    asserção ao mesmo elemento.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EXEMPLO PRÁTICO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Exemplo prático
+            </h2>
+
+            <p>
+                Imagine um formulário de cadastro no qual o botão
+                "Cadastrar" deve permanecer desabilitado enquanto
+                os dados obrigatórios não forem preenchidos.
+            </p>
+
+            <p>
+                Podemos validar o comportamento:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#cadastrar'</span>)
+.should(<span class="sql-string">'be.visible'</span>)
+.and(<span class="sql-string">'be.disabled'</span>)</code></pre>
+
+            <p>
+                Depois de preencher os campos:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#nome'</span>)
+.type(<span class="sql-string">'Maria'</span>)
+
+cy.get(<span class="sql-string">'#email'</span>)
+.type(<span class="sql-string">'maria@email.com'</span>)
+
+cy.get(<span class="sql-string">'#senha'</span>)
+.type(<span class="sql-string">'Senha123'</span>)</code></pre>
+
+            <p>
+                Podemos então validar que o botão foi habilitado:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#cadastrar'</span>)
+.should(<span class="sql-string">'be.enabled'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Observe o cenário:</strong>
+
+                <p>
+                    Antes do preenchimento → botão desabilitado.
+                </p>
+
+                <p>
+                    Depois do preenchimento → botão habilitado.
+                </p>
+
+                <p>
+                    Esse tipo de teste valida o comportamento da
+                    interface de acordo com as condições do formulário.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     TABELA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Principais validações de estado
+            </h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Asserção</th>
+                            <th>Objetivo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>
+                                <strong>be.visible</strong>
+                            </td>
+
+                            <td>
+                                Verifica se o elemento está visível.
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <strong>not.be.visible</strong>
+                            </td>
+
+                            <td>
+                                Verifica se o elemento não está visível.
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <strong>exist</strong>
+                            </td>
+
+                            <td>
+                                Verifica se o elemento existe no DOM.
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <strong>not.exist</strong>
+                            </td>
+
+                            <td>
+                                Verifica se o elemento não existe no DOM.
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <strong>be.enabled</strong>
+                            </td>
+
+                            <td>
+                                Verifica se o elemento está habilitado.
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <strong>be.disabled</strong>
+                            </td>
+
+                            <td>
+                                Verifica se o elemento está desabilitado.
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <strong>be.checked</strong>
+                            </td>
+
+                            <td>
+                                Verifica se checkbox ou radio está marcado.
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <strong>not.be.checked</strong>
+                            </td>
+
+                            <td>
+                                Verifica se checkbox ou radio está desmarcado.
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <strong>have.focus</strong>
+                            </td>
+
+                            <td>
+                                Verifica se o elemento possui foco.
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ERROS COMUNS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns ao validar estados
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Confundir exist com visible
+                    </h3>
+
+                    <p>
+                        Um elemento pode existir no DOM sem estar
+                        visível para o usuário.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Validar o elemento errado
+                    </h3>
+
+                    <p>
+                        Utilize seletores que identifiquem exatamente
+                        o componente que deve ser validado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Ignorar o comportamento esperado
+                    </h3>
+
+                    <p>
+                        A asserção deve representar uma regra real
+                        da aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Usar esperas fixas
+                    </h3>
+
+                    <p>
+                        Evite utilizar cy.wait() apenas para aguardar
+                        uma mudança de estado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRÁTICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Valide comportamentos reais
+                    </h3>
+
+                    <p>
+                        Crie asserções relacionadas às regras e
+                        comportamentos esperados da aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Use seletores confiáveis
+                    </h3>
+
+                    <p>
+                        Prefira seletores estáveis para localizar
+                        os elementos que serão validados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Combine ação e validação
+                    </h3>
+
+                    <p>
+                        Sempre que fizer sentido, valide o estado
+                        antes e depois de uma interação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🚫
+                    </div>
+
+                    <h3>
+                        Evite esperas desnecessárias
+                    </h3>
+
+                    <p>
+                        Aproveite as esperas automáticas do Cypress
+                        para tornar os testes mais confiáveis.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o conceito de estado de um elemento.
+                </p>
+
+                <p>
+                    ☐ Aprendi a validar elementos visíveis.
+                </p>
+
+                <p>
+                    ☐ Aprendi a validar elementos ocultos.
+                </p>
+
+                <p>
+                    ☐ Aprendi a validar existência.
+                </p>
+
+                <p>
+                    ☐ Aprendi a validar elementos habilitados.
+                </p>
+
+                <p>
+                    ☐ Aprendi a validar elementos desabilitados.
+                </p>
+
+                <p>
+                    ☐ Aprendi a validar checkboxes marcados.
+                </p>
+
+                <p>
+                    ☐ Aprendi a validar radio buttons.
+                </p>
+
+                <p>
+                    ☐ Aprendi a validar foco.
+                </p>
+
+                <p>
+                    ☐ Consigo combinar diferentes asserções.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    👁️ <strong>be.visible</strong>
+                    → verifica se o elemento está visível.
+                </p>
+
+                <p>
+                    🙈 <strong>not.be.visible</strong>
+                    → verifica se o elemento não está visível.
+                </p>
+
+                <p>
+                    🔎 <strong>exist</strong>
+                    → verifica se o elemento existe no DOM.
+                </p>
+
+                <p>
+                    🚫 <strong>not.exist</strong>
+                    → verifica se o elemento não existe no DOM.
+                </p>
+
+                <p>
+                    🟢 <strong>be.enabled</strong>
+                    → verifica se o elemento está habilitado.
+                </p>
+
+                <p>
+                    🔴 <strong>be.disabled</strong>
+                    → verifica se o elemento está desabilitado.
+                </p>
+
+                <p>
+                    ☑️ <strong>be.checked</strong>
+                    → verifica se checkbox ou radio está marcado.
+                </p>
+
+                <p>
+                    ☐ <strong>not.be.checked</strong>
+                    → verifica se checkbox ou radio está desmarcado.
+                </p>
+
+                <p>
+                    🎯 <strong>have.focus</strong>
+                    → verifica se o elemento possui foco.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você já consegue validar diferentes estados
+                dos elementos da interface e verificar se eles estão
+                se comportando conforme o esperado.
+            </p>
+
+            <p>
+                Na próxima aula vamos começar a trabalhar com
+                <strong>Fixtures</strong> e massa de dados, aprendendo
+                como organizar informações utilizadas pelos testes.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     QUIZ
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 25
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 25 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe validar visibilidade, existência,
+                habilitação, seleção, foco e outros estados dos
+                elementos utilizando o Cypress.
+            </p>
+
+            <a href="../aulas/aula-26.html" class="cta-button">
+                Aula 26 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+
+FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 25 • Validando Estados
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+
+JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-25.js"></script>
+
+</body>
+
+</html>

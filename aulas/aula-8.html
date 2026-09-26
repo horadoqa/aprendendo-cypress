@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 8 — Configurando o Projeto Cypress</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 8 • CONFIGURANDO O PROJETO
+            </span>
+
+            <h1>
+                Configurando o Projeto Cypress
+            </h1>
+
+            <p>
+                Aprenda a organizar o projeto Cypress, entender o
+                arquivo de configuração e definir as principais opções
+                utilizadas durante a execução dos testes.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+         OBJETIVOS DA AULA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Na aula anterior, instalamos o Cypress e verificamos
+                se o ambiente estava funcionando corretamente.
+            </p>
+
+            <p>
+                Agora vamos entender como organizar o projeto e
+                configurar o Cypress para que ele possa ser utilizado
+                de forma consistente nos nossos testes.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📁
+                    </div>
+
+                    <h3>
+                        Organizar o projeto
+                    </h3>
+
+                    <p>
+                        Conhecer as principais pastas e arquivos
+                        utilizados pelo Cypress.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚙️
+                    </div>
+
+                    <h3>
+                        Configurar o Cypress
+                    </h3>
+
+                    <p>
+                        Entender o arquivo cypress.config.js e
+                        suas principais opções.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        Definir a baseUrl
+                    </h3>
+
+                    <p>
+                        Configurar a URL base utilizada pelos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🖥️
+                    </div>
+
+                    <h3>
+                        Configurar o ambiente
+                    </h3>
+
+                    <p>
+                        Conhecer opções como viewport, retries e
+                        comportamento dos testes.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ESTRUTURA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é a configuração do Cypress?
+            </h2>
+
+            <p>
+                A configuração do Cypress define como o framework
+                deverá se comportar durante a execução dos testes.
+            </p>
+
+            <p>
+                Em vez de repetir determinadas informações em cada
+                teste, podemos centralizar configurações importantes
+                em um arquivo próprio.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    ⚙️ <strong>Configuração</strong>
+                    → define o comportamento do Cypress.
+                </p>
+
+                <p>
+                    🧪 <strong>Testes</strong>
+                    → utilizam essas configurações durante a execução.
+                </p>
+
+                <p>
+                    📁 <strong>Projeto</strong>
+                    → mantém as configurações organizadas.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ESTRUTURA PROJETO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Estrutura do projeto
+            </h2>
+
+            <p>
+                Depois de instalar e configurar o Cypress, teremos
+                uma estrutura semelhante a esta:
+            </p>
+
+            <pre><code>curso-cypress/
+
+├── cypress/
+│ └── e2e/
+├── node_modules/
+├── cypress.config.js
+├── package-lock.json
+└── package.json</code></pre>
+
+            <p>
+                Cada item possui uma responsabilidade diferente
+                dentro do projeto.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        cypress/
+                    </h3>
+
+                    <p>
+                        Diretório utilizado para arquivos relacionados
+                        aos testes Cypress.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📄
+                    </div>
+
+                    <h3>
+                        cypress.config.js
+                    </h3>
+
+                    <p>
+                        Arquivo principal de configuração do Cypress.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        package.json
+                    </h3>
+
+                    <p>
+                        Define informações, scripts e dependências
+                        do projeto Node.js.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔒
+                    </div>
+
+                    <h3>
+                        package-lock.json
+                    </h3>
+
+                    <p>
+                        Registra informações sobre as versões
+                        das dependências instaladas.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CYPRESS CONFIG
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Conhecendo o cypress.config.js
+            </h2>
+
+            <p>
+                O arquivo <strong>cypress.config.js</strong> é utilizado
+                para definir configurações do Cypress.
+            </p>
+
+            <p>
+                Uma configuração inicial pode ser:
+            </p>
+
+            <pre><code>const { defineConfig } = require(<span class="sql-string">'cypress'</span>)
+
+module.exports = defineConfig({
+
+e2e: {
+
+}
+
+})</code></pre>
+
+            <p>
+                A propriedade <strong>e2e</strong> concentra as
+                configurações relacionadas aos testes End-to-End.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    Não precisamos colocar todas as configurações
+                    possíveis no arquivo. Podemos adicionar somente
+                    aquilo que faz sentido para o projeto.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         DEFINE CONFIG
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                3. O que é defineConfig()?
+            </h2>
+
+            <p>
+                O <strong>defineConfig()</strong> é utilizado para
+                declarar a configuração do Cypress.
+            </p>
+
+            <pre><code>const { defineConfig } = require(<span class="sql-string">'cypress'</span>)
+
+module.exports = defineConfig({
+
+e2e: {
+
+}
+
+})</code></pre>
+
+            <p>
+                Dentro do objeto passado para
+                <strong>defineConfig()</strong>, podemos definir
+                diferentes opções do projeto.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚙️
+                    </div>
+
+                    <h3>
+                        Configuração centralizada
+                    </h3>
+
+                    <p>
+                        Mantém opções importantes do Cypress em
+                        um único arquivo.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Configuração por projeto
+                    </h3>
+
+                    <p>
+                        Cada projeto pode possuir suas próprias
+                        configurações.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         BASE URL
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Configurando a baseUrl
+            </h2>
+
+            <p>
+                Uma das configurações mais importantes é a
+                <strong>baseUrl</strong>.
+            </p>
+
+            <p>
+                Ela define a URL principal utilizada pela aplicação
+                que será testada.
+            </p>
+
+            <pre><code>const { defineConfig } = require(<span class="sql-string">'cypress'</span>)
+
+module.exports = defineConfig({
+
+e2e: {
+
+    baseUrl: <span class="sql-string">'http://localhost:3000'</span>
+
+}
+
+})</code></pre>
+
+            <p>
+                Depois disso, podemos utilizar caminhos relativos
+                nos testes:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/'</span>)</code></pre>
+
+            <p>
+                Ou:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/login'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Se a <strong>baseUrl</strong> for:
+                </p>
+
+                <pre><code>http://localhost:3000</code></pre>
+
+                <p>
+                    então:
+                </p>
+
+                <pre><code>cy.visit(<span class="sql-string">'/login'</span>)</code></pre>
+
+                <p>
+                    acessará:
+                </p>
+
+                <pre><code>http://localhost:3000/login</code></pre>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         POR QUE BASE URL
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Por que utilizar baseUrl?
+            </h2>
+
+            <p>
+                Sem uma baseUrl, poderíamos acabar repetindo a URL
+                completa em diversos testes.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'http://localhost:3000/login'</span>)
+
+cy.visit(<span class="sql-string">'http://localhost:3000/produtos'</span>)
+
+cy.visit(<span class="sql-string">'http://localhost:3000/dashboard'</span>)</code></pre>
+
+            <p>
+                Com a baseUrl configurada:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.visit(<span class="sql-string">'/produtos'</span>)
+
+cy.visit(<span class="sql-string">'/dashboard'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Isso deixa os testes mais simples e facilita
+                    a alteração da URL da aplicação quando necessário.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         VIEWPORT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Configurando o viewport
+            </h2>
+
+            <p>
+                O Cypress permite configurar o tamanho da área
+                disponível para a aplicação durante os testes.
+            </p>
+
+            <p>
+                Essa configuração é conhecida como
+                <strong>viewport</strong>.
+            </p>
+
+            <pre><code>const { defineConfig } = require(<span class="sql-string">'cypress'</span>)
+
+module.exports = defineConfig({
+
+viewportWidth: 1280,
+
+viewportHeight: 720,
+
+e2e: {
+
+    baseUrl: <span class="sql-string">'http://localhost:3000'</span>
+
+}
+
+})</code></pre>
+
+            <p>
+                Nesse exemplo, definimos uma área de:
+            </p>
+
+            <pre><code>1280 x 720</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ↔️
+                    </div>
+
+                    <h3>
+                        viewportWidth
+                    </h3>
+
+                    <p>
+                        Define a largura da área de visualização.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ↕️
+                    </div>
+
+                    <h3>
+                        viewportHeight
+                    </h3>
+
+                    <p>
+                        Define a altura da área de visualização.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         RESPONSIVIDADE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Testando diferentes tamanhos de tela
+            </h2>
+
+            <p>
+                O viewport também pode ser utilizado para testar
+                comportamentos relacionados a diferentes tamanhos
+                de tela.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.viewport(375, 667)</code></pre>
+
+            <p>
+                Esse comando altera o tamanho do viewport durante
+                o teste.
+            </p>
+
+            <p>
+                Podemos também utilizar nomes de dispositivos
+                suportados pelo Cypress:
+            </p>
+
+            <pre><code>cy.viewport(<span class="sql-string">'iphone-x'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    Testar diferentes tamanhos de tela é útil quando
+                    a aplicação possui comportamentos responsivos.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         RETRIES
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Configurando retries
+            </h2>
+
+            <p>
+                O Cypress permite configurar tentativas adicionais
+                para testes que falharem.
+            </p>
+
+            <p>
+                Essa funcionalidade é conhecida como
+                <strong>retries</strong>.
+            </p>
+
+            <pre><code>const { defineConfig } = require(<span class="sql-string">'cypress'</span>)
+
+module.exports = defineConfig({
+
+retries: {
+
+    runMode: 2,
+
+    openMode: 0
+
+},
+
+e2e: {
+
+    baseUrl: <span class="sql-string">'http://localhost:3000'</span>
+
+}
+
+})</code></pre>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Configuração</th>
+                            <th>Quando é utilizada</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>runMode</strong>
+                            </td>
+
+                            <td>
+                                Quando os testes são executados
+                                através do cypress run.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>openMode</strong>
+                            </td>
+
+                            <td>
+                                Quando os testes são executados
+                                através da interface do Cypress.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="highlight">
+
+                <strong>Atenção:</strong>
+
+                <p>
+                    Retries não devem ser utilizados para simplesmente
+                    esconder testes instáveis. Eles podem ser úteis
+                    em determinados ambientes, mas um teste que falha
+                    de forma intermitente deve ser investigado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         TIMEOUT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Configurando timeouts
+            </h2>
+
+            <p>
+                O Cypress possui mecanismos de espera automática,
+                mas também permite configurar determinados tempos
+                de espera.
+            </p>
+
+            <p>
+                Um exemplo é o <strong>defaultCommandTimeout</strong>:
+            </p>
+
+            <pre><code>const { defineConfig } = require(<span class="sql-string">'cypress'</span>)
+
+module.exports = defineConfig({
+
+defaultCommandTimeout: 10000,
+
+e2e: {
+
+    baseUrl: <span class="sql-string">'http://localhost:3000'</span>
+
+}
+
+})</code></pre>
+
+            <p>
+                Nesse exemplo, o valor foi configurado para
+                <strong>10 segundos</strong>.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Evite aumentar timeouts indiscriminadamente.
+                    Primeiro investigue se o problema está relacionado
+                    ao carregamento da aplicação, ao seletor ou ao
+                    próprio teste.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CONFIG COMPLETA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Uma configuração completa
+            </h2>
+
+            <p>
+                Podemos combinar algumas das configurações estudadas:
+            </p>
+
+            <pre><code>const { defineConfig } = require(<span class="sql-string">'cypress'</span>)
+
+module.exports = defineConfig({
+
+viewportWidth: 1280,
+
+viewportHeight: 720,
+
+defaultCommandTimeout: 10000,
+
+retries: {
+
+    runMode: 2,
+
+    openMode: 0
+
+},
+
+e2e: {
+
+    baseUrl: <span class="sql-string">'http://localhost:3000'</span>
+
+}
+
+})</code></pre>
+
+            <p>
+                O arquivo centraliza configurações que serão utilizadas
+                durante a execução dos testes.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>baseUrl</strong>
+                    → endereço principal da aplicação.
+                </p>
+
+                <p>
+                    ↔️ <strong>viewportWidth</strong>
+                    → largura do viewport.
+                </p>
+
+                <p>
+                    ↕️ <strong>viewportHeight</strong>
+                    → altura do viewport.
+                </p>
+
+                <p>
+                    ⏱️ <strong>defaultCommandTimeout</strong>
+                    → tempo padrão de espera de comandos.
+                </p>
+
+                <p>
+                    🔄 <strong>retries</strong>
+                    → configura novas tentativas para testes que falharem.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CONFIG POR AMBIENTE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Configuração por ambiente
+            </h2>
+
+            <p>
+                Em projetos reais, podemos ter diferentes ambientes
+                para executar os testes.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        💻
+                    </div>
+
+                    <h3>
+                        Desenvolvimento
+                    </h3>
+
+                    <p>
+                        Ambiente utilizado pelos desenvolvedores
+                        durante o desenvolvimento da aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Homologação
+                    </h3>
+
+                    <p>
+                        Ambiente utilizado para validações e testes
+                        antes da publicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🚀
+                    </div>
+
+                    <h3>
+                        Produção
+                    </h3>
+
+                    <p>
+                        Ambiente onde a aplicação é disponibilizada
+                        para seus usuários.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <p>
+                A utilização de uma configuração centralizada ajuda
+                a manter o projeto organizado quando trabalhamos
+                com diferentes ambientes.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         ENVIRONMENT VARIABLES
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Variáveis de ambiente
+            </h2>
+
+            <p>
+                O Cypress também permite trabalhar com informações
+                específicas de cada ambiente.
+            </p>
+
+            <p>
+                Podemos, por exemplo, utilizar configurações
+                relacionadas a uma API ou aplicação.
+            </p>
+
+            <pre><code>const { defineConfig } = require(<span class="sql-string">'cypress'</span>)
+
+module.exports = defineConfig({
+
+e2e: {
+
+    env: {
+
+        ambiente: <span class="sql-string">'teste'</span>
+
+    }
+
+}
+
+})</code></pre>
+
+            <p>
+                Durante os testes, podemos acessar esse valor:
+            </p>
+
+            <pre><code>cy.env(<span class="sql-string">'ambiente'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    Informações sensíveis, como senhas e tokens,
+                    não devem ser colocadas diretamente no código
+                    do projeto.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CONFIG E TESTE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Utilizando a configuração no teste
+            </h2>
+
+            <p>
+                Depois de configurar a <strong>baseUrl</strong>,
+                podemos simplificar nossos testes.
+            </p>
+
+            <p>
+                Configuração:
+            </p>
+
+            <pre><code>e2e: {
+
+baseUrl: <span class="sql-string">'http://localhost:3000'</span>
+
+}</code></pre>
+
+            <p>
+                Teste:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Página inicial'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve carregar a página'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/'</span>)
+
+    cy.get(<span class="sql-string">'h1'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O teste não precisa conhecer a URL completa.
+                    Essa responsabilidade foi centralizada na
+                    configuração do projeto.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ARQUIVOS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Organização dos arquivos
+            </h2>
+
+            <p>
+                Conforme o projeto crescer, podemos organizar
+                diferentes tipos de arquivos dentro da estrutura
+                do Cypress.
+            </p>
+
+            <pre><code>curso-cypress/
+
+├── cypress/
+│ ├── e2e/
+│ ├── fixtures/
+│ └── support/
+│
+├── node_modules/
+│
+├── cypress.config.js
+├── package-lock.json
+└── package.json</code></pre>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Pasta</th>
+                            <th>Objetivo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>e2e</strong>
+                            </td>
+
+                            <td>
+                                Arquivos dos testes E2E.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>fixtures</strong>
+                            </td>
+
+                            <td>
+                                Dados utilizados pelos testes.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>support</strong>
+                            </td>
+
+                            <td>
+                                Arquivos de suporte e comandos
+                                compartilhados.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <p>
+                Essas pastas serão exploradas com mais detalhes
+                ao longo das próximas aulas.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         ERROS COMUNS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns de configuração
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        URL incorreta
+                    </h3>
+
+                    <p>
+                        Configurar uma baseUrl que não corresponde
+                        ao endereço onde a aplicação está executando.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Configuração excessiva
+                    </h3>
+
+                    <p>
+                        Alterar diversas opções sem entender
+                        exatamente o impacto de cada uma.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Ignorar a configuração do projeto
+                    </h3>
+
+                    <p>
+                        Colocar informações que deveriam estar
+                        centralizadas dentro de vários testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Usar retries para esconder problemas
+                    </h3>
+
+                    <p>
+                        Repetir automaticamente testes instáveis
+                        sem investigar a causa da falha.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         BOAS PRÁTICAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas de configuração
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Configure apenas o necessário
+                    </h3>
+
+                    <p>
+                        Evite adicionar configurações sem uma
+                        necessidade real do projeto.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📁
+                    </div>
+
+                    <h3>
+                        Centralize configurações
+                    </h3>
+
+                    <p>
+                        Utilize o cypress.config.js para manter
+                        configurações globais organizadas.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Proteja informações sensíveis
+                    </h3>
+
+                    <p>
+                        Evite armazenar credenciais e tokens diretamente
+                        no código dos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧹
+                    </div>
+
+                    <h3>
+                        Mantenha o projeto organizado
+                    </h3>
+
+                    <p>
+                        Separe testes, dados, arquivos de suporte
+                        e configurações de forma clara.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CHECKLIST
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da configuração
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Projeto Node.js criado.
+                </p>
+
+                <p>
+                    ☐ Cypress instalado.
+                </p>
+
+                <p>
+                    ☐ cypress.config.js identificado.
+                </p>
+
+                <p>
+                    ☐ Estrutura cypress/e2e conhecida.
+                </p>
+
+                <p>
+                    ☐ baseUrl configurada.
+                </p>
+
+                <p>
+                    ☐ Viewport compreendido.
+                </p>
+
+                <p>
+                    ☐ Retries compreendidos.
+                </p>
+
+                <p>
+                    ☐ Timeout compreendido.
+                </p>
+
+                <p>
+                    ☐ Estrutura de pastas compreendida.
+                </p>
+
+                <p>
+                    ☐ Projeto pronto para executar os testes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         RESUMO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ⚙️ <strong>cypress.config.js</strong>
+                    → arquivo principal de configuração.
+                </p>
+
+                <p>
+                    🌐 <strong>baseUrl</strong>
+                    → define a URL principal da aplicação.
+                </p>
+
+                <p>
+                    ↔️ <strong>viewportWidth</strong>
+                    → define a largura do viewport.
+                </p>
+
+                <p>
+                    ↕️ <strong>viewportHeight</strong>
+                    → define a altura do viewport.
+                </p>
+
+                <p>
+                    🔄 <strong>retries</strong>
+                    → configura novas tentativas de execução.
+                </p>
+
+                <p>
+                    ⏱️ <strong>defaultCommandTimeout</strong>
+                    → define o tempo padrão de espera dos comandos.
+                </p>
+
+                <p>
+                    🧪 <strong>cypress/e2e</strong>
+                    → armazena os testes E2E.
+                </p>
+
+                <p>
+                    📁 <strong>fixtures</strong>
+                    → armazena dados utilizados pelos testes.
+                </p>
+
+                <p>
+                    🧩 <strong>support</strong>
+                    → concentra arquivos e comportamentos
+                    compartilhados.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você já conhece a estrutura básica de um projeto
+                Cypress e sabe como centralizar suas principais
+                configurações.
+            </p>
+
+            <p>
+                Na próxima aula vamos conhecer a interface do Cypress
+                e entender como utilizar o Cypress App para criar,
+                visualizar e executar nossos testes.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         CHECKPOINT
+    ====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 8
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 8 concluída!
+            </h2>
+
+            <p>
+                Agora você já conhece a estrutura do projeto Cypress,
+                sabe configurar a baseUrl, viewport, retries e outras
+                opções importantes.
+            </p>
+
+            <a href="../aulas/aula-9.html" class="cta-button">
+                Aula 9 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+   FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 8 • Configurando o Projeto Cypress
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+   JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-8.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <title>Aula 27 — Massa de Testes</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 27 • MASSA DE TESTES
+            </span>
+
+            <h1>
+                Massa de Testes
+            </h1>
+
+            <p>
+                Aprenda a criar, organizar e utilizar diferentes
+                conjuntos de dados para tornar seus testes Cypress
+                mais completos, previsíveis e reutilizáveis.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Na aula anterior aprendemos como utilizar Fixtures
+                para armazenar dados de teste em arquivos externos.
+            </p>
+
+            <p>
+                Agora vamos avançar um passo e entender o conceito
+                de massa de testes e como organizar diferentes
+                conjuntos de dados para os nossos cenários.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Entender massa de testes
+                    </h3>
+
+                    <p>
+                        Compreender o que significa massa de dados
+                        no contexto de testes automatizados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        Criar diferentes cenários
+                    </h3>
+
+                    <p>
+                        Preparar dados para cenários positivos,
+                        negativos e alternativos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📁
+                    </div>
+
+                    <h3>
+                        Organizar os dados
+                    </h3>
+
+                    <p>
+                        Separar dados de acordo com sua finalidade
+                        e contexto.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Reutilizar informações
+                    </h3>
+
+                    <p>
+                        Criar estruturas que possam ser utilizadas
+                        em diferentes testes.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE É MASSA DE TESTES
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é massa de testes?
+            </h2>
+
+            <p>
+                Massa de testes é o conjunto de dados utilizado para
+                executar determinados cenários durante os testes.
+            </p>
+
+            <p>
+                Esses dados podem representar usuários, produtos,
+                pedidos, endereços, informações financeiras,
+                configurações ou qualquer outro dado necessário
+                para a execução de um cenário.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🧪 <strong>Massa de testes</strong>
+                    → conjunto de dados utilizados na execução
+                    dos cenários.
+                </p>
+
+                <p>
+                    🎯 <strong>Cenário</strong>
+                    → situação que queremos validar.
+                </p>
+
+                <p>
+                    📋 <strong>Dados</strong>
+                    → informações necessárias para executar o cenário.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EXEMPLO SIMPLES
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Exemplo de massa de testes
+            </h2>
+
+            <p>
+                Imagine que precisamos testar uma tela de cadastro
+                de usuários.
+            </p>
+
+            <p>
+                Podemos criar diferentes conjuntos de dados:
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Usuário</th>
+                            <th>Email</th>
+                            <th>Senha</th>
+                            <th>Cenário</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                João
+                            </td>
+
+                            <td>
+                                joao@teste.com
+                            </td>
+
+                            <td>
+                                123456
+                            </td>
+
+                            <td>
+                                Cadastro válido
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Maria
+                            </td>
+
+                            <td>
+                                maria@teste.com
+                            </td>
+
+                            <td>
+                                123456
+                            </td>
+
+                            <td>
+                                Cadastro válido
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Carlos
+                            </td>
+
+                            <td>
+                                email-invalido
+                            </td>
+
+                            <td>
+                                123456
+                            </td>
+
+                            <td>
+                                Email inválido
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <p>
+                Cada registro representa uma possibilidade diferente
+                de execução.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     POSITIVO NEGATIVO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Dados positivos e negativos
+            </h2>
+
+            <p>
+                Uma boa massa de testes normalmente precisa considerar
+                diferentes tipos de cenários.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Cenários positivos
+                    </h3>
+
+                    <p>
+                        Utilizam dados válidos e esperam que a operação
+                        seja concluída com sucesso.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Cenários negativos
+                    </h3>
+
+                    <p>
+                        Utilizam dados inválidos para validar o
+                        comportamento esperado da aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚠️
+                    </div>
+
+                    <h3>
+                        Casos limite
+                    </h3>
+
+                    <p>
+                        Utilizam valores próximos dos limites
+                        definidos pelas regras da aplicação.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ESTRUTURA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Organizando uma massa de testes
+            </h2>
+
+            <p>
+                Podemos organizar os dados em diferentes arquivos
+                dentro da pasta de fixtures.
+            </p>
+
+            <pre><code>cypress/
+
+├── e2e/
+│
+├── fixtures/
+│ ├── usuarios-validos.json
+│ ├── usuarios-invalidos.json
+│ ├── produtos.json
+│ └── pedidos.json
+│
+└── support/</code></pre>
+
+            <p>
+                Essa estrutura permite identificar rapidamente
+                qual conjunto de dados cada arquivo representa.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    📁 <strong>usuarios-validos.json</strong>
+                    → dados para cenários de sucesso.
+                </p>
+
+                <p>
+                    📁 <strong>usuarios-invalidos.json</strong>
+                    → dados para cenários de validação.
+                </p>
+
+                <p>
+                    📁 <strong>produtos.json</strong>
+                    → dados relacionados a produtos.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     USUARIO VALIDOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Criando uma massa de usuários
+            </h2>
+
+            <p>
+                Podemos criar um arquivo contendo vários usuários.
+            </p>
+
+            <pre><code>[
+{
+    <span class="sql-string">"nome"</span>: <span class="sql-string">"João"</span>,
+    <span class="sql-string">"email"</span>: <span class="sql-string">"joao@teste.com"</span>,
+    <span class="sql-string">"senha"</span>: <span class="sql-string">"123456"</span>
+},
+
+{
+    <span class="sql-string">"nome"</span>: <span class="sql-string">"Maria"</span>,
+    <span class="sql-string">"email"</span>: <span class="sql-string">"maria@teste.com"</span>,
+    <span class="sql-string">"senha"</span>: <span class="sql-string">"654321"</span>
+},
+
+{
+    <span class="sql-string">"nome"</span>: <span class="sql-string">"Carlos"</span>,
+    <span class="sql-string">"email"</span>: <span class="sql-string">"carlos@teste.com"</span>,
+    <span class="sql-string">"senha"</span>: <span class="sql-string">"abc123"</span>
+}
+
+]</code></pre>
+
+            <p>
+                Agora temos três registros disponíveis para os testes.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     CARREGANDO DADOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Carregando uma massa de dados
+            </h2>
+
+            <p>
+                Podemos carregar o arquivo utilizando
+                <strong>cy.fixture()</strong>.
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuarios-validos'</span>)
+.as(<span class="sql-string">'usuarios'</span>)</code></pre>
+
+            <p>
+                Depois podemos utilizar os dados durante o teste.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'@usuarios'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    Uma fixture contendo um array representa vários
+                    registros. O teste precisa definir como esses
+                    registros serão utilizados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ITERAÇÃO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Percorrendo uma massa de dados
+            </h2>
+
+            <p>
+                Quando temos vários registros, podemos percorrer
+                os dados utilizando estruturas do JavaScript.
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuarios-validos'</span>)
+.then((usuarios) =&gt; {
+
+    usuarios.forEach((usuario) =&gt; {
+
+        cy.log(usuario.nome)
+
+    })
+
+})</code></pre>
+
+            <p>
+                Nesse exemplo, o <strong>forEach()</strong> percorre
+                cada usuário presente na massa de dados.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    📋 <strong>usuarios</strong>
+                    → array carregado da fixture.
+                </p>
+
+                <p>
+                    👤 <strong>usuario</strong>
+                    → registro atual durante a iteração.
+                </p>
+
+                <p>
+                    🔄 <strong>forEach()</strong>
+                    → percorre os registros.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     TESTE COM DADOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Utilizando dados em um teste
+            </h2>
+
+            <p>
+                Podemos utilizar cada usuário para executar uma ação
+                dentro da aplicação.
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuarios-validos'</span>)
+.then((usuarios) =&gt; {
+
+    usuarios.forEach((usuario) =&gt; {
+
+        cy.visit(<span class="sql-string">'/login'</span>)
+
+        cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+            .clear()
+            .type(usuario.email)
+
+        cy.get(<span class="sql-string">'[data-testid="senha"]'</span>)
+            .clear()
+            .type(usuario.senha)
+
+        cy.get(<span class="sql-string">'[data-testid="login"]'</span>)
+            .click()
+
+    })
+
+})</code></pre>
+
+            <p>
+                Esse exemplo demonstra uma possibilidade de utilização
+                de vários registros dentro de um fluxo.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Atenção:</strong>
+
+                <p>
+                    Em projetos reais, é importante avaliar se cada
+                    registro deve ser executado no mesmo teste ou se
+                    é mais adequado separar os cenários.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     MASSA NEGATIVA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Criando massa para cenários negativos
+            </h2>
+
+            <p>
+                Podemos criar dados específicos para validar
+                mensagens de erro.
+            </p>
+
+            <pre><code>[
+{
+    <span class="sql-string">"email"</span>: <span class="sql-string">"email-invalido"</span>,
+    <span class="sql-string">"senha"</span>: <span class="sql-string">"123456"</span>,
+    <span class="sql-string">"mensagem"</span>: <span class="sql-string">"Email inválido"</span>
+},
+
+{
+    <span class="sql-string">"email"</span>: <span class="sql-string">"usuario@teste.com"</span>,
+    <span class="sql-string">"senha"</span>: <span class="sql-string">""</span>,
+    <span class="sql-string">"mensagem"</span>: <span class="sql-string">"Senha obrigatória"</span>
+},
+
+{
+    <span class="sql-string">"email"</span>: <span class="sql-string">""</span>,
+    <span class="sql-string">"senha"</span>: <span class="sql-string">"123456"</span>,
+    <span class="sql-string">"mensagem"</span>: <span class="sql-string">"Email obrigatório"</span>
+}
+
+]</code></pre>
+
+            <p>
+                Dessa maneira, além dos dados de entrada, podemos
+                armazenar também o resultado esperado.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     DATA DRIVEN
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Testes orientados a dados
+            </h2>
+
+            <p>
+                Quando um mesmo fluxo precisa ser executado com
+                diferentes conjuntos de dados, podemos aplicar
+                uma abordagem orientada a dados.
+            </p>
+
+            <pre><code>const usuarios = [
+
+{
+    email: <span class="sql-string">'joao@teste.com'</span>,
+    senha: <span class="sql-string">'123456'</span>
+},
+
+{
+    email: <span class="sql-string">'maria@teste.com'</span>,
+    senha: <span class="sql-string">'654321'</span>
+}
+
+]</code></pre>
+
+            <p>
+                O mesmo fluxo pode ser utilizado para diferentes
+                entradas.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🔄 <strong>Mesmo comportamento</strong>
+                    → executado várias vezes.
+                </p>
+
+                <p>
+                    📋 <strong>Dados diferentes</strong>
+                    → cada execução utiliza uma entrada.
+                </p>
+
+                <p>
+                    🎯 <strong>Objetivo</strong>
+                    → validar o comportamento para diferentes
+                    combinações de dados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     DADOS ESPERADOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Armazenando resultado esperado
+            </h2>
+
+            <p>
+                Uma massa de testes pode armazenar não apenas
+                os dados de entrada, mas também informações sobre
+                o resultado esperado.
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"email"</span>: <span class="sql-string">"email-invalido"</span>,
+<span class="sql-string">"senha"</span>: <span class="sql-string">"123456"</span>,
+<span class="sql-string">"resultadoEsperado"</span>: {
+    <span class="sql-string">"sucesso"</span>: false,
+    <span class="sql-string">"mensagem"</span>: <span class="sql-string">"Email inválido"</span>
+}
+
+}</code></pre>
+
+            <p>
+                Isso permite que o próprio conjunto de dados descreva
+                parte do cenário que será validado.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     PRODUTOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Massa de testes para produtos
+            </h2>
+
+            <p>
+                O conceito também pode ser utilizado em outros
+                contextos além de usuários.
+            </p>
+
+            <pre><code>[
+{
+    <span class="sql-string">"nome"</span>: <span class="sql-string">"Notebook"</span>,
+    <span class="sql-string">"preco"</span>: 3500,
+    <span class="sql-string">"categoria"</span>: <span class="sql-string">"Eletrônicos"</span>
+},
+
+{
+    <span class="sql-string">"nome"</span>: <span class="sql-string">"Mouse"</span>,
+    <span class="sql-string">"preco"</span>: 100,
+    <span class="sql-string">"categoria"</span>: <span class="sql-string">"Periféricos"</span>
+}
+
+]</code></pre>
+
+            <p>
+                Essa estrutura pode ser utilizada para validar
+                listagens, filtros, detalhes de produtos ou
+                operações de compra.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     CASOS LIMITE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Testando casos limite
+            </h2>
+
+            <p>
+                Uma massa de testes também pode conter valores
+                próximos aos limites definidos pelas regras da aplicação.
+            </p>
+
+            <p>
+                Por exemplo, se um campo aceita até 50 caracteres,
+                podemos criar dados como:
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"nomeValido"</span>: <span class="sql-string">"Nome com tamanho permitido"</span>,
+<span class="sql-string">"nomeMuitoGrande"</span>: <span class="sql-string">"Nome que ultrapassa o limite definido..."</span>
+
+}</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        0️⃣
+                    </div>
+
+                    <h3>
+                        Valor mínimo
+                    </h3>
+
+                    <p>
+                        Verificar o comportamento no menor valor
+                        permitido.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔢
+                    </div>
+
+                    <h3>
+                        Valor máximo
+                    </h3>
+
+                    <p>
+                        Verificar o comportamento no maior valor
+                        permitido.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚠️
+                    </div>
+
+                    <h3>
+                        Valor acima do limite
+                    </h3>
+
+                    <p>
+                        Verificar como a aplicação trata valores
+                        que ultrapassam a regra.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     MASSA E ISOLAMENTO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Massa de testes e isolamento
+            </h2>
+
+            <p>
+                Os testes devem ser planejados de maneira que um
+                cenário não dependa indevidamente do resultado
+                de outro.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Exemplo:</strong>
+
+                <p>
+                    Se um teste altera o email de um usuário e o
+                    próximo teste depende daquele mesmo registro,
+                    podemos criar uma dependência entre os testes.
+                </p>
+
+                <p>
+                    Sempre que possível, cada cenário deve possuir
+                    os dados necessários para sua própria execução.
+                </p>
+
+            </div>
+
+            <p>
+                O objetivo é tornar os testes mais previsíveis e
+                facilitar a identificação de falhas.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     DADOS DINAMICOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Massa estática e dados dinâmicos
+            </h2>
+
+            <p>
+                É importante diferenciar dados estáticos de dados
+                que precisam ser gerados dinamicamente.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Exemplo</th>
+                            <th>Uso</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>Estático</strong>
+                            </td>
+
+                            <td>
+                                Produto conhecido
+                            </td>
+
+                            <td>
+                                Fixture
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>Dinâmico</strong>
+                            </td>
+
+                            <td>
+                                Email único
+                            </td>
+
+                            <td>
+                                Gerado durante o teste
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>Persistente</strong>
+                            </td>
+
+                            <td>
+                                Registro criado no sistema
+                            </td>
+
+                            <td>
+                                API ou banco de dados
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <p>
+                A estratégia deve ser escolhida de acordo com a
+                necessidade do cenário.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     ORGANIZACAO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Organização de uma massa maior
+            </h2>
+
+            <p>
+                Em projetos maiores, podemos separar os dados
+                por domínio e finalidade.
+            </p>
+
+            <pre><code>cypress/
+
+├── fixtures/
+│
+├── usuarios/
+│ ├── validos.json
+│ └── invalidos.json
+│
+├── produtos/
+│ ├── eletronicos.json
+│ └── perifericos.json
+│
+├── pedidos/
+│ ├── aprovados.json
+│ └── cancelados.json
+│
+└── enderecos/
+├── validos.json
+└── invalidos.json</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A estrutura deve ser adaptada ao tamanho e
+                    às necessidades do projeto.
+                </p>
+
+                <p>
+                    Não existe uma única organização obrigatória
+                    para todos os projetos.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRATICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas para massa de testes
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Dados relevantes
+                    </h3>
+
+                    <p>
+                        Crie dados que representem cenários reais
+                        e úteis para os testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏷️
+                    </div>
+
+                    <h3>
+                        Nomes claros
+                    </h3>
+
+                    <p>
+                        Utilize nomes que indiquem claramente
+                        o objetivo dos dados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Evite duplicação
+                    </h3>
+
+                    <p>
+                        Não mantenha várias cópias desnecessárias
+                        do mesmo conjunto de dados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Proteja dados sensíveis
+                    </h3>
+
+                    <p>
+                        Nunca utilize informações reais e sensíveis
+                        sem uma estratégia adequada de proteção.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧹
+                    </div>
+
+                    <h3>
+                        Mantenha os dados atualizados
+                    </h3>
+
+                    <p>
+                        Remova ou atualize registros que deixaram
+                        de representar a aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Cubra diferentes cenários
+                    </h3>
+
+                    <p>
+                        Considere casos positivos, negativos e
+                        situações limite.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ERROS COMUNS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Usar sempre os mesmos dados
+                    </h3>
+
+                    <p>
+                        Testar somente um cenário e deixar de explorar
+                        outras combinações relevantes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Misturar dados de cenários
+                    </h3>
+
+                    <p>
+                        Criar arquivos que combinam informações
+                        sem uma finalidade clara.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Dados dependentes entre testes
+                    </h3>
+
+                    <p>
+                        Fazer um teste depender de alterações
+                        realizadas por outro teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Dados sensíveis no repositório
+                    </h3>
+
+                    <p>
+                        Armazenar credenciais reais, tokens ou
+                        informações privadas na massa de testes.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     FLUXO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Fluxo para criar uma massa de testes
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🔎 <strong>1. Identifique o cenário</strong>
+                    → descubra o que precisa ser validado.
+                </p>
+
+                <p>
+                    📋 <strong>2. Identifique os dados</strong>
+                    → determine quais informações o cenário precisa.
+                </p>
+
+                <p>
+                    🧪 <strong>3. Crie os registros</strong>
+                    → prepare dados positivos, negativos e limites.
+                </p>
+
+                <p>
+                    📁 <strong>4. Organize os arquivos</strong>
+                    → mantenha os dados separados de forma clara.
+                </p>
+
+                <p>
+                    ♻️ <strong>5. Utilize nos testes</strong>
+                    → carregue os dados e execute os cenários.
+                </p>
+
+                <p>
+                    🧹 <strong>6. Mantenha os dados</strong>
+                    → atualize a massa conforme a aplicação evoluir.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o conceito de massa de testes.
+                </p>
+
+                <p>
+                    ☐ Sei diferenciar dados positivos e negativos.
+                </p>
+
+                <p>
+                    ☐ Sei criar diferentes conjuntos de dados.
+                </p>
+
+                <p>
+                    ☐ Entendi como organizar dados em Fixtures.
+                </p>
+
+                <p>
+                    ☐ Sei trabalhar com arrays de objetos.
+                </p>
+
+                <p>
+                    ☐ Entendi testes orientados a dados.
+                </p>
+
+                <p>
+                    ☐ Sei trabalhar com dados esperados.
+                </p>
+
+                <p>
+                    ☐ Entendi a importância dos casos limite.
+                </p>
+
+                <p>
+                    ☐ Entendi a importância do isolamento dos testes.
+                </p>
+
+                <p>
+                    ☐ Sei diferenciar dados estáticos e dinâmicos.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🧪 <strong>Massa de testes</strong>
+                    → conjunto de dados utilizados pelos cenários.
+                </p>
+
+                <p>
+                    ✅ <strong>Dados positivos</strong>
+                    → representam entradas válidas.
+                </p>
+
+                <p>
+                    ❌ <strong>Dados negativos</strong>
+                    → representam entradas inválidas.
+                </p>
+
+                <p>
+                    ⚠️ <strong>Casos limite</strong>
+                    → validam comportamentos próximos dos limites.
+                </p>
+
+                <p>
+                    📁 <strong>Fixtures</strong>
+                    → permitem armazenar os dados fora dos testes.
+                </p>
+
+                <p>
+                    🔄 <strong>Testes orientados a dados</strong>
+                    → permitem executar um mesmo fluxo com diferentes
+                    entradas.
+                </p>
+
+                <p>
+                    🔐 <strong>Segurança</strong>
+                    → dados sensíveis devem ser protegidos.
+                </p>
+
+                <p>
+                    🎯 <strong>Isolamento</strong>
+                    → testes devem evitar dependências desnecessárias
+                    entre si.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você já entende como criar e organizar uma
+                massa de testes para diferentes cenários utilizando
+                dados estruturados.
+            </p>
+
+            <p>
+                Na próxima aula vamos aprofundar o uso do
+                <strong>cy.fixture()</strong> e aprender diferentes
+                formas de carregar e utilizar dados externos durante
+                os testes.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     QUIZ
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 27
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 27 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe como criar, organizar e utilizar
+                diferentes massas de dados para seus testes Cypress.
+            </p>
+
+            <a href="../aulas/aula-28.html" class="cta-button">
+                Aula 28 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+ FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 27 • Massa de Testes
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+ JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-27.js"></script>
+
+</body>
+
+</html>

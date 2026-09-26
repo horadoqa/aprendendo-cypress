@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 3 — Tipos de Testes de Software</title>
+</head>
+
+<body>
+
+    <header>
+
+        <img
+            class="header-logo"
+            src="../assets/images/logo.png"
+            alt="Hora do QA"
+        >
+
+        <button
+            class="theme-toggle"
+            id="themeToggle"
+            type="button"
+            aria-label="Alternar tema"
+        >
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 3 • FUNDAMENTOS DE TESTES
+            </span>
+
+            <h1>
+                Tipos de Testes de Software
+            </h1>
+
+            <p>
+                Conheça os principais tipos de testes, entenda seus
+                objetivos e descubra onde os testes automatizados
+                com Cypress se encaixam.
+            </p>
+
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <!-- =====================================================
+             OBJETIVOS DA AULA
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Na aula anterior, vimos a diferença entre testes
+                manuais e automatizados.
+            </p>
+
+            <p>
+                Agora vamos entender que existem diferentes tipos
+                de testes e que cada um possui objetivos diferentes.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Testes Unitários
+                    </h3>
+
+                    <p>
+                        Verificam pequenas unidades de código
+                        de forma isolada.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔗
+                    </div>
+
+                    <h3>
+                        Testes de Integração
+                    </h3>
+
+                    <p>
+                        Verificam a interação entre diferentes
+                        componentes ou partes do sistema.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        Testes E2E
+                    </h3>
+
+                    <p>
+                        Validam fluxos completos da aplicação
+                        sob a perspectiva de um usuário ou sistema.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             VISÃO GERAL
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Por que existem diferentes tipos de testes?
+            </h2>
+
+            <p>
+                Uma aplicação possui várias partes. Podemos ter
+                funções, componentes, APIs, bancos de dados,
+                páginas e integrações com outros sistemas.
+            </p>
+
+            <p>
+                Um único tipo de teste não precisa verificar
+                todos esses elementos da mesma maneira.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🧩 <strong>Unidade:</strong>
+                    verifica uma pequena parte do código.
+                </p>
+
+                <p>
+                    🔗 <strong>Integração:</strong>
+                    verifica a comunicação entre partes.
+                </p>
+
+                <p>
+                    🌐 <strong>E2E:</strong>
+                    verifica um fluxo completo.
+                </p>
+
+            </div>
+
+            <p>
+                Pensar nesses diferentes níveis ajuda a construir
+                uma estratégia de testes mais organizada.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             TESTES UNITÁRIOS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Testes Unitários
+            </h2>
+
+            <p>
+                Testes unitários verificam pequenas unidades de
+                código de maneira isolada.
+            </p>
+
+            <p>
+                Uma unidade pode ser uma função, método ou outro
+                pequeno componente lógico do sistema.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Exemplo:</strong>
+
+                <p>
+                    Imagine uma função responsável por calcular
+                    o valor total de uma compra.
+                </p>
+
+                <p>
+                    Podemos fornecer alguns valores para a função
+                    e verificar se o resultado calculado está correto.
+                </p>
+
+            </div>
+
+            <pre><code>function calcularTotal(preco, quantidade) {
+    return preco * quantidade
+}
+
+calcularTotal(10, 3)
+
+// Resultado esperado:
+// 30</code></pre>
+
+            <p>
+                Nesse exemplo, podemos testar especificamente
+                o comportamento da função sem precisar abrir
+                uma página da aplicação.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             CARACTERÍSTICAS UNITÁRIOS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Características dos testes unitários
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Escopo pequeno
+                    </h3>
+
+                    <p>
+                        Normalmente verificam uma unidade específica
+                        do código.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚡
+                    </div>
+
+                    <h3>
+                        Execução rápida
+                    </h3>
+
+                    <p>
+                        Como possuem escopo reduzido, normalmente
+                        podem ser executados rapidamente.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Isolamento
+                    </h3>
+
+                    <p>
+                        Procuram testar a unidade sem depender
+                        desnecessariamente de outras partes do sistema.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔍
+                    </div>
+
+                    <h3>
+                        Feedback rápido
+                    </h3>
+
+                    <p>
+                        Podem indicar rapidamente problemas em
+                        pequenas partes do código.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             TESTES DE INTEGRAÇÃO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Testes de Integração
+            </h2>
+
+            <p>
+                Testes de integração verificam como diferentes
+                partes de um sistema trabalham juntas.
+            </p>
+
+            <p>
+                Em uma aplicação, uma funcionalidade pode depender
+                de vários componentes ou serviços.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Exemplo:</strong>
+
+                <p>
+                    Uma API pode receber uma requisição, executar
+                    uma regra de negócio e consultar dados em
+                    outro componente.
+                </p>
+
+                <p>
+                    Um teste de integração pode verificar a
+                    comunicação entre essas partes.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             EXEMPLO INTEGRAÇÃO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Exemplo de integração
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        API
+                    </h3>
+
+                    <p>
+                        Recebe uma requisição enviada pelo cliente.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚙️
+                    </div>
+
+                    <h3>
+                        Regra de negócio
+                    </h3>
+
+                    <p>
+                        Processa as informações recebidas.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🗄️
+                    </div>
+
+                    <h3>
+                        Banco de dados
+                    </h3>
+
+                    <p>
+                        Armazena ou consulta informações.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔄
+                    </div>
+
+                    <h3>
+                        Integração
+                    </h3>
+
+                    <p>
+                        O teste verifica a comunicação entre
+                        essas partes.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             TESTES E2E
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Testes End-to-End (E2E)
+            </h2>
+
+            <p>
+                E2E significa <strong>End-to-End</strong>, ou
+                "de ponta a ponta".
+            </p>
+
+            <p>
+                Esse tipo de teste procura validar um fluxo
+                completo da aplicação, envolvendo diferentes
+                partes do sistema.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Exemplo:</strong>
+
+                <p>
+                    Um usuário acessa a aplicação, realiza login,
+                    pesquisa um produto, adiciona o produto ao
+                    carrinho e finaliza uma compra.
+                </p>
+
+                <p>
+                    O teste pode verificar esse fluxo completo.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             FLUXO E2E
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Exemplo de fluxo E2E
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        1. Login
+                    </h3>
+
+                    <p>
+                        O usuário informa suas credenciais.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        2. Pesquisa
+                    </h3>
+
+                    <p>
+                        O usuário pesquisa um produto.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🛒
+                    </div>
+
+                    <h3>
+                        3. Carrinho
+                    </h3>
+
+                    <p>
+                        O produto é adicionado ao carrinho.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        💳
+                    </div>
+
+                    <h3>
+                        4. Checkout
+                    </h3>
+
+                    <p>
+                        O usuário conclui o processo de compra.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CYPRESS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Onde o Cypress entra?
+            </h2>
+
+            <p>
+                O Cypress é uma ferramenta voltada principalmente
+                para testes de aplicações web.
+            </p>
+
+            <p>
+                Ao longo deste curso, veremos como utilizá-lo para
+                criar testes automatizados que interagem com uma
+                aplicação e verificam seus comportamentos.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>Aplicação Web</strong>
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    🤖 <strong>Cypress</strong>
+                    → executa ações e realiza verificações.
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    ✅ <strong>Resultado do teste</strong>
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CYPRESS E E2E
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Cypress e testes E2E
+            </h2>
+
+            <p>
+                Um dos usos mais conhecidos do Cypress é a
+                automação de fluxos de aplicações web.
+            </p>
+
+            <p>
+                Podemos, por exemplo, criar um teste que simula
+                um fluxo de login.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve realizar login com sucesso'</span>, () =&gt; {
+
+        cy.visit(<span class="sql-string">'/login'</span>)
+
+        cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+            .type(<span class="sql-string">'usuario@email.com'</span>)
+
+        cy.get(<span class="sql-string">'[data-testid="senha"]'</span>)
+            .type(<span class="sql-string">'123456'</span>)
+
+        cy.get(<span class="sql-string">'[data-testid="entrar"]'</span>)
+            .click()
+
+        cy.url()
+            .should(<span class="sql-string">'include'</span>, <span class="sql-string">'dashboard'</span>)
+
+    })
+
+})</code></pre>
+
+            <p>
+                O código acima será estudado em detalhes nas próximas
+                aulas. Neste momento, o objetivo é identificar que
+                estamos automatizando um fluxo da aplicação.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             COMPARAÇÃO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Unitário × Integração × E2E
+            </h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Tipo</th>
+                            <th>O que verifica?</th>
+                            <th>Escopo</th>
+                            <th>Exemplo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>Unitário</strong>
+                            </td>
+
+                            <td>
+                                Uma pequena unidade de código.
+                            </td>
+
+                            <td>
+                                Pequeno.
+                            </td>
+
+                            <td>
+                                Função de cálculo.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <strong>Integração</strong>
+                            </td>
+
+                            <td>
+                                Comunicação entre componentes.
+                            </td>
+
+                            <td>
+                                Médio.
+                            </td>
+
+                            <td>
+                                API + serviço + banco.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <strong>E2E</strong>
+                            </td>
+
+                            <td>
+                                Fluxo completo da aplicação.
+                            </td>
+
+                            <td>
+                                Grande.
+                            </td>
+
+                            <td>
+                                Login + compra.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             PIRÂMIDE
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                A Pirâmide de Testes
+            </h2>
+
+            <p>
+                Uma forma conhecida de representar uma estratégia
+                de testes é através da Pirâmide de Testes.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <span class="badge">
+                        BASE
+                    </span>
+
+                    <h3>
+                        Testes Unitários
+                    </h3>
+
+                    <p>
+                        Normalmente possuem escopo pequeno e podem
+                        fornecer feedback rapidamente.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <span class="badge">
+                        MEIO
+                    </span>
+
+                    <h3>
+                        Testes de Integração
+                    </h3>
+
+                    <p>
+                        Verificam a interação entre diferentes
+                        componentes.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <span class="badge">
+                        TOPO
+                    </span>
+
+                    <h3>
+                        Testes E2E
+                    </h3>
+
+                    <p>
+                        Verificam fluxos mais completos e podem
+                        envolver várias partes da aplicação.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    A pirâmide é um modelo conceitual. A estratégia
+                    real de testes pode variar de acordo com o sistema,
+                    riscos, arquitetura e necessidades do projeto.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             OUTROS TIPOS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Outros tipos e abordagens de testes
+            </h2>
+
+            <p>
+                Além da classificação por nível, existem outras
+                formas de classificar testes.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔄
+                    </div>
+
+                    <h3>
+                        Regressão
+                    </h3>
+
+                    <p>
+                        Verifica se alterações introduziram problemas
+                        em comportamentos que anteriormente funcionavam.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧭
+                    </div>
+
+                    <h3>
+                        Exploratório
+                    </h3>
+
+                    <p>
+                        Utiliza exploração e aprendizado durante
+                        a própria execução dos testes.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        💨
+                    </div>
+
+                    <h3>
+                        Smoke Test
+                    </h3>
+
+                    <p>
+                        Conjunto de verificações iniciais para avaliar
+                        se uma versão possui condições básicas para
+                        continuar sendo testada.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🐞
+                    </div>
+
+                    <h3>
+                        Teste de Defeito
+                    </h3>
+
+                    <p>
+                        Pode ser criado para reproduzir e verificar
+                        um comportamento que apresentou problema.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             REGRESSÃO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Testes de regressão
+            </h2>
+
+            <p>
+                Imagine que uma aplicação possui uma funcionalidade
+                de login que já funciona corretamente.
+            </p>
+
+            <p>
+                Uma nova alteração é realizada no sistema.
+                Essa alteração pode afetar outras partes da aplicação.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>Antes da alteração:</strong>
+                    login funcionando.
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    <strong>Alteração:</strong>
+                    nova funcionalidade adicionada.
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    <strong>Regressão:</strong>
+                    verificar novamente o comportamento existente.
+                </p>
+
+            </div>
+
+            <p>
+                Testes automatizados podem ser utilizados como parte
+                dessa estratégia.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             SMOKE TEST
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Smoke Tests
+            </h2>
+
+            <p>
+                Smoke tests são verificações iniciais utilizadas
+                para avaliar se os principais comportamentos de uma
+                versão estão funcionando o suficiente para permitir
+                testes posteriores.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Login
+                    </h3>
+
+                    <p>
+                        Verificar se o usuário consegue acessar
+                        a aplicação.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏠
+                    </div>
+
+                    <h3>
+                        Página inicial
+                    </h3>
+
+                    <p>
+                        Verificar se a aplicação consegue carregar
+                        a página principal.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Pesquisa
+                    </h3>
+
+                    <p>
+                        Verificar se uma funcionalidade essencial
+                        está disponível.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             COMO ESCOLHER
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Como pensar sobre o tipo de teste?
+            </h2>
+
+            <p>
+                Uma maneira simples de começar é perguntar:
+                <strong>o que exatamente quero verificar?</strong>
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <h3>
+                        Quero testar uma função
+                    </h3>
+
+                    <p>
+                        Um teste unitário pode ser apropriado
+                        para verificar essa unidade de código.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        Quero testar uma integração
+                    </h3>
+
+                    <p>
+                        Um teste de integração pode verificar
+                        a comunicação entre componentes.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        Quero testar um fluxo completo
+                    </h3>
+
+                    <p>
+                        Um teste E2E pode verificar o comportamento
+                        de ponta a ponta.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             ERROS COMUNS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <h3>
+                        ❌ "Todo teste precisa ser E2E"
+                    </h3>
+
+                    <p>
+                        Diferentes níveis de teste possuem objetivos
+                        diferentes. Uma estratégia pode combinar
+                        diferentes tipos.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        ❌ "Cypress serve apenas para E2E"
+                    </h3>
+
+                    <p>
+                        O Cypress possui recursos para diferentes
+                        formas de teste em aplicações web. Neste curso,
+                        começaremos pelos fundamentos e pela automação
+                        de fluxos web.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        ❌ "Teste automatizado significa teste E2E"
+                    </h3>
+
+                    <p>
+                        Automação é uma forma de executar testes.
+                        Testes automatizados podem existir em
+                        diferentes níveis.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        ❌ "Quanto maior o teste, melhor"
+                    </h3>
+
+                    <p>
+                        O tamanho do teste não determina sozinho
+                        sua qualidade. O teste precisa ter um objetivo
+                        claro e verificável.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             EXEMPLO COMPLETO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Exemplo: sistema de login
+            </h2>
+
+            <p>
+                Vamos observar como diferentes níveis podem abordar
+                uma mesma funcionalidade.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Nível</th>
+                            <th>O que podemos verificar?</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>Unitário</strong>
+                            </td>
+
+                            <td>
+                                Função responsável por validar
+                                determinadas regras.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <strong>Integração</strong>
+                            </td>
+
+                            <td>
+                                Comunicação entre API,
+                                autenticação e outros componentes.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <strong>E2E</strong>
+                            </td>
+
+                            <td>
+                                Usuário acessando a página,
+                                preenchendo credenciais e entrando
+                                na aplicação.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CYPRESS NA TRILHA
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que vamos fazer com Cypress?
+            </h2>
+
+            <p>
+                Ao longo do curso, vamos utilizar o Cypress para
+                aprender conceitos de automação aplicados a
+                aplicações web.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>Aplicação Web</strong>
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    🧪 <strong>Teste</strong>
+                    → define o comportamento esperado.
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    🤖 <strong>Cypress</strong>
+                    → executa ações e verificações.
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    ✅ <strong>Resultado</strong>
+                    → informa se as verificações foram atendidas.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             RESUMO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🧩 <strong>Teste unitário</strong>
+                    → verifica uma pequena unidade de código.
+                </p>
+
+                <p>
+                    🔗 <strong>Teste de integração</strong>
+                    → verifica a interação entre componentes.
+                </p>
+
+                <p>
+                    🌐 <strong>Teste E2E</strong>
+                    → verifica um fluxo completo da aplicação.
+                </p>
+
+                <p>
+                    🔄 <strong>Teste de regressão</strong>
+                    → verifica comportamentos existentes após alterações.
+                </p>
+
+                <p>
+                    💨 <strong>Smoke test</strong>
+                    → realiza verificações iniciais de comportamentos
+                    importantes.
+                </p>
+
+                <p>
+                    🤖 <strong>Automação</strong>
+                    → permite executar verificações através de código
+                    e ferramentas.
+                </p>
+
+                <p>
+                    🧪 <strong>Cypress</strong>
+                    → será utilizado para aprender automação
+                    de aplicações web.
+                </p>
+
+            </div>
+
+            <p>
+                Agora que você conhece os principais tipos de testes,
+                podemos começar a estudar especificamente o Cypress
+                e entender como ele funciona.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             CHECKPOINT
+        ====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 3
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CTA
+        ====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 3 concluída!
+            </h2>
+
+            <p>
+                Agora você conhece os principais tipos de testes
+                e entende onde os testes de aplicações web
+                se encaixam.
+            </p>
+
+            <a href="../aulas/aula-4.html" class="cta-button">
+                Aula 4 →
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+       FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 3 • Tipos de Testes de Software
+        </p>
+
+    </footer>
+
+
+    <!-- =====================================================
+       JAVASCRIPT
+    ====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-3.js"></script>
+
+</body>
+
+</html>

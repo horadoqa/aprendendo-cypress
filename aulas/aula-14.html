@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 14 — cy.get()</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 14 • CY.GET()
+            </span>
+
+            <h1>
+                cy.get()
+            </h1>
+
+            <p>
+                Aprenda a localizar elementos da página utilizando
+                o comando cy.get() e seletores CSS nos testes com Cypress.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS DA AULA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Na aula anterior, aprendemos a utilizar o
+                <strong>cy.visit()</strong> para navegar pelas páginas
+                da aplicação.
+            </p>
+
+            <p>
+                Agora precisamos aprender como encontrar os elementos
+                dessas páginas para poder interagir com eles e validar
+                seus comportamentos.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Localizar elementos
+                    </h3>
+
+                    <p>
+                        Aprender como encontrar elementos HTML
+                        durante a execução dos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Utilizar cy.get()
+                    </h3>
+
+                    <p>
+                        Conhecer a sintaxe e o funcionamento
+                        do principal comando de busca do Cypress.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Trabalhar com seletores
+                    </h3>
+
+                    <p>
+                        Utilizar IDs, classes, atributos e outros
+                        seletores CSS.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Criar testes
+                    </h3>
+
+                    <p>
+                        Combinar cy.get() com comandos e assertions
+                        para validar a aplicação.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE É
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é o cy.get()?
+            </h2>
+
+            <p>
+                O <strong>cy.get()</strong> é um comando utilizado
+                para localizar elementos da página utilizando
+                seletores CSS.
+            </p>
+
+            <p>
+                Por exemplo, imagine o seguinte HTML:
+            </p>
+
+            <pre><code>&lt;button id="login"&gt;
+Entrar
+
+</button></code></pre>
+
+            <p>
+                Podemos localizar esse botão utilizando seu ID:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#login'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🔎 <strong>cy.get()</strong>
+                    → procura elementos na página.
+                </p>
+
+                <p>
+                    🎯 <strong>Seletor</strong>
+                    → informa qual elemento queremos localizar.
+                </p>
+
+                <p>
+                    🧪 <strong>Resultado</strong>
+                    → o Cypress retorna o elemento encontrado para
+                    que outros comandos possam ser utilizados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     SINTAXE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Sintaxe básica
+            </h2>
+
+            <p>
+                A sintaxe básica do comando é:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'seletor'</span>)</code></pre>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'button'</span>)</code></pre>
+
+            <p>
+                Nesse caso, o Cypress procurará elementos
+                <strong>button</strong> na página.
+            </p>
+
+            <p>
+                Também podemos utilizar:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'input'</span>)</code></pre>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)</code></pre>
+
+            <pre><code>cy.get(<span class="sql-string">'form'</span>)</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏷️
+                    </div>
+
+                    <h3>
+                        Tag
+                    </h3>
+
+                    <p>
+                        Podemos localizar elementos utilizando
+                        suas tags HTML.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🆔
+                    </div>
+
+                    <h3>
+                        ID
+                    </h3>
+
+                    <p>
+                        Podemos utilizar o identificador único
+                        do elemento.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎨
+                    </div>
+
+                    <h3>
+                        Classe
+                    </h3>
+
+                    <p>
+                        Podemos localizar elementos através
+                        de classes CSS.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     TAGS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Localizando elementos por tag
+            </h2>
+
+            <p>
+                Uma das formas mais simples de utilizar o
+                <strong>cy.get()</strong> é através da tag HTML.
+            </p>
+
+            <p>
+                Imagine o seguinte elemento:
+            </p>
+
+            <pre><code>&lt;h1&gt;
+Página de Login
+
+</h1></code></pre>
+
+            <p>
+                Podemos localizá-lo com:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)</code></pre>
+
+            <p>
+                Outro exemplo:
+            </p>
+
+            <pre><code>&lt;input type="text"&gt;</code></pre>
+
+            <pre><code>cy.get(<span class="sql-string">'input'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Atenção:</strong>
+
+                <p>
+                    Seletores baseados apenas em tags podem localizar
+                    vários elementos. Por isso, em aplicações maiores,
+                    normalmente precisamos de seletores mais específicos.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ID
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Localizando elementos por ID
+            </h2>
+
+            <p>
+                Podemos utilizar o atributo <strong>id</strong>
+                para localizar um elemento.
+            </p>
+
+            <p>
+                HTML:
+            </p>
+
+            <pre><code>&lt;button id="login"&gt;
+Entrar
+
+</button></code></pre>
+
+            <p>
+                Cypress:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#login'</span>)</code></pre>
+
+            <p>
+                O símbolo <strong>#</strong> representa um ID
+                em um seletor CSS.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    HTML:
+                    <strong>id="login"</strong>
+                </p>
+
+                <p>
+                    Seletor:
+                    <strong>#login</strong>
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CLASSES
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Localizando elementos por classe
+            </h2>
+
+            <p>
+                Também podemos utilizar classes CSS.
+            </p>
+
+            <p>
+                HTML:
+            </p>
+
+            <pre><code>&lt;button class="btn-login"&gt;
+Entrar
+
+</button></code></pre>
+
+            <p>
+                Cypress:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.btn-login'</span>)</code></pre>
+
+            <p>
+                O ponto <strong>.</strong> representa uma classe
+                em um seletor CSS.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    HTML:
+                    <strong>class="btn-login"</strong>
+                </p>
+
+                <p>
+                    Seletor:
+                    <strong>.btn-login</strong>
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ATRIBUTOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Localizando elementos por atributos
+            </h2>
+
+            <p>
+                O CSS também permite localizar elementos através
+                de atributos.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>&lt;input type="email"&gt;</code></pre>
+
+            <p>
+                Podemos utilizar:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'input[type="email"]'</span>)</code></pre>
+
+            <p>
+                Outro exemplo:
+            </p>
+
+            <pre><code>&lt;button data-testid="login-button"&gt;
+Entrar
+
+</button></code></pre>
+
+            <p>
+                O elemento pode ser localizado através do atributo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-testid="login-button"]'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Atributos criados especificamente para automação,
+                    como <strong>data-testid</strong> ou
+                    <strong>data-cy</strong>, podem ajudar a criar
+                    seletores mais estáveis.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ID + CLASSE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Combinando seletores
+            </h2>
+
+            <p>
+                Podemos combinar diferentes partes de um seletor CSS.
+            </p>
+
+            <p>
+                HTML:
+            </p>
+
+            <pre><code>&lt;button id="login" class="btn-primary"&gt;
+Entrar
+
+</button></code></pre>
+
+            <p>
+                Podemos utilizar:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#login'</span>)</code></pre>
+
+            <p>
+                Ou:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.btn-primary'</span>)</code></pre>
+
+            <p>
+                Também podemos combinar:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'button#login'</span>)</code></pre>
+
+            <p>
+                Ou:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'button.btn-primary'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Atenção:</strong>
+
+                <p>
+                    Quanto mais específico for o seletor, menor tende
+                    a ser a quantidade de elementos correspondentes.
+                    Porém, especificidade excessiva também pode tornar
+                    o teste mais frágil.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CY GET + CLICK
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Utilizando cy.get() com click()
+            </h2>
+
+            <p>
+                Depois de localizar um elemento, podemos utilizar
+                outros comandos do Cypress para interagir com ele.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#login'</span>)
+.click()</code></pre>
+
+            <p>
+                O Cypress primeiro localiza o elemento e depois
+                executa o clique.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🔎 <strong>cy.get()</strong>
+                    → encontra o botão.
+                </p>
+
+                <p>
+                    🖱️ <strong>click()</strong>
+                    → realiza a interação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CY GET + TYPE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Utilizando cy.get() com type()
+            </h2>
+
+            <p>
+                O mesmo conceito pode ser utilizado para preencher
+                campos de formulário.
+            </p>
+
+            <p>
+                HTML:
+            </p>
+
+            <pre><code>&lt;input id="email" type="email"&gt;</code></pre>
+
+            <p>
+                Teste:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+.type(<span class="sql-string">'usuario@email.com'</span>)</code></pre>
+
+            <p>
+                O fluxo é:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Localizar
+                    </h3>
+
+                    <p>
+                        O cy.get() encontra o campo.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⌨️
+                    </div>
+
+                    <h3>
+                        Interagir
+                    </h3>
+
+                    <p>
+                        O type() insere o texto no campo.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CY GET + SHOULD
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Utilizando cy.get() com should()
+            </h2>
+
+            <p>
+                O <strong>cy.get()</strong> também é utilizado
+                frequentemente em conjunto com assertions.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                Nesse caso, o Cypress localiza o elemento
+                <strong>h1</strong> e verifica se ele está visível.
+            </p>
+
+            <p>
+                Podemos também validar seu conteúdo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+.should(<span class="sql-string">'contain'</span>, <span class="sql-string">'Login'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🔎 cy.get()
+                    → localiza.
+                </p>
+
+                <p>
+                    ✅ should()
+                    → valida.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     MULTIPLOS ELEMENTOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Quando existem vários elementos
+            </h2>
+
+            <p>
+                Um seletor pode corresponder a mais de um elemento.
+            </p>
+
+            <p>
+                Imagine:
+            </p>
+
+            <pre><code>&lt;button class="produto"&gt;
+Produto 1
+
+</button>
+
+<button class="produto">
+Produto 2
+</button>
+
+<button class="produto">
+Produto 3
+</button></code></pre>
+
+            <p>
+                O comando:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.produto'</span>)</code></pre>
+
+            <p>
+                encontrará os elementos correspondentes ao seletor.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    Saber quantos elementos um seletor pode retornar
+                    é importante para evitar testes ambíguos.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     FIRST LAST EQ
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Selecionando elementos específicos
+            </h2>
+
+            <p>
+                Quando um seletor retorna vários elementos, podemos
+                utilizar comandos para trabalhar com elementos
+                específicos.
+            </p>
+
+            <p>
+                Primeiro elemento:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.produto'</span>)
+.first()</code></pre>
+
+            <p>
+                Último elemento:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.produto'</span>)
+.last()</code></pre>
+
+            <p>
+                Elemento de uma posição específica:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.produto'</span>)
+.eq(1)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>.first()</strong>
+                    → primeiro elemento.
+                </p>
+
+                <p>
+                    <strong>.last()</strong>
+                    → último elemento.
+                </p>
+
+                <p>
+                    <strong>.eq()</strong>
+                    → elemento de determinada posição.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CONTAINER
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Localizando elementos dentro de outro elemento
+            </h2>
+
+            <p>
+                Podemos utilizar um seletor para localizar um
+                elemento dentro de outro.
+            </p>
+
+            <p>
+                Imagine:
+            </p>
+
+            <pre><code>&lt;div class="login"&gt;
+
+&lt;input id="email"&gt;
+
+&lt;input id="senha"&gt;
+
+</div></code></pre>
+
+            <p>
+                Podemos localizar diretamente:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.login #email'</span>)</code></pre>
+
+            <p>
+                O seletor indica que queremos o elemento
+                <strong>#email</strong> dentro de um elemento
+                com a classe <strong>.login</strong>.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Conceito importante:</strong>
+
+                <p>
+                    Seletores CSS permitem representar relações
+                    entre elementos da página.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     FORMULARIO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Exemplo completo com formulário
+            </h2>
+
+            <p>
+                Podemos combinar diferentes comandos para testar
+                um formulário de login.
+            </p>
+
+            <p>
+                Imagine:
+            </p>
+
+            <pre><code>&lt;input
+id="email"
+type="email"
+
+>
+
+<input
+id="password"
+type="password"
+>
+
+<button id="login">
+Entrar
+</button></code></pre>
+
+            <p>
+                O teste poderia ser:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve preencher o formulário'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .type(<span class="sql-string">'usuario@email.com'</span>)
+
+    cy.get(<span class="sql-string">'#password'</span>)
+        .type(<span class="sql-string">'123456'</span>)
+
+    cy.get(<span class="sql-string">'#login'</span>)
+        .click()
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>cy.visit()</strong>
+                    → acessa a página.
+                </p>
+
+                <p>
+                    🔎 <strong>cy.get()</strong>
+                    → localiza os campos.
+                </p>
+
+                <p>
+                    ⌨️ <strong>type()</strong>
+                    → preenche os campos.
+                </p>
+
+                <p>
+                    🖱️ <strong>click()</strong>
+                    → envia o formulário.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     DATA CY
+====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Utilizando data-cy
+            </h2>
+
+            <p>
+                Uma estratégia comum para automação é adicionar
+                atributos específicos aos elementos da aplicação.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>&lt;button data-cy="login-button"&gt;
+Entrar
+
+</button></code></pre>
+
+            <p>
+                Podemos localizar o elemento utilizando:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-cy="login-button"]'</span>)</code></pre>
+
+            <p>
+                Essa abordagem será estudada com mais detalhes
+                na próxima aula, quando veremos estratégias
+                de seleção de elementos.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Atributos dedicados à automação podem reduzir
+                    a dependência de classes visuais ou da estrutura
+                    interna do HTML.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ERROS COMUNS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns ao utilizar cy.get()
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Seletor incorreto
+                    </h3>
+
+                    <p>
+                        Utilizar um seletor que não corresponde
+                        a nenhum elemento da página.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Classe instável
+                    </h3>
+
+                    <p>
+                        Depender de classes utilizadas apenas
+                        para estilização visual.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Seletor genérico demais
+                    </h3>
+
+                    <p>
+                        Utilizar seletores como button ou input
+                        quando existem muitos elementos semelhantes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Ignorar múltiplos elementos
+                    </h3>
+
+                    <p>
+                        Não considerar que um seletor pode retornar
+                        vários elementos.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRÁTICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas com cy.get()
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Utilize seletores estáveis
+                    </h3>
+
+                    <p>
+                        Prefira seletores que não dependam de detalhes
+                        visuais que mudam frequentemente.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Seja específico
+                    </h3>
+
+                    <p>
+                        Utilize seletores que identifiquem claramente
+                        o elemento desejado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Combine com assertions
+                    </h3>
+
+                    <p>
+                        Depois de localizar o elemento, valide
+                        seu estado ou comportamento quando necessário.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Prefira atributos de teste
+                    </h3>
+
+                    <p>
+                        Quando disponíveis, atributos dedicados
+                        à automação podem facilitar a manutenção.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     FLUXO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Fluxo básico de automação
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>1. cy.visit()</strong>
+                    → acessa a página.
+                </p>
+
+                <p>
+                    🔎 <strong>2. cy.get()</strong>
+                    → localiza o elemento.
+                </p>
+
+                <p>
+                    🖱️ <strong>3. click()</strong>
+                    → interage com o elemento.
+                </p>
+
+                <p>
+                    ⌨️ <strong>4. type()</strong>
+                    → preenche informações.
+                </p>
+
+                <p>
+                    ✅ <strong>5. should()</strong>
+                    → valida o resultado.
+                </p>
+
+            </div>
+
+            <p>
+                Esse fluxo aparecerá frequentemente nos testes
+                que construiremos nas próximas aulas.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o que é o cy.get().
+                </p>
+
+                <p>
+                    ☐ Sei utilizar seletores CSS.
+                </p>
+
+                <p>
+                    ☐ Sei localizar elementos por tag.
+                </p>
+
+                <p>
+                    ☐ Sei localizar elementos por ID.
+                </p>
+
+                <p>
+                    ☐ Sei localizar elementos por classe.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar seletores por atributos.
+                </p>
+
+                <p>
+                    ☐ Sei combinar cy.get() com click().
+                </p>
+
+                <p>
+                    ☐ Sei combinar cy.get() com type().
+                </p>
+
+                <p>
+                    ☐ Sei combinar cy.get() com should().
+                </p>
+
+                <p>
+                    ☐ Entendo que um seletor pode retornar vários elementos.
+                </p>
+
+                <p>
+                    ☐ Conheço first(), last() e eq().
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🔎 <strong>cy.get()</strong>
+                    → localiza elementos na página.
+                </p>
+
+                <p>
+                    🏷️ <strong>Tags</strong>
+                    → permitem localizar elementos pelo tipo HTML.
+                </p>
+
+                <p>
+                    🆔 <strong>#id</strong>
+                    → permite localizar elementos pelo ID.
+                </p>
+
+                <p>
+                    🎨 <strong>.classe</strong>
+                    → permite localizar elementos por classe CSS.
+                </p>
+
+                <p>
+                    🧩 <strong>Atributos</strong>
+                    → permitem criar seletores mais específicos.
+                </p>
+
+                <p>
+                    🖱️ <strong>click()</strong>
+                    → permite interagir com elementos encontrados.
+                </p>
+
+                <p>
+                    ⌨️ <strong>type()</strong>
+                    → permite inserir texto em campos.
+                </p>
+
+                <p>
+                    ✅ <strong>should()</strong>
+                    → permite validar elementos encontrados.
+                </p>
+
+            </div>
+
+            <p>
+                O <strong>cy.get()</strong> é um dos comandos mais
+                importantes do Cypress porque permite localizar os
+                elementos com os quais nossos testes irão interagir.
+            </p>
+
+            <p>
+                Saber criar bons seletores é fundamental para construir
+                testes confiáveis e fáceis de manter.
+            </p>
+
+            <p>
+                Na próxima aula vamos aprofundar esse assunto e estudar
+                diferentes estratégias para criar <strong>seletores
+                    estáveis</strong> para automação.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKPOINT
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 14
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 14 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe utilizar o cy.get() para localizar
+                elementos e combinar seletores com comandos como
+                click(), type() e should().
+            </p>
+
+            <a href="../aulas/aula-15.html" class="cta-button">
+                Aula 15 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+
+FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 14 • cy.get()
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+
+JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-14.js"></script>
+
+</body>
+
+</html>

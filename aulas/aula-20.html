@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 20 — Formulários com Cypress</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 20 • FORMULÁRIOS
+            </span>
+
+            <h1>
+                Testando Formulários com Cypress
+            </h1>
+
+            <p>
+                Aprenda a automatizar formulários utilizando inputs,
+                selects, checkboxes, radio buttons, textareas e
+                validações com Cypress.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS DA AULA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Nas aulas anteriores aprendemos a localizar elementos,
+                realizar cliques, preencher campos e criar asserções.
+            </p>
+
+            <p>
+                Agora vamos combinar esses conhecimentos para testar
+                formulários completos utilizando o Cypress.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        Preencher inputs
+                    </h3>
+
+                    <p>
+                        Aprender a preencher campos de texto, email,
+                        senha e outros tipos de input.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        Trabalhar com selects
+                    </h3>
+
+                    <p>
+                        Selecionar opções em campos do tipo select.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ☑️
+                    </div>
+
+                    <h3>
+                        Checkbox e radio
+                    </h3>
+
+                    <p>
+                        Interagir e validar caixas de seleção e
+                        opções de escolha.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Validar formulários
+                    </h3>
+
+                    <p>
+                        Verificar mensagens, valores e comportamentos
+                        após o preenchimento.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE É UM FORMULÁRIO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é um formulário?
+            </h2>
+
+            <p>
+                Um formulário é um conjunto de campos utilizado para
+                coletar informações do usuário.
+            </p>
+
+            <p>
+                Formulários estão presentes em diversas aplicações,
+                como páginas de login, cadastro, checkout, busca,
+                contato e configurações de perfil.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    📝 <strong>Input</strong>
+                    → recebe informações do usuário.
+                </p>
+
+                <p>
+                    📋 <strong>Select</strong>
+                    → permite selecionar uma opção.
+                </p>
+
+                <p>
+                    ☑️ <strong>Checkbox</strong>
+                    → permite selecionar uma ou mais opções.
+                </p>
+
+                <p>
+                    🔘 <strong>Radio</strong>
+                    → permite escolher uma opção dentro de um grupo.
+                </p>
+
+                <p>
+                    🔲 <strong>Textarea</strong>
+                    → permite inserir textos maiores.
+                </p>
+
+                <p>
+                    🚀 <strong>Submit</strong>
+                    → envia os dados do formulário.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     FORMULÁRIO HTML
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Estrutura básica de um formulário
+            </h2>
+
+            <p>
+                Um formulário HTML pode conter diferentes tipos de
+                elementos para entrada de dados.
+            </p>
+
+            <pre><code>&lt;form&gt;
+
+&lt;label for="nome"&gt;
+    Nome
+&lt;/label&gt;
+
+&lt;input
+    type="text"
+    id="nome"
+&gt;
+
+&lt;label for="email"&gt;
+    Email
+&lt;/label&gt;
+
+&lt;input
+    type="email"
+    id="email"
+&gt;
+
+&lt;button type="submit"&gt;
+    Enviar
+&lt;/button&gt;
+
+</form></code></pre>
+
+            <p>
+                O Cypress pode localizar esses elementos e simular
+                as ações realizadas por um usuário.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Objetivo do teste:</strong>
+
+                <p>
+                    Preencher os campos, enviar o formulário e validar
+                    o resultado apresentado pela aplicação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     INPUT TEXT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Preenchendo campos de texto
+            </h2>
+
+            <p>
+                Para preencher um campo de texto utilizamos o comando
+                <strong>type()</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#nome'</span>)
+.type(<span class="sql-string">'João Silva'</span>)</code></pre>
+
+            <p>
+                Também podemos localizar o campo utilizando um
+                atributo <strong>data-cy</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-cy="nome"]'</span>)
+.type(<span class="sql-string">'João Silva'</span>)</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        type()
+                    </h3>
+
+                    <p>
+                        Insere texto dentro de um elemento que aceita
+                        entrada de dados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Seletor estável
+                    </h3>
+
+                    <p>
+                        Um seletor confiável facilita a manutenção
+                        dos testes.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     LIMPAR INPUT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Limpando um campo
+            </h2>
+
+            <p>
+                O Cypress possui o comando <strong>clear()</strong>
+                para limpar o conteúdo de um campo.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#nome'</span>)
+.clear()</code></pre>
+
+            <p>
+                Também podemos limpar e preencher novamente:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#nome'</span>)
+.clear()
+.type(<span class="sql-string">'Maria Silva'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🧹 <strong>clear()</strong>
+                    → remove o conteúdo atual do campo.
+                </p>
+
+                <p>
+                    ✏️ <strong>type()</strong>
+                    → insere um novo valor.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EMAIL
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Testando campos de email
+            </h2>
+
+            <p>
+                Campos de email podem ser preenchidos utilizando
+                o mesmo comando <strong>type()</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+.type(<span class="sql-string">'usuario@email.com'</span>)</code></pre>
+
+            <p>
+                Também podemos validar se o campo recebeu o valor
+                esperado.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+.should(<span class="sql-string">'have.value'</span>, <span class="sql-string">'usuario@email.com'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Além de preencher o campo, valide o valor quando
+                    isso for importante para o comportamento que está
+                    sendo testado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PASSWORD
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Testando campos de senha
+            </h2>
+
+            <p>
+                Campos do tipo password também podem ser preenchidos
+                com <strong>type()</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#senha'</span>)
+.type(<span class="sql-string">'Senha@123'</span>)</code></pre>
+
+            <p>
+                Em testes reais, devemos ter cuidado para não expor
+                credenciais diretamente no código ou nos relatórios.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    Evite utilizar credenciais reais em testes
+                    automatizados. Prefira contas específicas para
+                    automação e mecanismos apropriados para armazenar
+                    informações sensíveis.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     SELECT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Trabalhando com select
+            </h2>
+
+            <p>
+                Para selecionar uma opção em um elemento
+                <strong>select</strong>, utilizamos o comando
+                <strong>select()</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#estado'</span>)
+.select(<span class="sql-string">'RJ'</span>)</code></pre>
+
+            <p>
+                Também podemos selecionar uma opção pelo texto:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#estado'</span>)
+.select(<span class="sql-string">'Rio de Janeiro'</span>)</code></pre>
+
+            <p>
+                Depois podemos validar a opção selecionada:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#estado'</span>)
+.should(<span class="sql-string">'have.value'</span>, <span class="sql-string">'RJ'</span>)</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        select()
+                    </h3>
+
+                    <p>
+                        Seleciona uma opção dentro de um elemento
+                        select.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Validação
+                    </h3>
+
+                    <p>
+                        Podemos verificar se a opção esperada foi
+                        selecionada.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKBOX
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Trabalhando com checkbox
+            </h2>
+
+            <p>
+                Checkboxes são utilizados quando o usuário pode
+                selecionar ou desmarcar uma opção.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#termos'</span>)
+.check()</code></pre>
+
+            <p>
+                Para desmarcar:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#termos'</span>)
+.uncheck()</code></pre>
+
+            <p>
+                Também podemos verificar o estado do checkbox:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#termos'</span>)
+.should(<span class="sql-string">'be.checked'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    ☑️ <strong>check()</strong>
+                    → marca o checkbox.
+                </p>
+
+                <p>
+                    ⬜ <strong>uncheck()</strong>
+                    → desmarca o checkbox.
+                </p>
+
+                <p>
+                    ✅ <strong>be.checked</strong>
+                    → valida se o checkbox está marcado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RADIO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Trabalhando com radio buttons
+            </h2>
+
+            <p>
+                Radio buttons permitem selecionar uma opção dentro
+                de um grupo.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#masculino'</span>)
+.check()</code></pre>
+
+            <p>
+                Também podemos validar se a opção foi selecionada:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#masculino'</span>)
+.should(<span class="sql-string">'be.checked'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Diferença importante:</strong>
+
+                <p>
+                    Enquanto um checkbox normalmente representa uma
+                    escolha independente, radio buttons geralmente
+                    fazem parte de um grupo em que apenas uma opção
+                    pode ser selecionada.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     TEXTAREA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Trabalhando com textarea
+            </h2>
+
+            <p>
+                O elemento <strong>textarea</strong> é utilizado
+                para campos que aceitam textos maiores.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#mensagem'</span>)
+.type(<span class="sql-string">'Esta é uma mensagem de teste.'</span>)</code></pre>
+
+            <p>
+                Podemos validar o conteúdo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#mensagem'</span>)
+.should(
+    <span class="sql-string">'have.value'</span>,
+    <span class="sql-string">'Esta é uma mensagem de teste.'</span>
+)</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+     CAMPOS OBRIGATÓRIOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Testando campos obrigatórios
+            </h2>
+
+            <p>
+                Formulários frequentemente possuem campos
+                obrigatórios que precisam ser preenchidos antes
+                do envio.
+            </p>
+
+            <p>
+                Um teste pode verificar o comportamento quando
+                o usuário tenta enviar o formulário sem preencher
+                esses campos.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'button[type="submit"]'</span>)
+.click()
+
+cy.get(<span class="sql-string">'#mensagem-erro'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Objetivo:</strong>
+
+                <p>
+                    Garantir que a aplicação não permita o envio
+                    de dados inválidos ou incompletos quando isso
+                    fizer parte da regra de negócio.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     VALIDAÇÃO EMAIL
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Testando validações de campos
+            </h2>
+
+            <p>
+                Podemos testar como a aplicação reage quando o
+                usuário informa dados inválidos.
+            </p>
+
+            <p>
+                Por exemplo, um email inválido:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+.type(<span class="sql-string">'email-invalido'</span>)
+
+cy.get(<span class="sql-string">'button[type="submit"]'</span>)
+.click()
+
+cy.get(<span class="sql-string">'#erro-email'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                Esse tipo de teste ajuda a verificar as regras de
+                validação implementadas pela aplicação.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     SUBMIT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Enviando o formulário
+            </h2>
+
+            <p>
+                Depois de preencher os campos, podemos enviar o
+                formulário utilizando <strong>click()</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'button[type="submit"]'</span>)
+.click()</code></pre>
+
+            <p>
+                Também podemos utilizar um seletor específico:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-cy="enviar"]'</span>)
+.click()</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🚀 <strong>Preencher</strong>
+                    → inserir os dados necessários.
+                </p>
+
+                <p>
+                    🖱️ <strong>Enviar</strong>
+                    → clicar no botão de submissão.
+                </p>
+
+                <p>
+                    ✅ <strong>Validar</strong>
+                    → verificar o resultado esperado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     FLUXO COMPLETO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Testando um formulário completo
+            </h2>
+
+            <p>
+                Podemos combinar diferentes comandos para criar
+                um teste completo de cadastro.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Cadastro de usuário'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve realizar um cadastro com sucesso'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/cadastro'</span>)
+
+    cy.get(<span class="sql-string">'#nome'</span>)
+        .type(<span class="sql-string">'João Silva'</span>)
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .type(<span class="sql-string">'joao@email.com'</span>)
+
+    cy.get(<span class="sql-string">'#senha'</span>)
+        .type(<span class="sql-string">'Senha@123'</span>)
+
+    cy.get(<span class="sql-string">'#estado'</span>)
+        .select(<span class="sql-string">'RJ'</span>)
+
+    cy.get(<span class="sql-string">'#termos'</span>)
+        .check()
+
+    cy.get(<span class="sql-string">'button[type="submit"]'</span>)
+        .click()
+
+    cy.get(<span class="sql-string">'#sucesso'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <strong>Observe o fluxo:</strong>
+
+                <p>
+                    1️⃣ Acessamos a página.
+                </p>
+
+                <p>
+                    2️⃣ Preenchemos os campos.
+                </p>
+
+                <p>
+                    3️⃣ Selecionamos opções.
+                </p>
+
+                <p>
+                    4️⃣ Marcamos o checkbox.
+                </p>
+
+                <p>
+                    5️⃣ Enviamos o formulário.
+                </p>
+
+                <p>
+                    6️⃣ Validamos o resultado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     DATA-CY
+====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Utilizando data-cy nos formulários
+            </h2>
+
+            <p>
+                Uma estratégia bastante útil é utilizar atributos
+                específicos para automação.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>&lt;input
+type="text"
+data-cy="nome"
+
+>
+
+<input
+type="email"
+data-cy="email"
+>
+
+<button
+data-cy="enviar"
+>
+Enviar
+</button></code></pre>
+
+            <p>
+                No Cypress:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-cy="nome"]'</span>)
+.type(<span class="sql-string">'João Silva'</span>)
+
+cy.get(<span class="sql-string">'[data-cy="email"]'</span>)
+.type(<span class="sql-string">'joao@email.com'</span>)
+
+cy.get(<span class="sql-string">'[data-cy="enviar"]'</span>)
+.click()</code></pre>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    A utilização de atributos dedicados à automação
+                    pode tornar os testes menos dependentes da
+                    estrutura visual da página.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     VALIDANDO VALORES
+====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Validando valores preenchidos
+            </h2>
+
+            <p>
+                Depois de preencher um campo, podemos verificar
+                seu valor utilizando a asserção
+                <strong>have.value</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#nome'</span>)
+.type(<span class="sql-string">'Maria Silva'</span>)
+.should(<span class="sql-string">'have.value'</span>, <span class="sql-string">'Maria Silva'</span>)</code></pre>
+
+            <p>
+                Também podemos validar um select:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#estado'</span>)
+.select(<span class="sql-string">'RJ'</span>)
+.should(<span class="sql-string">'have.value'</span>, <span class="sql-string">'RJ'</span>)</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        have.value
+                    </h3>
+
+                    <p>
+                        Verifica o valor atual de um campo de formulário.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Validação
+                    </h3>
+
+                    <p>
+                        Confirma que a aplicação recebeu ou manteve
+                        o valor esperado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     FORMULÁRIO NEGATIVO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                16. Testes positivos e negativos
+            </h2>
+
+            <p>
+                Ao testar formulários, é importante considerar tanto
+                cenários válidos quanto cenários inválidos.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🟢
+                    </div>
+
+                    <h3>
+                        Teste positivo
+                    </h3>
+
+                    <p>
+                        Utiliza dados válidos e verifica se o formulário
+                        é processado corretamente.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔴
+                    </div>
+
+                    <h3>
+                        Teste negativo
+                    </h3>
+
+                    <p>
+                        Utiliza dados inválidos ou incompletos para
+                        verificar o comportamento esperado.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <p>
+                Exemplo de cenário negativo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+.type(<span class="sql-string">'email-invalido'</span>)
+
+cy.get(<span class="sql-string">'button[type="submit"]'</span>)
+.click()
+
+cy.get(<span class="sql-string">'#erro-email'</span>)
+.should(<span class="sql-string">'contain'</span>, <span class="sql-string">'Email inválido'</span>)</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+     FORMULÁRIO LOGIN
+====================================================== -->
+
+        <section>
+
+            <h2>
+                17. Exemplo: teste de login
+            </h2>
+
+            <p>
+                Um dos formulários mais comuns em aplicações web
+                é o formulário de login.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve realizar login com sucesso'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'[data-cy="email"]'</span>)
+        .type(<span class="sql-string">'usuario@email.com'</span>)
+
+    cy.get(<span class="sql-string">'[data-cy="senha"]'</span>)
+        .type(<span class="sql-string">'Senha@123'</span>)
+
+    cy.get(<span class="sql-string">'[data-cy="entrar"]'</span>)
+        .click()
+
+    cy.url()
+        .should(<span class="sql-string">'include'</span>, <span class="sql-string">'dashboard'</span>)
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <strong>Possível fluxo:</strong>
+
+                <p>
+                    Login → envio das credenciais → autenticação →
+                    redirecionamento → validação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     MULTIPLOS CAMPOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                18. Exemplo: formulário de cadastro
+            </h2>
+
+            <p>
+                Um formulário de cadastro pode possuir diversos
+                tipos de campos.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#nome'</span>)
+.type(<span class="sql-string">'Maria Silva'</span>)
+
+cy.get(<span class="sql-string">'#email'</span>)
+.type(<span class="sql-string">'maria@email.com'</span>)
+
+cy.get(<span class="sql-string">'#telefone'</span>)
+.type(<span class="sql-string">'21999999999'</span>)
+
+cy.get(<span class="sql-string">'#estado'</span>)
+.select(<span class="sql-string">'RJ'</span>)
+
+cy.get(<span class="sql-string">'#newsletter'</span>)
+.check()
+
+cy.get(<span class="sql-string">'#mensagem'</span>)
+.type(<span class="sql-string">'Cadastro realizado para teste.'</span>)
+
+cy.get(<span class="sql-string">'[data-cy="enviar"]'</span>)
+.click()</code></pre>
+
+            <p>
+                Esse tipo de fluxo reúne praticamente todos os
+                principais comandos estudados nesta aula.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     ERROS COMUNS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns ao testar formulários
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Seletores frágeis
+                    </h3>
+
+                    <p>
+                        Utilizar seletores baseados em classes ou
+                        estruturas que mudam frequentemente.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Não validar o resultado
+                    </h3>
+
+                    <p>
+                        Preencher e enviar o formulário sem verificar
+                        se o comportamento esperado aconteceu.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Testar apenas o caminho feliz
+                    </h3>
+
+                    <p>
+                        Ignorar cenários com campos vazios ou
+                        informações inválidas.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Usar credenciais reais
+                    </h3>
+
+                    <p>
+                        Expor senhas, tokens ou informações sensíveis
+                        diretamente nos testes.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRÁTICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas para testes de formulários
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Use seletores estáveis
+                    </h3>
+
+                    <p>
+                        Prefira atributos dedicados à automação quando
+                        disponíveis.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Teste cenários positivos
+                    </h3>
+
+                    <p>
+                        Verifique se dados válidos produzem o resultado
+                        esperado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔴
+                    </div>
+
+                    <h3>
+                        Teste cenários negativos
+                    </h3>
+
+                    <p>
+                        Verifique mensagens e comportamentos quando
+                        dados inválidos são utilizados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Proteja dados sensíveis
+                    </h3>
+
+                    <p>
+                        Utilize mecanismos apropriados para credenciais
+                        e informações confidenciais.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     FLUXO RECOMENDADO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Fluxo recomendado para testar um formulário
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    1️⃣ <strong>Acessar</strong>
+                    → abrir a página do formulário.
+                </p>
+
+                <p>
+                    2️⃣ <strong>Localizar</strong>
+                    → encontrar os campos necessários.
+                </p>
+
+                <p>
+                    3️⃣ <strong>Preencher</strong>
+                    → inserir os dados de teste.
+                </p>
+
+                <p>
+                    4️⃣ <strong>Selecionar</strong>
+                    → trabalhar com selects, checkboxes e radios.
+                </p>
+
+                <p>
+                    5️⃣ <strong>Enviar</strong>
+                    → realizar a submissão.
+                </p>
+
+                <p>
+                    6️⃣ <strong>Validar</strong>
+                    → verificar o resultado apresentado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Sei utilizar type() para preencher campos.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar clear() para limpar campos.
+                </p>
+
+                <p>
+                    ☐ Sei trabalhar com campos de email e senha.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar select().
+                </p>
+
+                <p>
+                    ☐ Sei utilizar check().
+                </p>
+
+                <p>
+                    ☐ Sei utilizar uncheck().
+                </p>
+
+                <p>
+                    ☐ Sei trabalhar com radio buttons.
+                </p>
+
+                <p>
+                    ☐ Sei preencher textarea.
+                </p>
+
+                <p>
+                    ☐ Sei validar valores com have.value.
+                </p>
+
+                <p>
+                    ☐ Sei testar campos obrigatórios.
+                </p>
+
+                <p>
+                    ☐ Sei testar cenários positivos e negativos.
+                </p>
+
+                <p>
+                    ☐ Sei enviar e validar um formulário completo.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    📝 <strong>type()</strong>
+                    → preenche campos de formulário.
+                </p>
+
+                <p>
+                    🧹 <strong>clear()</strong>
+                    → limpa campos.
+                </p>
+
+                <p>
+                    📋 <strong>select()</strong>
+                    → seleciona opções.
+                </p>
+
+                <p>
+                    ☑️ <strong>check()</strong>
+                    → marca checkbox ou radio.
+                </p>
+
+                <p>
+                    ⬜ <strong>uncheck()</strong>
+                    → desmarca checkbox.
+                </p>
+
+                <p>
+                    🔎 <strong>have.value</strong>
+                    → valida o valor de um campo.
+                </p>
+
+                <p>
+                    🚀 <strong>click()</strong>
+                    → pode ser utilizado para enviar o formulário
+                    através do botão.
+                </p>
+
+                <p>
+                    🧪 <strong>Testes positivos e negativos</strong>
+                    → verificam diferentes comportamentos do formulário.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você já consegue automatizar os principais
+                elementos encontrados em formulários web utilizando
+                Cypress.
+            </p>
+
+            <p>
+                Na próxima aula vamos aprofundar o conceito de
+                assertions e entender como criar validações mais
+                completas nos nossos testes.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     QUIZ
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 20
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 20 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe como preencher, selecionar,
+                validar e enviar os principais elementos encontrados
+                em formulários utilizando Cypress.
+            </p>
+
+            <a href="../aulas/aula-21.html" class="cta-button">
+                Aula 21 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+   FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 20 • Formulários com Cypress
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+   JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-20.js"></script>
+
+</body>
+
+</html>

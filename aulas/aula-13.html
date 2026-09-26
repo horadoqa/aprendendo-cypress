@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <title>Aula 13 — cy.visit()</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 13 • CY.VISIT()
+            </span>
+
+            <h1>
+                cy.visit()
+            </h1>
+
+            <p>
+                Aprenda a utilizar o comando cy.visit() para navegar
+                pelas páginas da aplicação durante os testes E2E
+                com Cypress.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS DA AULA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Nas aulas anteriores, configuramos o projeto Cypress,
+                conhecemos sua estrutura e entendemos algumas das
+                principais configurações disponíveis.
+            </p>
+
+            <p>
+                Agora vamos começar a trabalhar com comandos utilizados
+                diretamente nos testes. O primeiro deles será o
+                <strong>cy.visit()</strong>.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        Navegar para uma página
+                    </h3>
+
+                    <p>
+                        Aprender a abrir uma URL durante a execução
+                        de um teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Utilizar cy.visit()
+                    </h3>
+
+                    <p>
+                        Conhecer a sintaxe básica e as principais
+                        formas de utilização do comando.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔗
+                    </div>
+
+                    <h3>
+                        Trabalhar com URLs
+                    </h3>
+
+                    <p>
+                        Utilizar URLs completas e caminhos relativos
+                        com baseUrl.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🚀
+                    </div>
+
+                    <h3>
+                        Criar testes de navegação
+                    </h3>
+
+                    <p>
+                        Criar testes que validam o acesso às páginas
+                        da aplicação.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE É
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é o cy.visit()?
+            </h2>
+
+            <p>
+                O <strong>cy.visit()</strong> é um comando do Cypress
+                utilizado para navegar até uma determinada URL.
+            </p>
+
+            <p>
+                Ele normalmente é utilizado no início de um teste
+                quando precisamos acessar uma página da aplicação
+                que será testada.
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'http://localhost:3000'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>cy.visit()</strong>
+                    → navega para uma URL.
+                </p>
+
+                <p>
+                    🧪 <strong>Teste</strong>
+                    → executa comandos depois que a página é acessada.
+                </p>
+
+                <p>
+                    🎯 <strong>Objetivo</strong>
+                    → colocar o navegador na página que será testada.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     SINTAXE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Sintaxe básica
+            </h2>
+
+            <p>
+                A sintaxe básica do comando é simples:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'URL'</span>)</code></pre>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'https://example.com'</span>)</code></pre>
+
+            <p>
+                Nesse caso, o Cypress navegará até o endereço informado.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        1️⃣
+                    </div>
+
+                    <h3>
+                        cy
+                    </h3>
+
+                    <p>
+                        Representa o objeto utilizado para acessar
+                        os comandos do Cypress.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        2️⃣
+                    </div>
+
+                    <h3>
+                        visit
+                    </h3>
+
+                    <p>
+                        Comando responsável por navegar para uma URL.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        3️⃣
+                    </div>
+
+                    <h3>
+                        URL
+                    </h3>
+
+                    <p>
+                        Endereço da página que deverá ser acessada.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     URL COMPLETA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Utilizando uma URL completa
+            </h2>
+
+            <p>
+                Podemos informar uma URL completa diretamente no
+                comando <strong>cy.visit()</strong>.
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'https://example.com'</span>)</code></pre>
+
+            <p>
+                Também podemos acessar uma aplicação local:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'http://localhost:3000'</span>)</code></pre>
+
+            <p>
+                Ou uma página específica:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'http://localhost:3000/login'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    Quando trabalhamos com uma aplicação local,
+                    o endereço utilizado precisa corresponder ao
+                    endereço em que a aplicação realmente está
+                    executando.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BASE URL
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Utilizando a baseUrl
+            </h2>
+
+            <p>
+                Na Aula 8, aprendemos que podemos configurar uma
+                <strong>baseUrl</strong> no arquivo
+                <strong>cypress.config.js</strong>.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>e2e: {
+
+baseUrl: <span class="sql-string">'http://localhost:3000'</span>
+
+}</code></pre>
+
+            <p>
+                Depois de configurar a baseUrl, podemos utilizar
+                caminhos relativos no <strong>cy.visit()</strong>.
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/'</span>)</code></pre>
+
+            <p>
+                Para acessar uma página de login:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/login'</span>)</code></pre>
+
+            <p>
+                Para acessar uma página de produtos:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/produtos'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 baseUrl:
+                    <strong>http://localhost:3000</strong>
+                </p>
+
+                <p>
+                    🔗 <strong>/login</strong>
+                    → http://localhost:3000/login
+                </p>
+
+                <p>
+                    🔗 <strong>/produtos</strong>
+                    → http://localhost:3000/produtos
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PRIMEIRO TESTE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Criando o primeiro teste com cy.visit()
+            </h2>
+
+            <p>
+                Podemos utilizar o <strong>cy.visit()</strong>
+                dentro de um teste Cypress.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Navegação'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve acessar a página inicial'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/'</span>)
+
+})
+
+})</code></pre>
+
+            <p>
+                Quando esse teste for executado, o Cypress abrirá
+                a aplicação definida pela baseUrl.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Fluxo:</strong>
+
+                <p>
+                    1️⃣ Inicia o teste.
+                </p>
+
+                <p>
+                    2️⃣ Executa o cy.visit().
+                </p>
+
+                <p>
+                    3️⃣ Navega para a URL.
+                </p>
+
+                <p>
+                    4️⃣ Continua a execução dos comandos seguintes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CY VISIT + ASSERTION
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. cy.visit() com uma validação
+            </h2>
+
+            <p>
+                O <strong>cy.visit()</strong> normalmente será apenas
+                o primeiro passo do teste. Depois da navegação,
+                podemos validar a página.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Página inicial'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve carregar a página inicial'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/'</span>)
+
+    cy.get(<span class="sql-string">'h1'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+
+})
+
+})</code></pre>
+
+            <p>
+                Nesse exemplo, o teste realiza duas etapas:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        Navegação
+                    </h3>
+
+                    <p>
+                        O cy.visit() acessa a página inicial.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Localização
+                    </h3>
+
+                    <p>
+                        O cy.get() localiza o elemento h1.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Validação
+                    </h3>
+
+                    <p>
+                        O should() verifica se o elemento está visível.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     NAVEGAÇÃO ENTRE PÁGINAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Navegando entre diferentes páginas
+            </h2>
+
+            <p>
+                Podemos utilizar o <strong>cy.visit()</strong>
+                para acessar diferentes rotas da aplicação.
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/'</span>)
+
+cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.visit(<span class="sql-string">'/produtos'</span>)
+
+cy.visit(<span class="sql-string">'/contato'</span>)</code></pre>
+
+            <p>
+                Cada chamada do comando realiza uma nova navegação.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Atenção:</strong>
+
+                <p>
+                    Em um teste real, normalmente não precisamos
+                    visitar várias páginas apenas para testar
+                    navegação. O fluxo deve representar o comportamento
+                    que queremos validar.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     TESTE DE LOGIN
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Exemplo: acessando uma página de login
+            </h2>
+
+            <p>
+                Imagine que nossa aplicação possui uma página
+                de login em <strong>/login</strong>.
+            </p>
+
+            <p>
+                Podemos criar o seguinte teste:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve acessar a página de login'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'h1'</span>)
+        .should(<span class="sql-string">'contain'</span>, <span class="sql-string">'Login'</span>)
+
+})
+
+})</code></pre>
+
+            <p>
+                Nesse caso, o Cypress acessa a rota
+                <strong>/login</strong> e depois valida o conteúdo
+                da página.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     VISIT E ROTAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Trabalhando com rotas
+            </h2>
+
+            <p>
+                O <strong>cy.visit()</strong> também é bastante
+                utilizado para testar diferentes rotas de uma
+                aplicação web.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Rotas da aplicação'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve acessar a página de produtos'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/produtos'</span>)
+
+})
+
+})</code></pre>
+
+            <p>
+                Podemos criar testes específicos para cada fluxo
+                importante da aplicação.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏠
+                    </div>
+
+                    <h3>
+                        Página inicial
+                    </h3>
+
+                    <p>
+                        /
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Login
+                    </h3>
+
+                    <p>
+                        /login
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🛒
+                    </div>
+
+                    <h3>
+                        Produtos
+                    </h3>
+
+                    <p>
+                        /produtos
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        👤
+                    </div>
+
+                    <h3>
+                        Perfil
+                    </h3>
+
+                    <p>
+                        /perfil
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     QUERY STRING
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Trabalhando com query strings
+            </h2>
+
+            <p>
+                O <strong>cy.visit()</strong> também pode receber
+                URLs que possuem parâmetros de consulta.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/produtos?categoria=notebook'</span>)</code></pre>
+
+            <p>
+                Nesse caso, a aplicação receberá a URL:
+            </p>
+
+            <pre><code>http://localhost:3000/produtos?categoria=notebook</code></pre>
+
+            <div class="highlight">
+
+                <strong>Exemplo prático:</strong>
+
+                <p>
+                    Podemos utilizar parâmetros na URL para testar
+                    filtros, buscas ou diferentes estados da aplicação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PATH PARAMETERS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Trabalhando com parâmetros na URL
+            </h2>
+
+            <p>
+                Algumas aplicações utilizam identificadores
+                diretamente no caminho da URL.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>/produtos/123</code></pre>
+
+            <p>
+                Podemos acessar essa página utilizando:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/produtos/123'</span>)</code></pre>
+
+            <p>
+                Esse tipo de URL é comum em páginas que representam
+                um recurso específico.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🆔
+                    </div>
+
+                    <h3>
+                        ID
+                    </h3>
+
+                    <p>
+                        Identificador do recurso acessado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔗
+                    </div>
+
+                    <h3>
+                        Rota
+                    </h3>
+
+                    <p>
+                        Caminho utilizado para chegar ao recurso.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     OPÇÕES
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Utilizando opções no cy.visit()
+            </h2>
+
+            <p>
+                O <strong>cy.visit()</strong> também aceita opções
+                adicionais quando precisamos de um comportamento
+                específico.
+            </p>
+
+            <p>
+                Um exemplo é definir um tempo de espera para o
+                carregamento da página:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/login'</span>, {
+
+timeout: 10000
+
+})</code></pre>
+
+            <p>
+                Nesse exemplo, o comando recebe um objeto de
+                configuração como segundo argumento.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Utilize opções adicionais somente quando houver
+                    uma necessidade real. Evite configurar valores
+                    diferentes em todos os testes sem entender
+                    o motivo.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     VERIFICANDO URL
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Validando a URL depois do visit()
+            </h2>
+
+            <p>
+                Depois de utilizar o <strong>cy.visit()</strong>,
+                podemos validar se o navegador está na URL esperada.
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.url()
+.should(<span class="sql-string">'include'</span>, <span class="sql-string">'/login'</span>)</code></pre>
+
+            <p>
+                Também podemos validar a URL completa quando isso
+                fizer sentido para o teste.
+            </p>
+
+            <pre><code>cy.url()
+.should(<span class="sql-string">'eq'</span>, <span class="sql-string">'http://localhost:3000/login'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>cy.visit()</strong>
+                    → realiza a navegação.
+                </p>
+
+                <p>
+                    🔎 <strong>cy.url()</strong>
+                    → permite consultar a URL atual.
+                </p>
+
+                <p>
+                    ✅ <strong>should()</strong>
+                    → valida se a URL corresponde ao esperado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     TESTE COMPLETO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Criando um teste completo
+            </h2>
+
+            <p>
+                Podemos combinar navegação e validações em um único
+                teste.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Página de login'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve acessar a página de login'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.url()
+        .should(<span class="sql-string">'include'</span>, <span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'h1'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+
+})
+
+})</code></pre>
+
+            <p>
+                O fluxo do teste pode ser entendido da seguinte forma:
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    1️⃣ Acessar a aplicação.
+                </p>
+
+                <p>
+                    2️⃣ Navegar para /login.
+                </p>
+
+                <p>
+                    3️⃣ Verificar a URL.
+                </p>
+
+                <p>
+                    4️⃣ Verificar se o título da página está visível.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     VISIT EM BEFORE EACH
+====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Utilizando cy.visit() com beforeEach()
+            </h2>
+
+            <p>
+                Quando vários testes precisam começar na mesma página,
+                podemos utilizar o hook <strong>beforeEach()</strong>.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Página de produtos'</span>, () =&gt; {
+
+beforeEach(() =&gt; {
+
+    cy.visit(<span class="sql-string">'/produtos'</span>)
+
+})
+
+it(<span class="sql-string">'deve exibir os produtos'</span>, () =&gt; {
+
+    cy.get(<span class="sql-string">'.produto'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+
+})
+
+it(<span class="sql-string">'deve exibir o título'</span>, () =&gt; {
+
+    cy.get(<span class="sql-string">'h1'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+
+})
+
+})</code></pre>
+
+            <p>
+                Nesse exemplo, o <strong>cy.visit()</strong> será
+                executado antes de cada teste.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Vantagem:</strong>
+
+                <p>
+                    Evitamos repetir a mesma navegação em todos os
+                    testes que precisam iniciar na mesma página.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ERROS COMUNS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns ao utilizar cy.visit()
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        URL incorreta
+                    </h3>
+
+                    <p>
+                        Informar uma URL que não existe ou não
+                        corresponde à aplicação em execução.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Aplicação desligada
+                    </h3>
+
+                    <p>
+                        Tentar acessar localhost quando o servidor
+                        da aplicação não está executando.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        BaseUrl incorreta
+                    </h3>
+
+                    <p>
+                        Configurar uma baseUrl diferente do endereço
+                        utilizado pela aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Repetir navegação sem necessidade
+                    </h3>
+
+                    <p>
+                        Utilizar vários cy.visit() sem que isso
+                        faça parte do cenário que está sendo testado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRÁTICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas com cy.visit()
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        Utilize baseUrl
+                    </h3>
+
+                    <p>
+                        Centralize o endereço principal da aplicação
+                        no arquivo de configuração.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Teste um comportamento por vez
+                    </h3>
+
+                    <p>
+                        Evite criar testes com navegações que não
+                        possuem relação com o cenário validado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Valide a navegação
+                    </h3>
+
+                    <p>
+                        Quando fizer sentido, valide a URL ou
+                        elementos da página após a navegação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Evite duplicação
+                    </h3>
+
+                    <p>
+                        Utilize hooks como beforeEach() quando
+                        vários testes precisarem da mesma preparação.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o que é o cy.visit().
+                </p>
+
+                <p>
+                    ☐ Sei navegar para uma URL.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar uma URL completa.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar caminhos relativos.
+                </p>
+
+                <p>
+                    ☐ Entendi a relação entre cy.visit() e baseUrl.
+                </p>
+
+                <p>
+                    ☐ Sei acessar diferentes rotas.
+                </p>
+
+                <p>
+                    ☐ Sei trabalhar com query strings.
+                </p>
+
+                <p>
+                    ☐ Sei validar a URL após a navegação.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar cy.visit() em beforeEach().
+                </p>
+
+                <p>
+                    ☐ Consigo criar um teste simples de navegação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>cy.visit()</strong>
+                    → navega para uma determinada URL.
+                </p>
+
+                <p>
+                    🔗 <strong>URL completa</strong>
+                    → permite acessar diretamente um endereço.
+                </p>
+
+                <p>
+                    ⚙️ <strong>baseUrl</strong>
+                    → permite utilizar caminhos relativos.
+                </p>
+
+                <p>
+                    🔎 <strong>cy.url()</strong>
+                    → permite consultar e validar a URL atual.
+                </p>
+
+                <p>
+                    🧪 <strong>beforeEach()</strong>
+                    → pode ser utilizado para realizar a navegação
+                    antes de cada teste.
+                </p>
+
+                <p>
+                    🎯 <strong>Boas práticas</strong>
+                    → utilize o comando de forma objetiva e evite
+                    navegações desnecessárias.
+                </p>
+
+            </div>
+
+            <p>
+                O <strong>cy.visit()</strong> é um dos comandos
+                fundamentais do Cypress. Ele normalmente aparece
+                no início de muitos testes porque é responsável por
+                colocar o navegador na página que será validada.
+            </p>
+
+            <p>
+                Na próxima aula vamos aprender a localizar elementos
+                da página utilizando o <strong>cy.get()</strong>.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKPOINT
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 13
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 13 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe utilizar o cy.visit() para navegar
+                pelas páginas da aplicação e criar os primeiros testes
+                de navegação com Cypress.
+            </p>
+
+            <a href="../aulas/aula-14.html" class="cta-button">
+                Aula 14 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+
+FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 13 • cy.visit()
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+
+JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-13.js"></script>
+
+</body>
+
+</html>

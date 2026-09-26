@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <title>Aula 19 — Comandos de Navegação</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 19 • COMANDOS DE NAVEGAÇÃO
+            </span>
+
+            <h1>
+                Comandos de Navegação
+            </h1>
+
+            <p>
+                Aprenda a navegar entre páginas, voltar, avançar,
+                recarregar aplicações e controlar o histórico do
+                navegador utilizando Cypress.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS DA AULA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Nas aulas anteriores aprendemos a localizar elementos,
+                utilizar seletores e realizar interações com a
+                aplicação.
+            </p>
+
+            <p>
+                Agora vamos aprender como controlar a navegação do
+                navegador durante nossos testes automatizados.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        Navegar para páginas
+                    </h3>
+
+                    <p>
+                        Utilizar o cy.visit() para acessar diferentes
+                        páginas da aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⬅️
+                    </div>
+
+                    <h3>
+                        Voltar
+                    </h3>
+
+                    <p>
+                        Utilizar comandos para retornar à página
+                        anterior.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ➡️
+                    </div>
+
+                    <h3>
+                        Avançar
+                    </h3>
+
+                    <p>
+                        Avançar no histórico de navegação durante
+                        a execução dos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔄
+                    </div>
+
+                    <h3>
+                        Recarregar
+                    </h3>
+
+                    <p>
+                        Recarregar a página utilizando comandos
+                        do Cypress.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE É NAVEGAÇÃO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é navegação?
+            </h2>
+
+            <p>
+                Navegação representa o processo de acessar diferentes
+                páginas ou estados de uma aplicação durante a interação
+                com o navegador.
+            </p>
+
+            <p>
+                Em um teste E2E, é comum precisarmos acessar uma página,
+                realizar uma ação, navegar para outra página e depois
+                validar o resultado.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>Página inicial</strong>
+                    → acesso à aplicação.
+                </p>
+
+                <p>
+                    🖱️ <strong>Interação</strong>
+                    → usuário realiza uma ação.
+                </p>
+
+                <p>
+                    ➡️ <strong>Nova página</strong>
+                    → aplicação realiza uma navegação.
+                </p>
+
+                <p>
+                    ✅ <strong>Validação</strong>
+                    → teste verifica o resultado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CY VISIT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Utilizando cy.visit()
+            </h2>
+
+            <p>
+                O comando <strong>cy.visit()</strong> é utilizado para
+                acessar uma URL durante o teste.
+            </p>
+
+            <p>
+                Podemos informar uma URL completa:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'https://exemplo.com'</span>)</code></pre>
+
+            <p>
+                Quando uma <strong>baseUrl</strong> está configurada,
+                também podemos utilizar um caminho relativo:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/'</span>)</code></pre>
+
+            <p>
+                Ou:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/login'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Quando o projeto possui uma baseUrl configurada,
+                    prefira utilizar caminhos relativos nos testes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     NAVEGAÇÃO ENTRE PÁGINAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Navegando entre páginas
+            </h2>
+
+            <p>
+                Podemos utilizar diferentes chamadas de
+                <strong>cy.visit()</strong> para acessar páginas
+                distintas.
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/'</span>)
+
+cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.visit(<span class="sql-string">'/produtos'</span>)
+
+cy.visit(<span class="sql-string">'/contato'</span>)</code></pre>
+
+            <p>
+                Cada chamada realiza uma navegação para o endereço
+                informado.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏠
+                    </div>
+
+                    <h3>
+                        /
+                    </h3>
+
+                    <p>
+                        Página inicial da aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        /login
+                    </h3>
+
+                    <p>
+                        Página de autenticação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🛍️
+                    </div>
+
+                    <h3>
+                        /produtos
+                    </h3>
+
+                    <p>
+                        Página de produtos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📧
+                    </div>
+
+                    <h3>
+                        /contato
+                    </h3>
+
+                    <p>
+                        Página de contato.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     URL ATUAL
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Validando a URL atual
+            </h2>
+
+            <p>
+                Durante um teste, podemos verificar se o navegador
+                está na página esperada.
+            </p>
+
+            <p>
+                Para isso, podemos utilizar o comando
+                <strong>cy.url()</strong>.
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.url()
+.should(<span class="sql-string">'include'</span>, <span class="sql-string">'/login'</span>)</code></pre>
+
+            <p>
+                Também podemos verificar uma URL específica:
+            </p>
+
+            <pre><code>cy.url()
+.should(<span class="sql-string">'eq'</span>, <span class="sql-string">'http://localhost:3000/login'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Atenção:</strong>
+
+                <p>
+                    A validação com <strong>include</strong> pode ser
+                    útil quando apenas uma parte da URL é relevante
+                    para o cenário.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CY GO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Utilizando cy.go()
+            </h2>
+
+            <p>
+                O comando <strong>cy.go()</strong> permite navegar
+                pelo histórico do navegador.
+            </p>
+
+            <p>
+                Para voltar uma página:
+            </p>
+
+            <pre><code>cy.go(<span class="sql-string">'back'</span>)</code></pre>
+
+            <p>
+                Também podemos utilizar o número
+                <strong>-1</strong>:
+            </p>
+
+            <pre><code>cy.go(-1)</code></pre>
+
+            <p>
+                Para avançar:
+            </p>
+
+            <pre><code>cy.go(<span class="sql-string">'forward'</span>)</code></pre>
+
+            <p>
+                Ou:
+            </p>
+
+            <pre><code>cy.go(1)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    ⬅️ <strong>cy.go(-1)</strong>
+                    → volta uma entrada no histórico.
+                </p>
+
+                <p>
+                    ➡️ <strong>cy.go(1)</strong>
+                    → avança uma entrada no histórico.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CY BACK
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Utilizando cy.go('back')
+            </h2>
+
+            <p>
+                O comando abaixo retorna para a página anterior:
+            </p>
+
+            <pre><code>cy.go(<span class="sql-string">'back'</span>)</code></pre>
+
+            <p>
+                Imagine o seguinte fluxo:
+            </p>
+
+            <pre><code>Página inicial
+  ↓
+
+Página de produtos
+↓
+Página de detalhes</code></pre>
+
+            <p>
+                Depois de acessar a página de detalhes, podemos voltar:
+            </p>
+
+            <pre><code>cy.go(<span class="sql-string">'back'</span>)</code></pre>
+
+            <p>
+                O navegador retorna para a página anterior do histórico.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     CY FORWARD
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Utilizando cy.go('forward')
+            </h2>
+
+            <p>
+                Depois de voltar no histórico, podemos avançar
+                novamente utilizando:
+            </p>
+
+            <pre><code>cy.go(<span class="sql-string">'forward'</span>)</code></pre>
+
+            <p>
+                Exemplo:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/produtos'</span>)
+
+cy.visit(<span class="sql-string">'/produto/1'</span>)
+
+cy.go(<span class="sql-string">'back'</span>)
+
+cy.go(<span class="sql-string">'forward'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O histórico do navegador é utilizado para
+                    controlar o movimento entre as páginas.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CY BACK
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Utilizando cy.back()
+            </h2>
+
+            <p>
+                O Cypress também disponibiliza o comando
+                <strong>cy.back()</strong> para retornar uma entrada
+                no histórico do navegador.
+            </p>
+
+            <pre><code>cy.back()</code></pre>
+
+            <p>
+                Ele pode ser utilizado quando queremos expressar
+                diretamente a intenção de voltar para a página anterior.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/produtos'</span>)
+
+cy.get(<span class="sql-string">'[data-cy="produto-1"]'</span>)
+.click()
+
+cy.back()</code></pre>
+
+            <div class="highlight">
+
+                <strong>Observação:</strong>
+
+                <p>
+                    O comando representa uma navegação no histórico.
+                    Ele não deve ser confundido com uma nova chamada
+                    de <strong>cy.visit()</strong>.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CY RELOAD
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Utilizando cy.reload()
+            </h2>
+
+            <p>
+                O comando <strong>cy.reload()</strong> recarrega
+                a página atual.
+            </p>
+
+            <pre><code>cy.reload()</code></pre>
+
+            <p>
+                Podemos utilizá-lo quando queremos verificar o
+                comportamento da aplicação depois de um reload.
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/dashboard'</span>)
+
+cy.reload()
+
+cy.get(<span class="sql-string">'h1'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔄
+                    </div>
+
+                    <h3>
+                        Recarregar
+                    </h3>
+
+                    <p>
+                        Atualiza o documento da página atual.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Validar estado
+                    </h3>
+
+                    <p>
+                        Permite verificar como a aplicação se comporta
+                        depois de uma atualização.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RELOAD COM OPÇÕES
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Recarregando sem utilizar o cache
+            </h2>
+
+            <p>
+                O <strong>cy.reload()</strong> também aceita opções
+                relacionadas ao comportamento de recarregamento.
+            </p>
+
+            <p>
+                Podemos solicitar um reload utilizando a estratégia
+                de recarregamento ignorando o cache:
+            </p>
+
+            <pre><code>cy.reload(<span class="sql-string">'onload'</span>, {
+timeout: 10000
+
+})</code></pre>
+
+            <p>
+                O primeiro argumento define o tipo de espera pelo
+                evento de carregamento, enquanto o objeto de opções
+                pode definir configurações como timeout.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    Na maioria dos testes, o uso simples de
+                    <strong>cy.reload()</strong> é suficiente.
+                    Utilize opções adicionais somente quando o
+                    cenário realmente exigir.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     HISTÓRICO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Entendendo o histórico do navegador
+            </h2>
+
+            <p>
+                Os comandos de voltar e avançar trabalham com o
+                histórico de navegação do navegador.
+            </p>
+
+            <p>
+                Podemos representar um fluxo da seguinte maneira:
+            </p>
+
+            <pre><code>/inicio
+
+↓
+/produtos
+↓
+/produto/1</code></pre>
+
+            <p>
+                Se estivermos em <strong>/produto/1</strong> e
+                executarmos:
+            </p>
+
+            <pre><code>cy.go(<span class="sql-string">'back'</span>)</code></pre>
+
+            <p>
+                retornaremos para:
+            </p>
+
+            <pre><code>/produtos</code></pre>
+
+            <p>
+                Se executarmos:
+            </p>
+
+            <pre><code>cy.go(<span class="sql-string">'forward'</span>)</code></pre>
+
+            <p>
+                poderemos retornar para:
+            </p>
+
+            <pre><code>/produto/1</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+     FLUXO PRÁTICO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Exemplo prático de navegação
+            </h2>
+
+            <p>
+                Vamos imaginar uma aplicação com uma página inicial,
+                uma página de produtos e uma página de detalhes.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Navegação'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve navegar entre páginas'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/'</span>)
+
+    cy.get(<span class="sql-string">'[data-cy="produtos"]'</span>)
+        .click()
+
+    cy.url()
+        .should(<span class="sql-string">'include'</span>, <span class="sql-string">'/produtos'</span>)
+
+    cy.get(<span class="sql-string">'[data-cy="produto-1"]'</span>)
+        .click()
+
+    cy.url()
+        .should(<span class="sql-string">'include'</span>, <span class="sql-string">'/produto/1'</span>)
+
+    cy.go(<span class="sql-string">'back'</span>)
+
+    cy.url()
+        .should(<span class="sql-string">'include'</span>, <span class="sql-string">'/produtos'</span>)
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Esse teste combina interação, navegação e
+                    validação da URL.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     NAVEGAÇÃO E SELETORES
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Navegação após uma interação
+            </h2>
+
+            <p>
+                Um cenário bastante comum em testes E2E é clicar
+                em um elemento e verificar se a aplicação navegou
+                para a página esperada.
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/'</span>)
+
+cy.get(<span class="sql-string">'[data-cy="login"]'</span>)
+.click()
+
+cy.url()
+.should(<span class="sql-string">'include'</span>, <span class="sql-string">'/login'</span>)</code></pre>
+
+            <p>
+                Também podemos validar elementos da nova página:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+.should(<span class="sql-string">'contain'</span>, <span class="sql-string">'Login'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Depois de uma ação que deveria provocar navegação,
+                    valide algum aspecto observável da nova página,
+                    como URL, título ou elemento principal.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     URL
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. cy.url() e cy.location()
+            </h2>
+
+            <p>
+                O <strong>cy.url()</strong> é uma forma simples de
+                obter a URL atual da página.
+            </p>
+
+            <pre><code>cy.url()
+.should(<span class="sql-string">'include'</span>, <span class="sql-string">'/dashboard'</span>)</code></pre>
+
+            <p>
+                O Cypress também disponibiliza o comando
+                <strong>cy.location()</strong>, que permite acessar
+                partes específicas da localização atual.
+            </p>
+
+            <pre><code>cy.location(<span class="sql-string">'pathname'</span>)
+.should(<span class="sql-string">'eq'</span>, <span class="sql-string">'/dashboard'</span>)</code></pre>
+
+            <p>
+                Também podemos acessar outras propriedades, como
+                <strong>hostname</strong> e <strong>pathname</strong>.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔗
+                    </div>
+
+                    <h3>
+                        cy.url()
+                    </h3>
+
+                    <p>
+                        Retorna a URL atual da página.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📍
+                    </div>
+
+                    <h3>
+                        cy.location()
+                    </h3>
+
+                    <p>
+                        Permite consultar propriedades específicas
+                        da localização atual.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     REDIRECIONAMENTO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Testando redirecionamentos
+            </h2>
+
+            <p>
+                Aplicações frequentemente redirecionam o usuário
+                depois de determinadas ações.
+            </p>
+
+            <p>
+                Por exemplo, depois de realizar login, o usuário
+                pode ser direcionado para um dashboard.
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.get(<span class="sql-string">'[data-cy="email"]'</span>)
+.type(<span class="sql-string">'usuario@exemplo.com'</span>)
+
+cy.get(<span class="sql-string">'[data-cy="senha"]'</span>)
+.type(<span class="sql-string">'senha123'</span>)
+
+cy.get(<span class="sql-string">'[data-cy="entrar"]'</span>)
+.click()
+
+cy.url()
+.should(<span class="sql-string">'include'</span>, <span class="sql-string">'/dashboard'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O objetivo do teste não é apenas clicar no botão.
+                    Também precisamos validar se a aplicação chegou
+                    ao estado esperado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     NAVEGAÇÃO EXTERNA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Navegação para URLs externas
+            </h2>
+
+            <p>
+                O <strong>cy.visit()</strong> também pode acessar
+                uma URL completa.
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'https://example.cypress.io'</span>)</code></pre>
+
+            <p>
+                Entretanto, testes E2E normalmente devem se concentrar
+                no comportamento da aplicação que está sob teste.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Evite transformar dependências externas em
+                    requisitos obrigatórios para a execução da sua
+                    suíte. Quando apropriado, considere interceptação
+                    ou mocks para controlar dependências externas.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     NAVEGAÇÃO E BASEURL
+====================================================== -->
+
+        <section>
+
+            <h2>
+                16. Navegação utilizando baseUrl
+            </h2>
+
+            <p>
+                Quando configuramos uma <strong>baseUrl</strong>,
+                os testes podem utilizar caminhos relativos.
+            </p>
+
+            <pre><code>e2e: {
+
+baseUrl: <span class="sql-string">'http://localhost:3000'</span>
+
+}</code></pre>
+
+            <p>
+                Então podemos escrever:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/'</span>)
+
+cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.visit(<span class="sql-string">'/produtos'</span>)</code></pre>
+
+            <p>
+                Em vez de repetir:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'http://localhost:3000/'</span>)
+
+cy.visit(<span class="sql-string">'http://localhost:3000/login'</span>)
+
+cy.visit(<span class="sql-string">'http://localhost:3000/produtos'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Centralizar a URL da aplicação ajuda a reduzir
+                    repetição e facilita a manutenção dos testes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     QUANDO UTILIZAR
+====================================================== -->
+
+        <section>
+
+            <h2>
+                17. Quando utilizar cada comando?
+            </h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Comando</th>
+                            <th>Objetivo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>cy.visit()</strong>
+                            </td>
+
+                            <td>
+                                Acessar uma URL.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>cy.go('back')</strong>
+                            </td>
+
+                            <td>
+                                Voltar no histórico do navegador.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>cy.go('forward')</strong>
+                            </td>
+
+                            <td>
+                                Avançar no histórico do navegador.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>cy.back()</strong>
+                            </td>
+
+                            <td>
+                                Retornar uma entrada no histórico.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>cy.reload()</strong>
+                            </td>
+
+                            <td>
+                                Recarregar a página atual.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>cy.url()</strong>
+                            </td>
+
+                            <td>
+                                Consultar a URL atual.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>cy.location()</strong>
+                            </td>
+
+                            <td>
+                                Consultar propriedades da localização.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ERROS COMUNS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns em testes de navegação
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Não validar a navegação
+                    </h3>
+
+                    <p>
+                        Clicar em um elemento sem verificar se a
+                        aplicação chegou ao destino esperado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Repetir URLs completas
+                    </h3>
+
+                    <p>
+                        Espalhar a URL da aplicação por diversos
+                        testes mesmo quando existe uma baseUrl.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Depender de histórico incorreto
+                    </h3>
+
+                    <p>
+                        Utilizar back ou forward sem considerar o
+                        fluxo de navegação realizado pelo teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Usar reload sem necessidade
+                    </h3>
+
+                    <p>
+                        Recarregar a página sem que isso faça parte
+                        do comportamento que está sendo validado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRÁTICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas de navegação
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Valide o destino
+                    </h3>
+
+                    <p>
+                        Depois de uma navegação importante, valide
+                        a URL ou algum elemento da página.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        Utilize baseUrl
+                    </h3>
+
+                    <p>
+                        Centralize o endereço principal da aplicação
+                        na configuração do Cypress.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Simule fluxos reais
+                    </h3>
+
+                    <p>
+                        Construa cenários que representem ações
+                        realizadas por usuários.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧹
+                    </div>
+
+                    <h3>
+                        Evite navegação desnecessária
+                    </h3>
+
+                    <p>
+                        Mantenha cada teste focado no comportamento
+                        que precisa ser validado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EXERCÍCIO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Exercício prático
+            </h2>
+
+            <p>
+                Crie um teste que execute o seguinte fluxo:
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    1️⃣ Acesse a página inicial.
+                </p>
+
+                <p>
+                    2️⃣ Navegue para a página de produtos.
+                </p>
+
+                <p>
+                    3️⃣ Valide a URL.
+                </p>
+
+                <p>
+                    4️⃣ Acesse um produto.
+                </p>
+
+                <p>
+                    5️⃣ Valide a página de detalhes.
+                </p>
+
+                <p>
+                    6️⃣ Volte para a página anterior.
+                </p>
+
+                <p>
+                    7️⃣ Valide novamente a URL.
+                </p>
+
+                <p>
+                    8️⃣ Recarregue a página.
+                </p>
+
+                <p>
+                    9️⃣ Valide se o conteúdo principal continua disponível.
+                </p>
+
+            </div>
+
+            <p>
+                Um exemplo de estrutura:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Navegação de produtos'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve navegar corretamente'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/'</span>)
+
+    // navegar para produtos
+
+    // validar URL
+
+    // acessar produto
+
+    // validar página
+
+    // voltar
+
+    // validar URL
+
+    // recarregar
+
+    // validar conteúdo
+
+})
+
+})</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o objetivo do cy.visit().
+                </p>
+
+                <p>
+                    ☐ Sei navegar utilizando caminhos relativos.
+                </p>
+
+                <p>
+                    ☐ Entendi como funciona o histórico do navegador.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar cy.go().
+                </p>
+
+                <p>
+                    ☐ Sei voltar utilizando cy.back().
+                </p>
+
+                <p>
+                    ☐ Sei avançar utilizando cy.go('forward').
+                </p>
+
+                <p>
+                    ☐ Sei utilizar cy.reload().
+                </p>
+
+                <p>
+                    ☐ Sei validar a URL com cy.url().
+                </p>
+
+                <p>
+                    ☐ Conheço o cy.location().
+                </p>
+
+                <p>
+                    ☐ Sei validar redirecionamentos.
+                </p>
+
+                <p>
+                    ☐ Entendi a relação entre navegação e baseUrl.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>cy.visit()</strong>
+                    → acessa uma URL.
+                </p>
+
+                <p>
+                    ⬅️ <strong>cy.go('back')</strong>
+                    → volta no histórico do navegador.
+                </p>
+
+                <p>
+                    ➡️ <strong>cy.go('forward')</strong>
+                    → avança no histórico do navegador.
+                </p>
+
+                <p>
+                    ↩️ <strong>cy.back()</strong>
+                    → retorna uma entrada no histórico.
+                </p>
+
+                <p>
+                    🔄 <strong>cy.reload()</strong>
+                    → recarrega a página atual.
+                </p>
+
+                <p>
+                    🔗 <strong>cy.url()</strong>
+                    → permite consultar e validar a URL atual.
+                </p>
+
+                <p>
+                    📍 <strong>cy.location()</strong>
+                    → permite consultar propriedades da localização.
+                </p>
+
+                <p>
+                    🎯 <strong>baseUrl</strong>
+                    → centraliza o endereço principal da aplicação.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você já conhece os principais comandos utilizados
+                para controlar a navegação durante os testes Cypress.
+            </p>
+
+            <p>
+                Esses comandos serão utilizados frequentemente em
+                cenários E2E, principalmente quando precisamos validar
+                fluxos entre diferentes páginas da aplicação.
+            </p>
+
+            <p>
+                Na próxima aula vamos trabalhar com formulários,
+                inputs, selects, checkboxes e radio buttons.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKPOINT
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 19
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 19 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe como navegar entre páginas,
+                voltar, avançar, recarregar e validar URLs durante
+                seus testes automatizados com Cypress.
+            </p>
+
+            <a href="../aulas/aula-20.html" class="cta-button">
+                Aula 20 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+   FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 19 • Comandos de Navegação
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+   JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-19.js"></script>
+
+
+</body>
+
+</html>

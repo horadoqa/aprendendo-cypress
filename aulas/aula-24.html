@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 24 — Validando Atributos</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 24 • VALIDANDO ATRIBUTOS
+            </span>
+
+            <h1>
+                Validando Atributos
+            </h1>
+
+            <p>
+                Aprenda a validar atributos, classes, valores e
+                propriedades dos elementos utilizando o Cypress.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+         OBJETIVOS DA AULA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Na aula anterior aprendemos como validar textos
+                exibidos na interface da aplicação.
+            </p>
+
+            <p>
+                Agora vamos avançar para outro tipo importante de
+                validação: os atributos e propriedades dos elementos
+                HTML.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Validar atributos
+                    </h3>
+
+                    <p>
+                        Verificar se um elemento possui determinado
+                        atributo e valor.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏷️
+                    </div>
+
+                    <h3>
+                        Validar classes
+                    </h3>
+
+                    <p>
+                        Verificar se um elemento possui determinada
+                        classe CSS.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        Validar valores
+                    </h3>
+
+                    <p>
+                        Validar o valor atual de inputs e outros
+                        elementos de formulário.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚙️
+                    </div>
+
+                    <h3>
+                        Validar propriedades
+                    </h3>
+
+                    <p>
+                        Verificar propriedades específicas de
+                        elementos HTML.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         O QUE SÃO ATRIBUTOS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que são atributos HTML?
+            </h2>
+
+            <p>
+                Atributos são informações adicionadas aos elementos
+                HTML para definir características ou comportamentos.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>&lt;input
+type="email"
+id="email"
+name="email"
+placeholder="Digite seu e-mail"
+
+></code></pre>
+
+            <p>
+                Nesse exemplo, temos diversos atributos:
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>type</strong>
+                    → define o tipo do input.
+                </p>
+
+                <p>
+                    <strong>id</strong>
+                    → identifica o elemento.
+                </p>
+
+                <p>
+                    <strong>name</strong>
+                    → identifica o campo em um formulário.
+                </p>
+
+                <p>
+                    <strong>placeholder</strong>
+                    → apresenta uma mensagem de orientação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         SHOULD HAVE ATTR
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Validando a existência de um atributo
+            </h2>
+
+            <p>
+                Para verificar se um elemento possui determinado
+                atributo, podemos utilizar a asserção
+                <strong>have.attr</strong>.
+            </p>
+
+            <p>
+                Imagine o seguinte elemento:
+            </p>
+
+            <pre><code>&lt;input
+type="email"
+id="email"
+
+></code></pre>
+
+            <p>
+                Podemos verificar se o elemento possui o atributo
+                <strong>type</strong>:
+            </p>
+
+            <pre><code>cy.get('#email')
+.should('have.attr', 'type')</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>have.attr</strong>
+                    → verifica a existência de um atributo.
+                </p>
+
+                <p>
+                    <strong>type</strong>
+                    → nome do atributo que queremos validar.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         VALIDANDO VALOR DO ATRIBUTO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Validando o valor de um atributo
+            </h2>
+
+            <p>
+                Também podemos verificar não apenas se o atributo
+                existe, mas qual é o seu valor.
+            </p>
+
+            <p>
+                Considere:
+            </p>
+
+            <pre><code>&lt;input
+id="email"
+type="email"
+
+></code></pre>
+
+            <p>
+                Podemos validar o valor do atributo
+                <strong>type</strong>:
+            </p>
+
+            <pre><code>cy.get('#email')
+.should('have.attr', 'type', 'email')</code></pre>
+
+            <p>
+                Nesse caso, o teste verifica duas informações:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        1️⃣
+                    </div>
+
+                    <h3>
+                        Atributo
+                    </h3>
+
+                    <p>
+                        O elemento precisa possuir o atributo
+                        <strong>type</strong>.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        2️⃣
+                    </div>
+
+                    <h3>
+                        Valor
+                    </h3>
+
+                    <p>
+                        O valor do atributo precisa ser
+                        <strong>email</strong>.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         EXEMPLOS DE ATRIBUTOS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Validando diferentes atributos
+            </h2>
+
+            <p>
+                A mesma estratégia pode ser utilizada para diferentes
+                atributos HTML.
+            </p>
+
+            <pre><code>&lt;input
+id="email"
+type="email"
+name="email"
+placeholder="Digite seu e-mail"
+
+></code></pre>
+
+            <p>
+                Podemos validar o atributo <strong>type</strong>:
+            </p>
+
+            <pre><code>cy.get('#email')
+.should('have.attr', 'type', 'email')</code></pre>
+
+            <p>
+                Validar o atributo <strong>name</strong>:
+            </p>
+
+            <pre><code>cy.get('#email')
+.should('have.attr', 'name', 'email')</code></pre>
+
+            <p>
+                E também o <strong>placeholder</strong>:
+            </p>
+
+            <pre><code>cy.get('#email')
+.should(
+    'have.attr',
+    'placeholder',
+    'Digite seu e-mail'
+)</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+         DATA ATTRIBUTES
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Validando data attributes
+            </h2>
+
+            <p>
+                É muito comum aplicações utilizarem atributos
+                personalizados iniciados por <strong>data-</strong>.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>&lt;button
+data-testid="login-button"
+
+>
+Entrar
+</button></code></pre>
+
+            <p>
+                Podemos verificar esse atributo utilizando
+                <strong>have.attr</strong>:
+            </p>
+
+            <pre><code>cy.get('[data-testid="login-button"]')
+.should(
+    'have.attr',
+    'data-testid',
+    'login-button'
+)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Atributos dedicados à automação podem ajudar
+                    a criar seletores mais estáveis quando utilizados
+                    de forma consistente no projeto.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CLASSES
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Validando classes CSS
+            </h2>
+
+            <p>
+                Classes também podem ser importantes para verificar
+                o estado ou a aparência de determinados elementos.
+            </p>
+
+            <p>
+                Considere:
+            </p>
+
+            <pre><code>&lt;button class="btn btn-primary"&gt;
+Entrar
+
+</button></code></pre>
+
+            <p>
+                Podemos verificar se o elemento possui a classe
+                <strong>btn-primary</strong>:
+            </p>
+
+            <pre><code>cy.get('button')
+.should('have.class', 'btn-primary')</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>have.class</strong>
+                    → verifica se um elemento possui determinada
+                    classe CSS.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         MULTIPLAS CLASSES
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Validando elementos com várias classes
+            </h2>
+
+            <p>
+                Um elemento pode possuir várias classes ao mesmo
+                tempo.
+            </p>
+
+            <pre><code>&lt;button class="btn btn-primary active"&gt;
+Entrar
+
+</button></code></pre>
+
+            <p>
+                Podemos validar cada classe individualmente:
+            </p>
+
+            <pre><code>cy.get('button')
+.should('have.class', 'btn')
+.and('have.class', 'btn-primary')
+.and('have.class', 'active')</code></pre>
+
+            <p>
+                Dessa maneira, conseguimos verificar diferentes
+                características do mesmo elemento.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         VALUE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Validando o valor de um input
+            </h2>
+
+            <p>
+                Inputs possuem uma característica importante:
+                o valor atual preenchido pelo usuário.
+            </p>
+
+            <p>
+                Podemos utilizar a asserção
+                <strong>have.value</strong>.
+            </p>
+
+            <pre><code>&lt;input
+id="email"
+type="email"
+value="usuario@email.com"
+
+></code></pre>
+
+            <p>
+                O teste pode verificar esse valor:
+            </p>
+
+            <pre><code>cy.get('#email')
+.should('have.value', 'usuario@email.com')</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>have.value</strong>
+                    → verifica o valor atual de um elemento
+                    de formulário.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         TYPE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Validando o tipo de um input
+            </h2>
+
+            <p>
+                Uma validação bastante comum é verificar se um
+                campo possui o tipo esperado.
+            </p>
+
+            <pre><code>&lt;input
+id="senha"
+type="password"
+
+></code></pre>
+
+            <p>
+                Podemos validar o atributo:
+            </p>
+
+            <pre><code>cy.get('#senha')
+.should('have.attr', 'type', 'password')</code></pre>
+
+            <p>
+                Dessa forma, conseguimos garantir que o campo
+                foi configurado como um campo de senha.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         HREF
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Validando links
+            </h2>
+
+            <p>
+                Links normalmente possuem o atributo
+                <strong>href</strong>, que indica o endereço
+                de destino.
+            </p>
+
+            <pre><code>&lt;a
+href="/produtos"
+
+>
+Produtos
+</a></code></pre>
+
+            <p>
+                Podemos validar o destino:
+            </p>
+
+            <pre><code>cy.get('a')
+.should('have.attr', 'href', '/produtos')</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Essa validação pode ajudar a verificar se links
+                    importantes da aplicação estão configurados
+                    corretamente.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         TARGET
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Validando outros atributos de links
+            </h2>
+
+            <p>
+                Também podemos validar atributos adicionais
+                presentes em links.
+            </p>
+
+            <pre><code>&lt;a
+href="https://exemplo.com"
+target="_blank"
+
+>
+Acessar
+</a></code></pre>
+
+            <p>
+                Podemos verificar o atributo
+                <strong>target</strong>:
+            </p>
+
+            <pre><code>cy.get('a')
+.should('have.attr', 'target', '_blank')</code></pre>
+
+            <p>
+                Também podemos verificar o <strong>href</strong>:
+            </p>
+
+            <pre><code>cy.get('a')
+.should(
+    'have.attr',
+    'href',
+    'https://exemplo.com'
+)</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+         MULTIPLAS ASSERTIONS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Utilizando múltiplas validações
+            </h2>
+
+            <p>
+                Podemos realizar várias asserções sobre o mesmo
+                elemento.
+            </p>
+
+            <pre><code>&lt;input
+id="email"
+class="form-control"
+type="email"
+name="email"
+placeholder="Digite seu e-mail"
+
+></code></pre>
+
+            <p>
+                O teste pode validar diferentes características:
+            </p>
+
+            <pre><code>cy.get('#email')
+.should('have.class', 'form-control')
+.and('have.attr', 'type', 'email')
+.and('have.attr', 'name', 'email')
+.and(
+    'have.attr',
+    'placeholder',
+    'Digite seu e-mail'
+)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Utilizar múltiplas asserções pode deixar o teste
+                    mais completo, mas é importante evitar validações
+                    desnecessárias.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         EXISTÊNCIA VS VALOR
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Existência do atributo x valor do atributo
+            </h2>
+
+            <p>
+                Existe uma diferença importante entre verificar
+                apenas a existência de um atributo e verificar
+                também o seu valor.
+            </p>
+
+            <p>
+                Para verificar apenas a existência:
+            </p>
+
+            <pre><code>cy.get('#email')
+.should('have.attr', 'type')</code></pre>
+
+            <p>
+                Para verificar o valor:
+            </p>
+
+            <pre><code>cy.get('#email')
+.should('have.attr', 'type', 'email')</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Existência
+                    </h3>
+
+                    <p>
+                        Verifica se o atributo está presente
+                        no elemento.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Valor
+                    </h3>
+
+                    <p>
+                        Verifica se o atributo possui o valor
+                        esperado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         PROPRIEDADES
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Atributos e propriedades
+            </h2>
+
+            <p>
+                É importante diferenciar atributos HTML de
+                propriedades dos elementos.
+            </p>
+
+            <p>
+                Por exemplo, um checkbox pode possuir o atributo
+                <strong>checked</strong>:
+            </p>
+
+            <pre><code>&lt;input
+type="checkbox"
+checked
+
+></code></pre>
+
+            <p>
+                Para validar o estado atual do elemento, podemos
+                utilizar asserções específicas:
+            </p>
+
+            <pre><code>cy.get('input[type="checkbox"]')
+.should('be.checked')</code></pre>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    Nem sempre validar diretamente um atributo é a
+                    melhor forma de verificar o estado atual de um
+                    elemento. Para estados como checked, disabled
+                    ou selected, o Cypress possui asserções próprias.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         DISABLED
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Validando elementos desabilitados
+            </h2>
+
+            <p>
+                Podemos validar se um elemento está desabilitado
+                utilizando a asserção <strong>be.disabled</strong>.
+            </p>
+
+            <pre><code>&lt;button disabled&gt;
+Salvar
+
+</button></code></pre>
+
+            <p>
+                O teste:
+            </p>
+
+            <pre><code>cy.get('button')
+.should('be.disabled')</code></pre>
+
+            <p>
+                Para verificar o estado oposto:
+            </p>
+
+            <pre><code>cy.get('button')
+.should('not.be.disabled')</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+         CHECKED
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Validando checkbox selecionado
+            </h2>
+
+            <p>
+                Para verificar se um checkbox está marcado,
+                podemos utilizar <strong>be.checked</strong>.
+            </p>
+
+            <pre><code>&lt;input
+type="checkbox"
+id="termos"
+
+></code></pre>
+
+            <p>
+                Depois de marcar o checkbox:
+            </p>
+
+            <pre><code>cy.get('#termos')
+.check()
+.should('be.checked')</code></pre>
+
+            <p>
+                Também podemos verificar se ele não está marcado:
+            </p>
+
+            <pre><code>cy.get('#termos')
+.should('not.be.checked')</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+         SELECTED
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                16. Validando opções selecionadas
+            </h2>
+
+            <p>
+                Em elementos <strong>select</strong>, podemos
+                verificar qual opção está selecionada.
+            </p>
+
+            <pre><code>&lt;select id="estado"&gt;
+
+&lt;option value="rj"&gt;
+    Rio de Janeiro
+&lt;/option&gt;
+
+&lt;option value="sp"&gt;
+    São Paulo
+&lt;/option&gt;
+
+</select></code></pre>
+
+            <p>
+                Podemos selecionar uma opção e validar seu valor:
+            </p>
+
+            <pre><code>cy.get('#estado')
+.select('rj')
+.should('have.value', 'rj')</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Para formulários, combinar interação e validação
+                    ajuda a garantir que a aplicação respondeu
+                    corretamente à ação realizada.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ATTRIBUTE SELECTORS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                17. Atributos também podem ser utilizados
+                em seletores
+            </h2>
+
+            <p>
+                Além de validar atributos, também podemos utilizá-los
+                para localizar elementos.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>&lt;button
+data-testid="login-button"
+
+>
+Entrar
+</button></code></pre>
+
+            <p>
+                Podemos localizar o botão através do atributo:
+            </p>
+
+            <pre><code>cy.get('[data-testid="login-button"]')</code></pre>
+
+            <p>
+                E depois realizar uma validação:
+            </p>
+
+            <pre><code>cy.get('[data-testid="login-button"]')
+.should('have.attr', 'data-testid', 'login-button')</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+         EXEMPLO COMPLETO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                18. Exemplo completo
+            </h2>
+
+            <p>
+                Vamos combinar localização, interação e validação
+                de atributos.
+            </p>
+
+            <p>
+                HTML:
+            </p>
+
+            <pre><code>&lt;form&gt;
+
+&lt;input
+    id="email"
+    type="email"
+    name="email"
+    placeholder="Digite seu e-mail"
+    class="form-control"
+&gt;
+
+&lt;button
+    id="login"
+    type="submit"
+    class="btn btn-primary"
+&gt;
+    Entrar
+&lt;/button&gt;
+
+</form></code></pre>
+
+            <p>
+                Teste:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Formulário de login'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve possuir os atributos esperados'</span>, () =&gt; {
+
+    cy.get('#email')
+        .should('have.attr', 'type', 'email')
+        .and('have.attr', 'name', 'email')
+        .and(
+            'have.attr',
+            'placeholder',
+            'Digite seu e-mail'
+        )
+        .and('have.class', 'form-control')
+
+    cy.get('#login')
+        .should('have.attr', 'type', 'submit')
+        .and('have.class', 'btn')
+        .and('have.class', 'btn-primary')
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <strong>O que estamos validando?</strong>
+
+                <p>
+                    📧 O tipo do campo de e-mail.
+                </p>
+
+                <p>
+                    🏷️ O atributo name.
+                </p>
+
+                <p>
+                    💬 O placeholder.
+                </p>
+
+                <p>
+                    🎨 As classes CSS.
+                </p>
+
+                <p>
+                    🔘 O tipo do botão.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         QUANDO VALIDAR ATRIBUTOS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                19. Quando validar atributos?
+            </h2>
+
+            <p>
+                A validação de atributos pode ser útil em diferentes
+                situações durante a automação.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔗
+                    </div>
+
+                    <h3>
+                        Links
+                    </h3>
+
+                    <p>
+                        Verificar href, target e outros atributos
+                        relacionados à navegação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        Formulários
+                    </h3>
+
+                    <p>
+                        Validar type, name, placeholder e value
+                        dos campos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏷️
+                    </div>
+
+                    <h3>
+                        Classes
+                    </h3>
+
+                    <p>
+                        Verificar classes utilizadas para representar
+                        estilos ou estados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Data attributes
+                    </h3>
+
+                    <p>
+                        Validar atributos utilizados como identificadores
+                        ou metadados da aplicação.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ERROS COMUNS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Validar atributos desnecessários
+                    </h3>
+
+                    <p>
+                        Criar verificações para características que
+                        não possuem importância para o comportamento
+                        do teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Confundir atributo com estado
+                    </h3>
+
+                    <p>
+                        Utilizar uma validação de atributo quando
+                        existe uma asserção específica para o estado
+                        do elemento.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Depender de classes visuais
+                    </h3>
+
+                    <p>
+                        Utilizar classes puramente visuais como
+                        principal estratégia para localizar elementos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Testar tudo ao mesmo tempo
+                    </h3>
+
+                    <p>
+                        Criar testes excessivamente grandes,
+                        difíceis de entender e manter.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         BOAS PRÁTICAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Valide o que importa
+                    </h3>
+
+                    <p>
+                        Concentre as asserções em comportamentos
+                        relevantes para o teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Prefira seletores estáveis
+                    </h3>
+
+                    <p>
+                        Utilize identificadores apropriados para
+                        reduzir a fragilidade dos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Use asserções específicas
+                    </h3>
+
+                    <p>
+                        Utilize be.checked, be.disabled, have.value
+                        e outras asserções quando forem apropriadas.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧹
+                    </div>
+
+                    <h3>
+                        Evite excesso de validações
+                    </h3>
+
+                    <p>
+                        Um teste deve ser claro e possuir um objetivo
+                        bem definido.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CHECKLIST
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o que são atributos HTML.
+                </p>
+
+                <p>
+                    ☐ Aprendi a utilizar have.attr.
+                </p>
+
+                <p>
+                    ☐ Sei validar o valor de um atributo.
+                </p>
+
+                <p>
+                    ☐ Aprendi a validar classes com have.class.
+                </p>
+
+                <p>
+                    ☐ Aprendi a validar valores com have.value.
+                </p>
+
+                <p>
+                    ☐ Sei validar atributos de links.
+                </p>
+
+                <p>
+                    ☐ Sei validar data attributes.
+                </p>
+
+                <p>
+                    ☐ Entendi a diferença entre atributo e estado.
+                </p>
+
+                <p>
+                    ☐ Conheço asserções como be.checked e
+                    be.disabled.
+                </p>
+
+                <p>
+                    ☐ Sei combinar múltiplas asserções.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         RESUMO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🔎 <strong>have.attr</strong>
+                    → valida a existência ou o valor de um atributo.
+                </p>
+
+                <p>
+                    🏷️ <strong>have.class</strong>
+                    → valida uma classe CSS.
+                </p>
+
+                <p>
+                    📝 <strong>have.value</strong>
+                    → valida o valor atual de um elemento.
+                </p>
+
+                <p>
+                    🔗 <strong>href</strong>
+                    → pode ser validado para verificar o destino
+                    de links.
+                </p>
+
+                <p>
+                    🧩 <strong>data-*</strong>
+                    → permite trabalhar com atributos personalizados.
+                </p>
+
+                <p>
+                    ☑️ <strong>be.checked</strong>
+                    → valida se um checkbox está marcado.
+                </p>
+
+                <p>
+                    🚫 <strong>be.disabled</strong>
+                    → valida se um elemento está desabilitado.
+                </p>
+
+                <p>
+                    🔗 <strong>.and()</strong>
+                    → permite encadear múltiplas asserções.
+                </p>
+
+            </div>
+
+            <p>
+                Nesta aula aprendemos como validar atributos,
+                classes, valores e estados de elementos utilizando
+                o Cypress.
+            </p>
+
+            <p>
+                Essas validações são importantes para garantir que
+                os elementos da aplicação possuem as características
+                esperadas durante a execução dos testes.
+            </p>
+
+            <p>
+                Na próxima aula vamos continuar trabalhando com
+                validações e aprender como verificar diferentes
+                estados dos elementos da interface.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         CHECKPOINT / QUIZ
+    ====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 24
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 24 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe validar atributos, classes,
+                valores, links e diferentes características dos
+                elementos utilizando o Cypress.
+            </p>
+
+            <a href="../aulas/aula-25.html" class="cta-button">
+                Aula 25 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+     FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 24 • Validando Atributos
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-24.js"></script>
+
+</body>
+
+</html>

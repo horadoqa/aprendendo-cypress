@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 1 — Introdução aos Testes de Software</title>
+</head>
+
+<body>
+
+    <header>
+
+        <img
+            class="header-logo"
+            src="../assets/images/logo.png"
+            alt="Hora do QA"
+        >
+
+        <button
+            class="theme-toggle"
+            id="themeToggle"
+            type="button"
+            aria-label="Alternar tema"
+        >
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 1 • FUNDAMENTOS DE TESTES
+            </span>
+
+            <h1>
+                Introdução aos Testes de Software
+            </h1>
+
+            <p>
+                Entenda o que são testes de software, por que testar,
+                quais são os principais tipos de testes e onde a
+                automação entra nesse processo.
+            </p>
+
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <!-- =====================================================
+             OBJETIVOS DA AULA
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Antes de aprender Cypress, precisamos entender
+                os fundamentos de testes de software e o papel
+                da automação dentro do processo de qualidade.
+            </p>
+
+            <p>
+                Nesta aula, você vai aprender a diferenciar:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Testes de Software
+                    </h3>
+
+                    <p>
+                        Atividades realizadas para verificar
+                        se um software atende aos comportamentos
+                        esperados.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        👨‍💻
+                    </div>
+
+                    <h3>
+                        Testes Manuais
+                    </h3>
+
+                    <p>
+                        Testes executados por uma pessoa seguindo
+                        cenários e procedimentos definidos.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🤖
+                    </div>
+
+                    <h3>
+                        Automação de Testes
+                    </h3>
+
+                    <p>
+                        Utilização de código e ferramentas para
+                        executar verificações automaticamente.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             VISÃO GERAL
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que são testes de software?
+            </h2>
+
+            <p>
+                Testes de software são atividades realizadas para
+                verificar o comportamento de uma aplicação e obter
+                informações sobre sua qualidade.
+            </p>
+
+            <p>
+                Um teste pode verificar desde uma pequena função
+                até o comportamento completo de uma aplicação,
+                incluindo a interação do usuário com uma interface.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>De forma simples:</strong>
+                </p>
+
+                <p>
+                    Testar significa verificar se o software
+                    apresenta o comportamento esperado para
+                    determinadas condições.
+                </p>
+
+            </div>
+
+            <p>
+                Os testes também ajudam a identificar problemas
+                antes que eles cheguem aos usuários e fornecem
+                informações importantes para o processo de
+                desenvolvimento e manutenção do software.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             POR QUE TESTAR?
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Por que testar software?
+            </h2>
+
+            <p>
+                Aplicações possuem regras de negócio, interfaces,
+                integrações e diferentes fluxos de utilização.
+                Alterações em uma parte do sistema podem afetar
+                outras funcionalidades.
+            </p>
+
+            <p>
+                Os testes ajudam a verificar se esses comportamentos
+                continuam funcionando conforme o esperado.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔍
+                    </div>
+
+                    <h3>
+                        Encontrar problemas
+                    </h3>
+
+                    <p>
+                        Identificar comportamentos inesperados
+                        durante o desenvolvimento e manutenção.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🛡️
+                    </div>
+
+                    <h3>
+                        Reduzir riscos
+                    </h3>
+
+                    <p>
+                        Verificar comportamentos importantes
+                        antes da disponibilização de uma versão.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔄
+                    </div>
+
+                    <h3>
+                        Validar alterações
+                    </h3>
+
+                    <p>
+                        Verificar se mudanças realizadas não
+                        alteraram comportamentos esperados.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        Obter evidências
+                    </h3>
+
+                    <p>
+                        Registrar resultados das verificações
+                        realizadas durante o processo de teste.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             EXEMPLO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Exemplo de uma aplicação
+            </h2>
+
+            <p>
+                Imagine uma aplicação de login.
+                O usuário informa seu e-mail e senha e
+                seleciona o botão "Entrar".
+            </p>
+
+            <p>
+                Podemos criar diferentes cenários para verificar
+                o comportamento dessa funcionalidade.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Cenário</th>
+                            <th>Entrada</th>
+                            <th>Resultado esperado</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>Login válido</td>
+                            <td>E-mail e senha corretos</td>
+                            <td>Usuário acessa a aplicação</td>
+                        </tr>
+
+                        <tr>
+                            <td>Senha inválida</td>
+                            <td>E-mail correto e senha incorreta</td>
+                            <td>Mensagem de erro</td>
+                        </tr>
+
+                        <tr>
+                            <td>E-mail inválido</td>
+                            <td>E-mail inexistente</td>
+                            <td>Mensagem de erro</td>
+                        </tr>
+
+                        <tr>
+                            <td>Campos vazios</td>
+                            <td>Sem informações</td>
+                            <td>Validação dos campos</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <p style="margin-top: 20px;">
+                Cada uma dessas situações pode se transformar
+                em um cenário de teste.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             TESTE MANUAL
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                2. O que é um teste manual?
+            </h2>
+
+            <p>
+                Um teste manual é executado por uma pessoa,
+                que realiza as ações necessárias e verifica
+                os resultados apresentados pela aplicação.
+            </p>
+
+            <p>
+                Por exemplo, para testar um login manualmente,
+                uma pessoa poderia:
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>1.</strong>
+                    Abrir a página de login.
+                </p>
+
+                <p>
+                    <strong>2.</strong>
+                    Informar o e-mail.
+                </p>
+
+                <p>
+                    <strong>3.</strong>
+                    Informar a senha.
+                </p>
+
+                <p>
+                    <strong>4.</strong>
+                    Clicar no botão "Entrar".
+                </p>
+
+                <p>
+                    <strong>5.</strong>
+                    Verificar o resultado apresentado.
+                </p>
+
+            </div>
+
+            <p>
+                O teste manual é importante e continua sendo utilizado
+                em diferentes situações. Porém, alguns cenários são
+                executados muitas vezes durante o desenvolvimento.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             AUTOMAÇÃO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                3. O que é automação de testes?
+            </h2>
+
+            <p>
+                Automação de testes consiste em utilizar software,
+                código e ferramentas para executar verificações
+                automaticamente.
+            </p>
+
+            <p>
+                Em vez de uma pessoa realizar manualmente todas
+                as etapas de um cenário, podemos escrever um teste
+                que execute essas ações e valide o resultado.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Exemplo:</strong>
+
+                <p>
+                    Em um teste automatizado, o código pode abrir
+                    uma página, preencher um formulário, clicar
+                    em um botão e verificar se determinada mensagem
+                    apareceu.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             MANUAL X AUTOMATIZADO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Teste manual × teste automatizado
+            </h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Característica</th>
+                            <th>Manual</th>
+                            <th>Automatizado</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>Execução</td>
+                            <td>Realizada por uma pessoa</td>
+                            <td>Realizada por código</td>
+                        </tr>
+
+                        <tr>
+                            <td>Repetição</td>
+                            <td>Pode exigir execução novamente</td>
+                            <td>Pode ser executado novamente através do teste</td>
+                        </tr>
+
+                        <tr>
+                            <td>Velocidade</td>
+                            <td>Depende da execução humana</td>
+                            <td>Pode executar várias verificações rapidamente</td>
+                        </tr>
+
+                        <tr>
+                            <td>Manutenção</td>
+                            <td>Depende do procedimento utilizado</td>
+                            <td>O código do teste precisa ser mantido</td>
+                        </tr>
+
+                        <tr>
+                            <td>Programação</td>
+                            <td>Não necessariamente</td>
+                            <td>Normalmente envolve código</td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    Automação não significa substituir todos os testes
+                    manuais. Cada abordagem possui aplicações diferentes
+                    dentro de uma estratégia de testes.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             TIPOS DE TESTES
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Tipos de testes
+            </h2>
+
+            <p>
+                Existem diferentes níveis e tipos de testes.
+                Eles podem verificar partes diferentes de uma aplicação.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Teste Unitário
+                    </h3>
+
+                    <p>
+                        Verifica uma unidade pequena do código,
+                        como uma função ou método.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔗
+                    </div>
+
+                    <h3>
+                        Teste de Integração
+                    </h3>
+
+                    <p>
+                        Verifica a interação entre diferentes
+                        componentes de um sistema.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        Teste End-to-End
+                    </h3>
+
+                    <p>
+                        Verifica um fluxo completo da aplicação
+                        do ponto de vista do usuário.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔌
+                    </div>
+
+                    <h3>
+                        Teste de API
+                    </h3>
+
+                    <p>
+                        Verifica requisições, respostas e
+                        comportamentos de uma API.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             TESTE END TO END
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                5. O que é um teste End-to-End?
+            </h2>
+
+            <p>
+                O teste <strong>End-to-End (E2E)</strong> verifica
+                um fluxo completo da aplicação, simulando uma
+                sequência de ações próxima à utilização real
+                do sistema.
+            </p>
+
+            <p>
+                Por exemplo, em uma loja virtual podemos testar:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        1. Pesquisar
+                    </h3>
+
+                    <p>
+                        O usuário pesquisa um produto.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🛒
+                    </div>
+
+                    <h3>
+                        2. Adicionar
+                    </h3>
+
+                    <p>
+                        O produto é adicionado ao carrinho.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        💳
+                    </div>
+
+                    <h3>
+                        3. Comprar
+                    </h3>
+
+                    <p>
+                        O usuário realiza o processo de compra.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        4. Confirmar
+                    </h3>
+
+                    <p>
+                        A aplicação apresenta a confirmação
+                        do pedido.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <p>
+                Esse tipo de cenário é especialmente relevante
+                para ferramentas de automação de testes de aplicações
+                web, como o Cypress.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             ONDE ENTRA O CYPRESS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Onde entra o Cypress?
+            </h2>
+
+            <p>
+                O <strong>Cypress</strong> é uma ferramenta utilizada
+                para testes automatizados de aplicações web.
+            </p>
+
+            <p>
+                Durante o curso, vamos utilizá-lo para criar testes
+                que interagem com uma aplicação e verificam se ela
+                apresenta os comportamentos esperados.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Imagine o fluxo:</strong>
+
+                <p>
+                    👤 Usuário
+                    → acessa a aplicação
+                </p>
+
+                <p>
+                    🤖 Cypress
+                    → executa as ações do teste
+                </p>
+
+                <p>
+                    🖱️ Interface
+                    → recebe as interações
+                </p>
+
+                <p>
+                    ✅ Assertions
+                    → verificam os resultados
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             PRIMEIRO EXEMPLO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Um primeiro exemplo com Cypress
+            </h2>
+
+            <p>
+                Mais adiante no curso, veremos comandos como
+                <strong>cy.visit()</strong> e
+                <strong>cy.get()</strong>.
+            </p>
+
+            <p>
+                Um teste simples pode ter uma estrutura semelhante
+                a esta:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Página de login'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve permitir realizar login'</span>, () =&gt; {
+
+        cy.visit(<span class="sql-string">'/login'</span>)
+
+        cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+            .type(<span class="sql-string">'usuario@email.com'</span>)
+
+        cy.get(<span class="sql-string">'[data-testid="senha"]'</span>)
+            .type(<span class="sql-string">'123456'</span>)
+
+        cy.get(<span class="sql-string">'[data-testid="entrar"]'</span>)
+            .click()
+
+        cy.contains(<span class="sql-string">'Bem-vindo'</span>)
+            .should(<span class="sql-string">'be.visible'</span>)
+
+    })
+
+})</code></pre>
+
+            <p>
+                Não é necessário memorizar esse código agora.
+                O objetivo é apenas visualizar como um cenário
+                que seria executado manualmente pode ser descrito
+                através de código.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             ASSERTIONS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                7. O que são Assertions?
+            </h2>
+
+            <p>
+                Uma <strong>assertion</strong> é uma verificação
+                utilizada para confirmar se uma condição esperada
+                foi atendida.
+            </p>
+
+            <p>
+                Por exemplo, podemos verificar se um botão está
+                visível:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'button'</span>)
+    .should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                Nesse caso, o teste espera que o botão esteja
+                visível na página.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Pense assim:</strong>
+
+                <p>
+                    Ação → executar alguma coisa.
+                </p>
+
+                <p>
+                    Assertion → verificar se o resultado esperado
+                    aconteceu.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             FLUXO DE UM TESTE
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Fluxo básico de um teste automatizado
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        1. Preparar
+                    </h3>
+
+                    <p>
+                        Acessar a aplicação e preparar o cenário.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🖱️
+                    </div>
+
+                    <h3>
+                        2. Interagir
+                    </h3>
+
+                    <p>
+                        Clicar, digitar, selecionar e executar
+                        ações na aplicação.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔍
+                    </div>
+
+                    <h3>
+                        3. Validar
+                    </h3>
+
+                    <p>
+                        Verificar se o comportamento esperado
+                        aconteceu.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        4. Resultado
+                    </h3>
+
+                    <p>
+                        Registrar se o cenário passou ou falhou.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CONCEITOS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Conceitos importantes
+            </h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Conceito</th>
+                            <th>Descrição</th>
+                            <th>Exemplo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>Teste</strong>
+                            </td>
+
+                            <td>
+                                Verificação de um comportamento
+                                esperado.
+                            </td>
+
+                            <td>
+                                Validar o login.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <strong>Teste Manual</strong>
+                            </td>
+
+                            <td>
+                                Executado por uma pessoa.
+                            </td>
+
+                            <td>
+                                Preencher o formulário manualmente.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <strong>Automação</strong>
+                            </td>
+
+                            <td>
+                                Execução de verificações através
+                                de código e ferramentas.
+                            </td>
+
+                            <td>
+                                Cypress.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <strong>E2E</strong>
+                            </td>
+
+                            <td>
+                                Teste de um fluxo completo.
+                            </td>
+
+                            <td>
+                                Login → produto → checkout.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <strong>Assertion</strong>
+                            </td>
+
+                            <td>
+                                Verificação de uma condição esperada.
+                            </td>
+
+                            <td>
+                                Elemento deve estar visível.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             ERROS COMUNS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <h3>
+                        ❌ "Automatizar tudo"
+                    </h3>
+
+                    <p>
+                        Automação não significa que todo cenário
+                        precisa obrigatoriamente ser automatizado.
+                        A estratégia deve considerar o objetivo
+                        de cada teste.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        ❌ "Teste automatizado não falha"
+                    </h3>
+
+                    <p>
+                        Testes automatizados também podem apresentar
+                        falhas, falsos positivos, falsos negativos
+                        ou problemas de manutenção.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        ❌ "Cypress substitui conhecimento de testes"
+                    </h3>
+
+                    <p>
+                        Cypress é uma ferramenta. Conhecer fundamentos
+                        de testes continua sendo importante para criar
+                        cenários relevantes.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        ❌ "Basta verificar se a página abriu"
+                    </h3>
+
+                    <p>
+                        Um teste precisa validar comportamentos
+                        relevantes da aplicação, e não apenas
+                        verificar se uma página foi carregada.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             RESUMO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🧪 <strong>Testes de software</strong>
+                    → verificam comportamentos esperados da aplicação.
+                </p>
+
+                <p>
+                    👨‍💻 <strong>Testes manuais</strong>
+                    → são executados por uma pessoa.
+                </p>
+
+                <p>
+                    🤖 <strong>Automação</strong>
+                    → utiliza código e ferramentas para executar
+                    verificações automaticamente.
+                </p>
+
+                <p>
+                    🌐 <strong>Testes E2E</strong>
+                    → verificam fluxos completos da aplicação.
+                </p>
+
+                <p>
+                    🔍 <strong>Assertions</strong>
+                    → verificam se o resultado esperado aconteceu.
+                </p>
+
+                <p>
+                    🧰 <strong>Cypress</strong>
+                    → será a ferramenta utilizada nesta trilha
+                    para aprender automação de aplicações web.
+                </p>
+
+            </div>
+
+            <p>
+                Na próxima aula, vamos conhecer melhor o Cypress,
+                entender sua arquitetura e preparar o ambiente
+                para começar a criar nossos primeiros testes.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             CHECKPOINT
+        ====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 1
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CTA
+        ====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 1 concluída!
+            </h2>
+
+            <p>
+                Agora você já conhece os fundamentos de testes
+                de software e entende onde a automação e o Cypress
+                entram nesse processo.
+            </p>
+
+            <a href="../aulas/aula-2.html" class="cta-button">
+                Aula 2 →
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+       FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 1 • Fundamentos de Testes de Software
+        </p>
+
+    </footer>
+
+
+    <!-- =====================================================
+       JAVASCRIPT
+    ====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-1.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 9 — Cypress App</title>
+
+</head>
+
+<body>
+
+    <header>
+
+        <img
+            class="header-logo"
+            src="../assets/images/logo.png"
+            alt="Hora do QA"
+        >
+
+        <button
+            class="theme-toggle"
+            id="themeToggle"
+            type="button"
+            aria-label="Alternar tema"
+        >
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 9 • CYPRESS APP
+            </span>
+
+            <h1>
+                Cypress App
+            </h1>
+
+            <p>
+                Conheça a interface do Cypress, aprenda a abrir o
+                Cypress App e entenda como criar, visualizar e
+                executar seus testes.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+         OBJETIVOS DA AULA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Na aula anterior, aprendemos a organizar o projeto
+                e configurar o Cypress por meio do arquivo
+                <strong>cypress.config.js</strong>.
+            </p>
+
+            <p>
+                Agora vamos conhecer o Cypress App, a interface
+                gráfica utilizada para visualizar projetos, selecionar
+                testes e acompanhar sua execução.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🖥️
+                    </div>
+
+                    <h3>
+                        Conhecer o Cypress App
+                    </h3>
+
+                    <p>
+                        Entender o que é a interface gráfica do
+                        Cypress e para que ela serve.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📂
+                    </div>
+
+                    <h3>
+                        Abrir um projeto
+                    </h3>
+
+                    <p>
+                        Aprender como iniciar o Cypress dentro de
+                        um projeto existente.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Encontrar os testes
+                    </h3>
+
+                    <p>
+                        Identificar os arquivos de teste disponíveis
+                        no projeto.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ▶️
+                    </div>
+
+                    <h3>
+                        Executar uma spec
+                    </h3>
+
+                    <p>
+                        Entender como selecionar e executar um
+                        arquivo de teste.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         O QUE É CYPRESS APP
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é o Cypress App?
+            </h2>
+
+            <p>
+                O <strong>Cypress App</strong> é a interface gráfica
+                do Cypress utilizada para trabalhar com os testes
+                durante o desenvolvimento.
+            </p>
+
+            <p>
+                Por meio dele podemos abrir um projeto, escolher
+                o tipo de teste, visualizar os arquivos disponíveis
+                e executar uma especificação.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🖥️ <strong>Cypress App</strong>
+                    → interface gráfica para desenvolvimento
+                    e execução dos testes.
+                </p>
+
+                <p>
+                    🧪 <strong>Spec</strong>
+                    → arquivo que contém os testes.
+                </p>
+
+                <p>
+                    ▶️ <strong>Execução</strong>
+                    → permite acompanhar visualmente o teste
+                    no navegador.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         CYPRESS OPEN
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Abrindo o Cypress App
+            </h2>
+
+            <p>
+                Para abrir a interface do Cypress em um projeto,
+                utilizamos o comando:
+            </p>
+
+            <pre><code>npx cypress open</code></pre>
+
+            <p>
+                O comando inicia a interface gráfica do Cypress
+                e permite selecionar como os testes serão executados.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    O comando deve ser executado dentro do diretório
+                    do projeto que possui o Cypress instalado.
+                </p>
+
+            </div>
+
+            <pre><code>cd curso-cypress
+
+npx cypress open</code></pre>
+
+        </section>
+
+
+        <!-- =====================================================
+         TIPOS DE TESTE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Escolhendo o tipo de teste
+            </h2>
+
+            <p>
+                Ao abrir o Cypress App, podemos encontrar opções
+                relacionadas aos tipos de testes disponíveis
+                no projeto.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        E2E Testing
+                    </h3>
+
+                    <p>
+                        Utilizado para testes End-to-End que
+                        simulam comportamentos completos da aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Component Testing
+                    </h3>
+
+                    <p>
+                        Utilizado para testar componentes
+                        individualmente.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="highlight">
+
+                <p>
+                    Nesta trilha vamos trabalhar principalmente
+                    com <strong>End-to-End Testing</strong>.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         E2E
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Selecionando E2E Testing
+            </h2>
+
+            <p>
+                Para nosso curso, vamos selecionar a opção
+                <strong>E2E Testing</strong>.
+            </p>
+
+            <p>
+                O Cypress apresentará informações relacionadas
+                à configuração necessária para executar os testes
+                End-to-End.
+            </p>
+
+            <pre><code>E2E Testing
+
+    ↓
+
+Configuração do projeto
+
+    ↓
+
+Seleção do navegador
+
+    ↓
+
+Lista de testes</code></pre>
+
+            <p>
+                Depois dessa etapa, teremos acesso à tela que
+                apresenta os arquivos de teste disponíveis.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+         NAVEGADORES
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Escolhendo o navegador
+            </h2>
+
+            <p>
+                O Cypress permite executar os testes em navegadores
+                compatíveis instalados no ambiente.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        Chrome
+                    </h3>
+
+                    <p>
+                        Um dos navegadores utilizados com frequência
+                        durante o desenvolvimento dos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🦊
+                    </div>
+
+                    <h3>
+                        Firefox
+                    </h3>
+
+                    <p>
+                        Navegador que também pode ser utilizado
+                        para execução dos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧭
+                    </div>
+
+                    <h3>
+                        Edge
+                    </h3>
+
+                    <p>
+                        Outra opção de navegador baseada em
+                        Chromium.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Durante o desenvolvimento, é interessante conhecer
+                    o comportamento dos testes em diferentes navegadores
+                    quando isso fizer parte dos requisitos do projeto.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         SPEC
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                5. O que é uma Spec?
+            </h2>
+
+            <p>
+                Uma <strong>spec</strong> é um arquivo que contém
+                uma ou mais definições de teste.
+            </p>
+
+            <p>
+                Em um projeto Cypress, podemos organizar os testes
+                dentro da pasta:
+            </p>
+
+            <pre><code>cypress/
+
+└── e2e/
+
+    ├── login.cy.js
+    ├── produtos.cy.js
+    └── checkout.cy.js</code></pre>
+
+            <p>
+                Cada arquivo pode representar um conjunto de
+                cenários relacionados a determinada funcionalidade.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        login.cy.js
+                    </h3>
+
+                    <p>
+                        Testes relacionados ao processo de login.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🛒
+                    </div>
+
+                    <h3>
+                        produtos.cy.js
+                    </h3>
+
+                    <p>
+                        Testes relacionados à consulta e utilização
+                        de produtos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        💳
+                    </div>
+
+                    <h3>
+                        checkout.cy.js
+                    </h3>
+
+                    <p>
+                        Testes relacionados ao fluxo de checkout.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         SELECIONANDO SPEC
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Selecionando uma Spec
+            </h2>
+
+            <p>
+                Depois de abrir o Cypress App e selecionar E2E,
+                o Cypress apresenta os arquivos de teste encontrados
+                no projeto.
+            </p>
+
+            <p>
+                Podemos selecionar uma spec para iniciar sua execução.
+            </p>
+
+            <pre><code>cypress/e2e/
+
+    login.cy.js
+    produtos.cy.js
+    checkout.cy.js</code></pre>
+
+            <p>
+                Ao selecionar:
+            </p>
+
+            <pre><code>login.cy.js</code></pre>
+
+            <p>
+                o Cypress abre o navegador e executa os testes
+                definidos nesse arquivo.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🧪 <strong>Spec</strong>
+                    → arquivo selecionado.
+                </p>
+
+                <p>
+                    🌐 <strong>Navegador</strong>
+                    → ambiente onde o teste é executado.
+                </p>
+
+                <p>
+                    📋 <strong>Runner</strong>
+                    → interface que apresenta o resultado da execução.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         TEST RUNNER
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Conhecendo o Test Runner
+            </h2>
+
+            <p>
+                O <strong>Test Runner</strong> é a interface onde
+                podemos acompanhar visualmente a execução dos testes.
+            </p>
+
+            <p>
+                Durante a execução, o Cypress apresenta informações
+                sobre os comandos realizados e o resultado das
+                asserções.
+            </p>
+
+            <pre><code>Suite de testes
+
+    ✓ deve abrir a página
+
+    ✓ deve exibir o título
+
+    ✓ deve permitir realizar login</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ▶️
+                    </div>
+
+                    <h3>
+                        Execução
+                    </h3>
+
+                    <p>
+                        Permite acompanhar os comandos conforme
+                        eles são executados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Teste aprovado
+                    </h3>
+
+                    <p>
+                        Indica que o cenário foi executado com sucesso.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Teste com falha
+                    </h3>
+
+                    <p>
+                        Permite identificar onde ocorreu o problema
+                        durante a execução.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         COMANDOS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Visualizando os comandos
+            </h2>
+
+            <p>
+                Durante a execução, o Cypress apresenta os comandos
+                realizados pelo teste.
+            </p>
+
+            <p>
+                Um teste simples pode executar:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/'</span>)
+
+cy.get(<span class="sql-string">'h1'</span>)
+
+    .should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                No Test Runner, podemos acompanhar a execução dessas
+                etapas de forma visual.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>cy.visit()</strong>
+                    → navega até uma página.
+                </p>
+
+                <p>
+                    🔎 <strong>cy.get()</strong>
+                    → encontra um elemento.
+                </p>
+
+                <p>
+                    ✅ <strong>should()</strong>
+                    → verifica uma condição.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         DEBUG
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Utilizando o Cypress para investigar falhas
+            </h2>
+
+            <p>
+                Uma das vantagens do Cypress App durante o
+                desenvolvimento é a possibilidade de observar
+                visualmente o comportamento do teste.
+            </p>
+
+            <p>
+                Quando uma etapa falha, podemos analisar o comando
+                que apresentou o problema e observar o estado da
+                aplicação naquele momento.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Localizar a falha
+                    </h3>
+
+                    <p>
+                        Identifique qual comando ou asserção
+                        apresentou o problema.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🖥️
+                    </div>
+
+                    <h3>
+                        Observar a aplicação
+                    </h3>
+
+                    <p>
+                        Analise o estado da interface durante
+                        a execução do teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Investigar a causa
+                    </h3>
+
+                    <p>
+                        Utilize as informações disponíveis para
+                        entender a origem da falha.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         REEXECUÇÃO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Reexecutando os testes
+            </h2>
+
+            <p>
+                Durante o desenvolvimento, podemos alterar o código
+                da aplicação ou dos testes e executar novamente
+                a spec para verificar o resultado.
+            </p>
+
+            <p>
+                Esse ciclo faz parte do processo de desenvolvimento
+                de testes automatizados:
+            </p>
+
+            <pre><code>Alterar teste
+
+    ↓
+
+Executar
+
+    ↓
+
+Observar resultado
+
+    ↓
+
+Identificar problema
+
+    ↓
+
+Corrigir
+
+    ↓
+
+Executar novamente</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🔄 O Cypress App facilita esse ciclo porque
+                    permite acompanhar visualmente o comportamento
+                    do teste durante o desenvolvimento.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         OPEN VS RUN
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Cypress Open x Cypress Run
+            </h2>
+
+            <p>
+                O Cypress possui duas formas importantes de executar
+                os testes.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Comando</th>
+                            <th>Objetivo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>npx cypress open</strong>
+                            </td>
+
+                            <td>
+                                Abre a interface gráfica para
+                                desenvolvimento e execução interativa.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>npx cypress run</strong>
+                            </td>
+
+                            <td>
+                                Executa os testes pela linha de comando,
+                                normalmente em modo headless.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="highlight">
+
+                <p>
+                    🖥️ <strong>open</strong>
+                    → normalmente utilizado durante o desenvolvimento.
+                </p>
+
+                <p>
+                    ⚙️ <strong>run</strong>
+                    → muito utilizado em automações e pipelines.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         HEADLESS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                12. O que é execução headless?
+            </h2>
+
+            <p>
+                Na execução headless, o teste é executado sem a
+                apresentação visual tradicional do navegador para
+                o usuário.
+            </p>
+
+            <p>
+                Esse tipo de execução é especialmente importante
+                em ambientes automatizados, como pipelines de CI/CD.
+            </p>
+
+            <pre><code>npx cypress run</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🖥️
+                    </div>
+
+                    <h3>
+                        Modo interativo
+                    </h3>
+
+                    <p>
+                        Ideal para desenvolvimento, investigação
+                        e acompanhamento visual dos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚙️
+                    </div>
+
+                    <h3>
+                        Modo headless
+                    </h3>
+
+                    <p>
+                        Adequado para execuções automatizadas
+                        em ambientes de CI/CD.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         ESTRUTURA VISUAL
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Entendendo o fluxo do Cypress App
+            </h2>
+
+            <p>
+                Podemos resumir o fluxo de utilização da interface
+                da seguinte maneira:
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    📁 <strong>Projeto</strong>
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    🖥️ <strong>Cypress App</strong>
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    🌐 <strong>E2E Testing</strong>
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    🧪 <strong>Selecionar Spec</strong>
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    ▶️ <strong>Executar</strong>
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    📊 <strong>Visualizar resultado</strong>
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         ERROS COMUNS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns ao utilizar o Cypress App
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Executar fora do projeto
+                    </h3>
+
+                    <p>
+                        Rodar o comando do Cypress em um diretório
+                        que não possui o projeto configurado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Não encontrar as specs
+                    </h3>
+
+                    <p>
+                        Arquivos podem não estar no diretório ou
+                        padrão esperado pelo Cypress.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Ignorar mensagens de erro
+                    </h3>
+
+                    <p>
+                        Falhas apresentadas pelo Test Runner devem
+                        ser analisadas para identificar sua causa.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Confundir open e run
+                    </h3>
+
+                    <p>
+                        Cada comando possui uma finalidade diferente
+                        dentro do fluxo de automação.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         BOAS PRÁTICAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Use o App durante o desenvolvimento
+                    </h3>
+
+                    <p>
+                        A interface facilita a criação, observação
+                        e investigação dos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📁
+                    </div>
+
+                    <h3>
+                        Organize suas specs
+                    </h3>
+
+                    <p>
+                        Separe os testes de acordo com as
+                        funcionalidades da aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Investigue as falhas
+                    </h3>
+
+                    <p>
+                        Não utilize a execução repetida apenas para
+                        ignorar problemas nos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚙️
+                    </div>
+
+                    <h3>
+                        Conheça os dois modos
+                    </h3>
+
+                    <p>
+                        Entenda quando utilizar a execução interativa
+                        e quando utilizar a linha de comando.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         CHECKLIST
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o que é o Cypress App.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar o comando
+                    <strong>npx cypress open</strong>.
+                </p>
+
+                <p>
+                    ☐ Entendi a diferença entre E2E e Component Testing.
+                </p>
+
+                <p>
+                    ☐ Entendi o conceito de spec.
+                </p>
+
+                <p>
+                    ☐ Sei onde ficam os testes E2E.
+                </p>
+
+                <p>
+                    ☐ Entendi como selecionar uma spec.
+                </p>
+
+                <p>
+                    ☐ Conheci o Test Runner.
+                </p>
+
+                <p>
+                    ☐ Entendi a diferença entre
+                    <strong>cypress open</strong> e
+                    <strong>cypress run</strong>.
+                </p>
+
+                <p>
+                    ☐ Entendi o conceito de execução headless.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar o Cypress App durante o desenvolvimento.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         RESUMO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🖥️ <strong>Cypress App</strong>
+                    → interface gráfica do Cypress.
+                </p>
+
+                <p>
+                    ▶️ <strong>npx cypress open</strong>
+                    → abre a interface interativa.
+                </p>
+
+                <p>
+                    🌐 <strong>E2E Testing</strong>
+                    → permite executar testes End-to-End.
+                </p>
+
+                <p>
+                    🧪 <strong>Spec</strong>
+                    → arquivo que contém os testes.
+                </p>
+
+                <p>
+                    📊 <strong>Test Runner</strong>
+                    → apresenta visualmente a execução dos testes.
+                </p>
+
+                <p>
+                    ⚙️ <strong>npx cypress run</strong>
+                    → executa os testes pela linha de comando.
+                </p>
+
+                <p>
+                    🖥️ <strong>Modo interativo</strong>
+                    → útil durante o desenvolvimento.
+                </p>
+
+                <p>
+                    ⚙️ <strong>Modo headless</strong>
+                    → útil para execuções automatizadas.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você já conhece a interface do Cypress e
+                entende como abrir o projeto, selecionar uma spec
+                e acompanhar a execução dos testes.
+            </p>
+
+            <p>
+                Na próxima aula vamos criar nosso primeiro teste
+                automatizado com Cypress e colocar em prática os
+                conceitos apresentados até aqui.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+         CHECKPOINT
+    ====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 9
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 9 concluída!
+            </h2>
+
+            <p>
+                Agora você já conhece o Cypress App, sabe abrir
+                um projeto, selecionar uma spec e acompanhar
+                visualmente a execução dos testes.
+            </p>
+
+            <a
+                href="../aulas/aula-10.html"
+                class="cta-button"
+            >
+                Aula 10 →
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+       FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 9 • Cypress App
+        </p>
+
+    </footer>
+
+
+    <!-- =====================================================
+       JAVASCRIPT
+    ====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-9.js"></script>
+
+</body>
+
+</html>

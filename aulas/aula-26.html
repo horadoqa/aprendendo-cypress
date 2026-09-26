@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <title>Aula 26 — Fixtures no Cypress</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 26 • FIXTURES
+            </span>
+
+            <h1>
+                Fixtures no Cypress
+            </h1>
+
+            <p>
+                Aprenda a utilizar fixtures para organizar dados de
+                teste em arquivos externos e tornar seus testes
+                mais organizados, reutilizáveis e fáceis de manter.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS DA AULA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Nas aulas anteriores aprendemos a localizar elementos,
+                interagir com a aplicação e criar validações utilizando
+                o Cypress.
+            </p>
+
+            <p>
+                Agora vamos aprender a separar os dados utilizados
+                pelos testes do código de automação.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📁
+                    </div>
+
+                    <h3>
+                        Entender Fixtures
+                    </h3>
+
+                    <p>
+                        Compreender o que são fixtures e qual problema
+                        elas ajudam a resolver.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Criar dados de teste
+                    </h3>
+
+                    <p>
+                        Criar arquivos contendo informações utilizadas
+                        durante os testes automatizados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📄
+                    </div>
+
+                    <h3>
+                        Utilizar arquivos JSON
+                    </h3>
+
+                    <p>
+                        Trabalhar com dados estruturados em arquivos
+                        JSON.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Reutilizar dados
+                    </h3>
+
+                    <p>
+                        Utilizar a mesma massa de dados em diferentes
+                        testes quando fizer sentido.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE SÃO FIXTURES
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que são Fixtures?
+            </h2>
+
+            <p>
+                Fixtures são arquivos utilizados para armazenar dados
+                que podem ser consumidos pelos testes.
+            </p>
+
+            <p>
+                Em vez de colocar todos os dados diretamente dentro
+                dos testes, podemos armazená-los em arquivos separados.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    📄 <strong>Fixture</strong>
+                    → arquivo que contém dados utilizados pelos testes.
+                </p>
+
+                <p>
+                    🧪 <strong>Teste</strong>
+                    → utiliza esses dados durante a execução.
+                </p>
+
+                <p>
+                    ♻️ <strong>Reutilização</strong>
+                    → os mesmos dados podem ser utilizados em
+                    diferentes cenários.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PROBLEMA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. O problema de colocar dados diretamente no teste
+            </h2>
+
+            <p>
+                Imagine um teste de login contendo usuário e senha
+                diretamente no código:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve realizar login'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+        .type(<span class="sql-string">'usuario@teste.com'</span>)
+
+    cy.get(<span class="sql-string">'[data-testid="senha"]'</span>)
+        .type(<span class="sql-string">'123456'</span>)
+
+    cy.get(<span class="sql-string">'[data-testid="login"]'</span>)
+        .click()
+
+})
+
+})</code></pre>
+
+            <p>
+                O teste funciona, mas os dados estão misturados
+                com a lógica de automação.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Problema:</strong>
+
+                <p>
+                    Conforme a quantidade de testes aumenta, manter
+                    usuários, produtos e outros dados diretamente
+                    no código pode deixar a suíte mais difícil
+                    de organizar.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     SOLUÇÃO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Separando os dados do teste
+            </h2>
+
+            <p>
+                Podemos criar um arquivo de fixture para armazenar
+                os dados do usuário.
+            </p>
+
+            <pre><code>cypress/
+
+├── e2e/
+│
+├── fixtures/
+│ └── usuario.json
+│
+└── support/</code></pre>
+
+            <p>
+                O arquivo <strong>usuario.json</strong> pode conter:
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"nome"</span>: <span class="sql-string">"João"</span>,
+<span class="sql-string">"email"</span>: <span class="sql-string">"usuario@teste.com"</span>,
+<span class="sql-string">"senha"</span>: <span class="sql-string">"123456"</span>
+
+}</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Agora os dados estão separados da implementação
+                    do teste.
+                </p>
+
+                <p>
+                    O arquivo de teste fica responsável pela automação,
+                    enquanto a fixture fica responsável pelos dados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PASTA FIXTURES
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. A pasta cypress/fixtures
+            </h2>
+
+            <p>
+                Por padrão, o Cypress utiliza a pasta
+                <strong>cypress/fixtures</strong> para armazenar
+                fixtures.
+            </p>
+
+            <pre><code>cypress/
+
+├── e2e/
+│
+├── fixtures/
+│ ├── usuario.json
+│ ├── produto.json
+│ └── endereco.json
+│
+└── support/</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        👤
+                    </div>
+
+                    <h3>
+                        usuario.json
+                    </h3>
+
+                    <p>
+                        Pode armazenar dados relacionados a usuários
+                        utilizados nos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🛒
+                    </div>
+
+                    <h3>
+                        produto.json
+                    </h3>
+
+                    <p>
+                        Pode armazenar informações sobre produtos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📍
+                    </div>
+
+                    <h3>
+                        endereco.json
+                    </h3>
+
+                    <p>
+                        Pode armazenar informações utilizadas em
+                        formulários de endereço.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     JSON
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Trabalhando com arquivos JSON
+            </h2>
+
+            <p>
+                Um dos formatos mais utilizados para fixtures no
+                Cypress é o JSON.
+            </p>
+
+            <p>
+                Um arquivo JSON pode representar informações
+                estruturadas:
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"nome"</span>: <span class="sql-string">"Maria"</span>,
+<span class="sql-string">"email"</span>: <span class="sql-string">"maria@teste.com"</span>,
+<span class="sql-string">"idade"</span>: 30
+
+}</code></pre>
+
+            <p>
+                Também podemos utilizar objetos mais complexos:
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"usuario"</span>: {
+    <span class="sql-string">"nome"</span>: <span class="sql-string">"Maria"</span>,
+    <span class="sql-string">"email"</span>: <span class="sql-string">"maria@teste.com"</span>
+},
+
+<span class="sql-string">"endereco"</span>: {
+    <span class="sql-string">"cidade"</span>: <span class="sql-string">"Rio de Janeiro"</span>,
+    <span class="sql-string">"estado"</span>: <span class="sql-string">"RJ"</span>
+}
+
+}</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+     CY FIXTURE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Utilizando cy.fixture()
+            </h2>
+
+            <p>
+                O comando <strong>cy.fixture()</strong> permite
+                carregar dados armazenados em uma fixture.
+            </p>
+
+            <p>
+                Por exemplo, considerando o arquivo:
+            </p>
+
+            <pre><code>cypress/fixtures/usuario.json</code></pre>
+
+            <p>
+                Podemos carregá-lo utilizando:
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuario'</span>)</code></pre>
+
+            <p>
+                O Cypress procura o arquivo correspondente dentro
+                da pasta de fixtures.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    📁 <strong>fixtures/usuario.json</strong>
+                    → arquivo armazenado no projeto.
+                </p>
+
+                <p>
+                    🧪 <strong>cy.fixture('usuario')</strong>
+                    → carrega os dados do arquivo.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ALIAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Utilizando fixtures com alias
+            </h2>
+
+            <p>
+                Podemos associar os dados carregados a um alias
+                utilizando <strong>as()</strong>.
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuario'</span>)
+.as(<span class="sql-string">'usuario'</span>)</code></pre>
+
+            <p>
+                Depois podemos utilizar o alias durante o teste.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'@usuario'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    Aliases são úteis para compartilhar valores
+                    carregados durante o fluxo do teste.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BEFORE EACH
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Carregando uma fixture no beforeEach
+            </h2>
+
+            <p>
+                Quando vários testes precisam dos mesmos dados,
+                podemos carregar a fixture no hook
+                <strong>beforeEach()</strong>.
+            </p>
+
+            <pre><code>beforeEach(() =&gt; {
+
+cy.fixture(<span class="sql-string">'usuario'</span>)
+    .as(<span class="sql-string">'usuario'</span>)
+
+})</code></pre>
+
+            <p>
+                Dessa forma, o carregamento acontece antes de cada
+                teste.
+            </p>
+
+            <p>
+                Um exemplo completo:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+beforeEach(() =&gt; {
+
+    cy.fixture(<span class="sql-string">'usuario'</span>)
+        .as(<span class="sql-string">'usuario'</span>)
+
+})
+
+it(<span class="sql-string">'deve realizar login'</span>, function () {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+        .type(this.usuario.email)
+
+    cy.get(<span class="sql-string">'[data-testid="senha"]'</span>)
+        .type(this.usuario.senha)
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Perceba que utilizamos uma função tradicional
+                    no <strong>it()</strong> para acessar o alias
+                    através de <strong>this</strong>.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ARROW FUNCTION
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Atenção ao uso de this
+            </h2>
+
+            <p>
+                Ao utilizar aliases com <strong>this</strong>,
+                é importante observar a diferença entre uma função
+                tradicional e uma arrow function.
+            </p>
+
+            <p>
+                Com função tradicional:
+            </p>
+
+            <pre><code>it(<span class="sql-string">'deve utilizar os dados'</span>, function () {
+
+cy.get(<span class="sql-string">'input'</span>)
+    .type(this.usuario.email)
+
+})</code></pre>
+
+            <p>
+                Nesse caso, o contexto fornecido pelo Cypress pode
+                ser acessado através de <strong>this</strong>.
+            </p>
+
+            <p>
+                Evite fazer:
+            </p>
+
+            <pre><code>it(<span class="sql-string">'deve utilizar os dados'</span>, () =&gt; {
+
+cy.get(<span class="sql-string">'input'</span>)
+    .type(this.usuario.email)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Se precisar acessar aliases através de
+                    <strong>this</strong>, utilize uma função tradicional
+                    em vez de uma arrow function.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EXEMPLO LOGIN
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Exemplo completo: teste de login
+            </h2>
+
+            <p>
+                Vamos criar uma fixture para um usuário:
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"email"</span>: <span class="sql-string">"usuario@teste.com"</span>,
+<span class="sql-string">"senha"</span>: <span class="sql-string">"123456"</span>
+
+}</code></pre>
+
+            <p>
+                Depois podemos utilizá-la no teste:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+beforeEach(() =&gt; {
+
+    cy.fixture(<span class="sql-string">'usuario'</span>)
+        .as(<span class="sql-string">'usuario'</span>)
+
+})
+
+it(<span class="sql-string">'deve realizar login com sucesso'</span>, function () {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+        .type(this.usuario.email)
+
+    cy.get(<span class="sql-string">'[data-testid="senha"]'</span>)
+        .type(this.usuario.senha)
+
+    cy.get(<span class="sql-string">'[data-testid="login"]'</span>)
+        .click()
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O teste agora utiliza os dados da fixture
+                    sem precisar armazenar email e senha diretamente
+                    na implementação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ARRAYS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Fixtures com listas de dados
+            </h2>
+
+            <p>
+                Uma fixture também pode armazenar uma lista de
+                objetos.
+            </p>
+
+            <pre><code>[
+{
+    <span class="sql-string">"nome"</span>: <span class="sql-string">"Produto A"</span>,
+    <span class="sql-string">"preco"</span>: 100
+},
+
+{
+    <span class="sql-string">"nome"</span>: <span class="sql-string">"Produto B"</span>,
+    <span class="sql-string">"preco"</span>: 200
+},
+
+{
+    <span class="sql-string">"nome"</span>: <span class="sql-string">"Produto C"</span>,
+    <span class="sql-string">"preco"</span>: 300
+}
+
+]</code></pre>
+
+            <p>
+                Esse formato pode ser útil para cenários que
+                precisam trabalhar com vários registros.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        👤
+                    </div>
+
+                    <h3>
+                        Usuários
+                    </h3>
+
+                    <p>
+                        Diferentes usuários para diferentes cenários
+                        de teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Produtos
+                    </h3>
+
+                    <p>
+                        Listas de produtos para validar catálogos
+                        e funcionalidades.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧾
+                    </div>
+
+                    <h3>
+                        Pedidos
+                    </h3>
+
+                    <p>
+                        Dados estruturados para cenários de pedidos
+                        e compras.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     OBJETOS COMPLEXOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Fixtures com objetos complexos
+            </h2>
+
+            <p>
+                Podemos representar estruturas maiores dentro de
+                uma única fixture.
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"cliente"</span>: {
+    <span class="sql-string">"nome"</span>: <span class="sql-string">"Carlos"</span>,
+    <span class="sql-string">"email"</span>: <span class="sql-string">"carlos@teste.com"</span>
+},
+
+<span class="sql-string">"pedido"</span>: {
+    <span class="sql-string">"numero"</span>: 12345,
+    <span class="sql-string">"status"</span>: <span class="sql-string">"aprovado"</span>
+},
+
+<span class="sql-string">"produtos"</span>: [
+    {
+        <span class="sql-string">"nome"</span>: <span class="sql-string">"Produto A"</span>,
+        <span class="sql-string">"quantidade"</span>: 2
+    }
+]
+
+}</code></pre>
+
+            <p>
+                Esse tipo de estrutura pode representar dados
+                necessários para cenários mais completos.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     FIXTURES E MANUTENÇÃO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Fixtures e manutenção dos testes
+            </h2>
+
+            <p>
+                Uma das principais vantagens das fixtures é separar
+                os dados da lógica de automação.
+            </p>
+
+            <p>
+                Imagine que vários testes utilizam o mesmo email.
+                Se o email estiver em uma fixture, podemos alterar
+                o valor em um único lugar.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    Antes:
+                </p>
+
+                <pre><code>teste A → usuario@teste.com
+
+teste B → usuario@teste.com
+
+teste C → usuario@teste.com</code></pre>
+
+                <p>
+                    Com fixture:
+                </p>
+
+                <pre><code>usuario.json
+↓
+
+teste A
+teste B
+teste C</code></pre>
+
+            </div>
+
+            <p>
+                Isso pode reduzir duplicação e facilitar a manutenção
+                quando o mesmo conjunto de dados é realmente compartilhado
+                entre diferentes testes.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     QUANDO USAR
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Quando utilizar Fixtures?
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        👤
+                    </div>
+
+                    <h3>
+                        Dados de usuários
+                    </h3>
+
+                    <p>
+                        Quando testes precisam utilizar usuários
+                        previamente definidos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🛒
+                    </div>
+
+                    <h3>
+                        Dados de produtos
+                    </h3>
+
+                    <p>
+                        Quando cenários precisam trabalhar com
+                        produtos conhecidos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        Dados previsíveis
+                    </h3>
+
+                    <p>
+                        Quando o teste precisa de informações
+                        estáveis e conhecidas.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Reutilização
+                    </h3>
+
+                    <p>
+                        Quando o mesmo conjunto de dados é utilizado
+                        em diferentes cenários.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     QUANDO NÃO USAR
+====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Quando uma Fixture pode não ser suficiente?
+            </h2>
+
+            <p>
+                Fixtures são úteis, mas não precisam ser utilizadas
+                para absolutamente todos os dados dos testes.
+            </p>
+
+            <p>
+                Alguns cenários exigem dados dinâmicos, gerados durante
+                a execução ou criados através da própria aplicação.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Exemplo:</strong>
+
+                <p>
+                    Se cada teste precisa de um email único,
+                    simplesmente reutilizar o mesmo email de uma
+                    fixture pode não atender ao cenário.
+                </p>
+
+                <p>
+                    Nesses casos, podemos utilizar estratégias de
+                    geração de dados ou criação de registros através
+                    de APIs e outras abordagens.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRÁTICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas com Fixtures
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📁
+                    </div>
+
+                    <h3>
+                        Organize os arquivos
+                    </h3>
+
+                    <p>
+                        Utilize nomes claros e mantenha as fixtures
+                        relacionadas organizadas.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏷️
+                    </div>
+
+                    <h3>
+                        Use nomes descritivos
+                    </h3>
+
+                    <p>
+                        Prefira nomes como usuario.json e produto.json
+                        em vez de nomes genéricos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Não armazene segredos
+                    </h3>
+
+                    <p>
+                        Evite colocar senhas reais, tokens ou outras
+                        informações sensíveis em arquivos versionados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Use dados relevantes
+                    </h3>
+
+                    <p>
+                        Mantenha nas fixtures somente os dados
+                        necessários para os cenários.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Reutilize quando fizer sentido
+                    </h3>
+
+                    <p>
+                        Compartilhe dados quando isso tornar os testes
+                        mais simples e não criar dependências indesejadas.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧹
+                    </div>
+
+                    <h3>
+                        Evite fixtures gigantes
+                    </h3>
+
+                    <p>
+                        Divida grandes conjuntos de dados quando isso
+                        melhorar a organização.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ERROS COMUNS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Dados desatualizados
+                    </h3>
+
+                    <p>
+                        Utilizar uma fixture que não representa mais
+                        o comportamento esperado pela aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Fixture gigante
+                    </h3>
+
+                    <p>
+                        Colocar dados de muitos cenários diferentes
+                        em um único arquivo difícil de manter.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Dados sensíveis
+                    </h3>
+
+                    <p>
+                        Armazenar credenciais reais ou tokens em
+                        arquivos que podem ser versionados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Reutilização excessiva
+                    </h3>
+
+                    <p>
+                        Forçar todos os testes a dependerem de uma
+                        única massa de dados mesmo quando os cenários
+                        são diferentes.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     FLUXO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Fluxo de utilização
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    📁 <strong>1. Criar a fixture</strong>
+                    → armazenar os dados.
+                </p>
+
+                <p>
+                    🧪 <strong>2. Carregar a fixture</strong>
+                    → utilizar cy.fixture().
+                </p>
+
+                <p>
+                    🏷️ <strong>3. Criar um alias</strong>
+                    → compartilhar os dados durante o teste.
+                </p>
+
+                <p>
+                    🔎 <strong>4. Utilizar os dados</strong>
+                    → preencher campos ou realizar validações.
+                </p>
+
+                <p>
+                    ♻️ <strong>5. Reutilizar</strong>
+                    → utilizar os dados em cenários apropriados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o conceito de Fixtures.
+                </p>
+
+                <p>
+                    ☐ Conheço a pasta cypress/fixtures.
+                </p>
+
+                <p>
+                    ☐ Sei criar um arquivo JSON.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar cy.fixture().
+                </p>
+
+                <p>
+                    ☐ Entendi como utilizar aliases.
+                </p>
+
+                <p>
+                    ☐ Entendi o uso de this com aliases.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar fixtures em testes de login.
+                </p>
+
+                <p>
+                    ☐ Sei trabalhar com listas e objetos.
+                </p>
+
+                <p>
+                    ☐ Conheço boas práticas para organizar fixtures.
+                </p>
+
+                <p>
+                    ☐ Sei quando uma fixture pode não ser a melhor opção.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    📁 <strong>Fixtures</strong>
+                    → armazenam dados utilizados pelos testes.
+                </p>
+
+                <p>
+                    📄 <strong>JSON</strong>
+                    → formato comum para armazenar dados de fixtures.
+                </p>
+
+                <p>
+                    🧪 <strong>cy.fixture()</strong>
+                    → carrega uma fixture.
+                </p>
+
+                <p>
+                    🏷️ <strong>as()</strong>
+                    → cria um alias para os dados carregados.
+                </p>
+
+                <p>
+                    🔄 <strong>beforeEach()</strong>
+                    → pode ser utilizado para carregar dados antes
+                    de cada teste.
+                </p>
+
+                <p>
+                    ♻️ <strong>Reutilização</strong>
+                    → permite compartilhar dados entre cenários
+                    quando isso fizer sentido.
+                </p>
+
+                <p>
+                    🔐 <strong>Segurança</strong>
+                    → informações sensíveis não devem ser armazenadas
+                    diretamente em fixtures versionadas.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você já sabe como separar dados de teste da
+                lógica de automação utilizando Fixtures.
+            </p>
+
+            <p>
+                Na próxima aula vamos avançar para a criação e
+                organização de uma massa de testes mais estruturada,
+                entendendo como preparar diferentes conjuntos de
+                dados para nossos cenários.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     QUIZ
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 26
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 26 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe como utilizar Fixtures para
+                separar e organizar os dados utilizados pelos
+                seus testes Cypress.
+            </p>
+
+            <a href="../aulas/aula-27.html" class="cta-button">
+                Aula 27 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+ FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 26 • Fixtures
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+ JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-26.js"></script>
+
+</body>
+
+</html>

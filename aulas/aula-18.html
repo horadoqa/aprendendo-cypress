@@ -1,0 +1,1682 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <title>Aula 18 — should() no Cypress</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 18 • SHOULD()
+            </span>
+
+            <h1>
+                should() no Cypress
+            </h1>
+
+            <p>
+                Aprenda a utilizar o comando should() para criar
+                asserções e validar elementos, textos, atributos,
+                estados e comportamentos da aplicação.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS DA AULA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Nas aulas anteriores aprendemos a navegar pela aplicação,
+                localizar elementos utilizando cy.get(), criar seletores
+                e realizar interações com click() e type().
+            </p>
+
+            <p>
+                Agora vamos aprender uma das funcionalidades mais
+                importantes do Cypress: as <strong>asserções</strong>.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Criar asserções
+                    </h3>
+
+                    <p>
+                        Aprender como validar se o comportamento esperado
+                        realmente aconteceu.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        👀
+                    </div>
+
+                    <h3>
+                        Validar elementos
+                    </h3>
+
+                    <p>
+                        Verificar se elementos estão visíveis, presentes
+                        ou em determinado estado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        Validar conteúdo
+                    </h3>
+
+                    <p>
+                        Validar textos e informações apresentadas
+                        na interface.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Criar testes confiáveis
+                    </h3>
+
+                    <p>
+                        Transformar comportamentos esperados em
+                        validações automatizadas.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE É ASSERTION
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é uma assertion?
+            </h2>
+
+            <p>
+                Uma assertion, ou asserção, é uma verificação realizada
+                pelo teste para determinar se o resultado obtido
+                corresponde ao resultado esperado.
+            </p>
+
+            <p>
+                Em outras palavras, podemos pensar em uma assertion
+                como uma pergunta feita pelo teste:
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    ❓ O elemento está visível?
+                </p>
+
+                <p>
+                    ❓ O texto está correto?
+                </p>
+
+                <p>
+                    ❓ O botão está habilitado?
+                </p>
+
+                <p>
+                    ❓ O campo contém o valor esperado?
+                </p>
+
+                <p>
+                    ❓ A aplicação apresentou o comportamento esperado?
+                </p>
+
+            </div>
+
+            <p>
+                Se a condição esperada for verdadeira, o teste continua.
+                Caso contrário, o Cypress registra uma falha.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     SHOULD
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. O que é o should()?
+            </h2>
+
+            <p>
+                O <strong>should()</strong> é um comando utilizado para
+                criar asserções sobre elementos e valores encontrados
+                durante a execução do teste.
+            </p>
+
+            <p>
+                Sua estrutura básica é:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'seletor'</span>)
+.should(<span class="sql-string">'condição'</span>)</code></pre>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                Nesse caso, estamos dizendo ao Cypress:
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    O elemento <strong>h1</strong> deve estar visível.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     SINTAXE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Estrutura do should()
+            </h2>
+
+            <p>
+                O comando normalmente é utilizado após um comando
+                que retorna ou localiza um elemento.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.login-button'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                Podemos interpretar o código da seguinte maneira:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        cy.get()
+                    </h3>
+
+                    <p>
+                        Localiza o elemento que será validado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ➡️
+                    </div>
+
+                    <h3>
+                        .
+                    </h3>
+
+                    <p>
+                        Encadeia o próximo comando ao resultado anterior.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        should()
+                    </h3>
+
+                    <p>
+                        Define a condição que deverá ser verdadeira.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BE VISIBLE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Validando visibilidade
+            </h2>
+
+            <p>
+                Uma das asserções mais utilizadas é
+                <strong>be.visible</strong>.
+            </p>
+
+            <p>
+                Ela verifica se o elemento está visível na página.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'button'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                Podemos utilizar essa validação para garantir que
+                elementos importantes da interface estão disponíveis
+                para o usuário.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#login'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Exemplo:</strong>
+
+                <p>
+                    Se o botão de login deveria aparecer na tela,
+                    podemos validar sua visibilidade antes de
+                    continuar o teste.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EXIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Validando existência
+            </h2>
+
+            <p>
+                A asserção <strong>exist</strong> verifica se o
+                elemento existe no DOM.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.menu'</span>)
+.should(<span class="sql-string">'exist'</span>)</code></pre>
+
+            <p>
+                É importante diferenciar existência de visibilidade.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Assertion</th>
+                            <th>O que verifica?</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>exist</strong>
+                            </td>
+
+                            <td>
+                                Verifica se o elemento existe no DOM.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>be.visible</strong>
+                            </td>
+
+                            <td>
+                                Verifica se o elemento está visível.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     NOT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Utilizando not
+            </h2>
+
+            <p>
+                Podemos utilizar <strong>not</strong> para validar
+                que uma determinada condição não é verdadeira.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.loading'</span>)
+.should(<span class="sql-string">'not.be.visible'</span>)</code></pre>
+
+            <p>
+                Nesse caso, estamos verificando que o elemento
+                de loading não está visível.
+            </p>
+
+            <p>
+                Outro exemplo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.modal'</span>)
+.should(<span class="sql-string">'not.exist'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O <strong>not</strong> pode ser utilizado para
+                    inverter determinadas condições de uma assertion.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     TEXT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Validando textos
+            </h2>
+
+            <p>
+                Também podemos utilizar should() para verificar
+                o conteúdo textual de um elemento.
+            </p>
+
+            <p>
+                Uma das formas mais comuns é utilizar
+                <strong>contain</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+.should(<span class="sql-string">'contain'</span>, <span class="sql-string">'Bem-vindo'</span>)</code></pre>
+
+            <p>
+                Nesse exemplo, o teste verifica se o elemento
+                contém o texto informado.
+            </p>
+
+            <p>
+                Também podemos utilizar:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+.should(<span class="sql-string">'have.text'</span>, <span class="sql-string">'Bem-vindo'</span>)</code></pre>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Assertion</th>
+                            <th>Objetivo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>contain</strong>
+                            </td>
+
+                            <td>
+                                Verifica se o elemento contém
+                                determinado texto.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>have.text</strong>
+                            </td>
+
+                            <td>
+                                Verifica o texto do elemento.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CLASS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Validando classes
+            </h2>
+
+            <p>
+                Podemos verificar se um elemento possui determinada
+                classe CSS utilizando <strong>have.class</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.mensagem'</span>)
+.should(<span class="sql-string">'have.class'</span>, <span class="sql-string">'sucesso'</span>)</code></pre>
+
+            <p>
+                Isso pode ser útil quando a aplicação utiliza classes
+                para representar estados visuais.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>&lt;div class="mensagem sucesso"&gt;
+Cadastro realizado!
+
+</div></code></pre>
+
+            <p>
+                O teste poderia validar:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.mensagem'</span>)
+.should(<span class="sql-string">'have.class'</span>, <span class="sql-string">'sucesso'</span>)</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+     ATTRIBUTES
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Validando atributos
+            </h2>
+
+            <p>
+                O Cypress também permite verificar atributos
+                presentes nos elementos.
+            </p>
+
+            <p>
+                Para isso, podemos utilizar
+                <strong>have.attr</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'a'</span>)
+.should(<span class="sql-string">'have.attr'</span>, <span class="sql-string">'href'</span>)</code></pre>
+
+            <p>
+                Também podemos verificar o valor do atributo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'a'</span>)
+.should(
+    <span class="sql-string">'have.attr'</span>,
+    <span class="sql-string">'href'</span>,
+    <span class="sql-string">'/produtos'</span>
+)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Isso é especialmente útil para validar links,
+                    atributos HTML e configurações específicas
+                    dos elementos.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     VALUE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Validando valores de campos
+            </h2>
+
+            <p>
+                Para campos de formulário, podemos verificar o
+                valor atual utilizando <strong>have.value</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+.should(<span class="sql-string">'have.value'</span>, <span class="sql-string">'usuario@email.com'</span>)</code></pre>
+
+            <p>
+                Por exemplo, podemos preencher um campo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+.type(<span class="sql-string">'usuario@email.com'</span>)</code></pre>
+
+            <p>
+                E depois validar o valor:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+.should(<span class="sql-string">'have.value'</span>, <span class="sql-string">'usuario@email.com'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Essa abordagem permite verificar se a interação
+                    com o formulário produziu o valor esperado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BE ENABLED
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Validando estados de elementos
+            </h2>
+
+            <p>
+                Existem diversas assertions para verificar estados
+                específicos dos elementos.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'button'</span>)
+.should(<span class="sql-string">'be.enabled'</span>)</code></pre>
+
+            <p>
+                Podemos verificar se um elemento está desabilitado:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'button'</span>)
+.should(<span class="sql-string">'be.disabled'</span>)</code></pre>
+
+            <p>
+                Também podemos verificar se um checkbox está marcado:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#termos'</span>)
+.should(<span class="sql-string">'be.checked'</span>)</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        👁️
+                    </div>
+
+                    <h3>
+                        be.visible
+                    </h3>
+
+                    <p>
+                        Verifica se o elemento está visível.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🟢
+                    </div>
+
+                    <h3>
+                        be.enabled
+                    </h3>
+
+                    <p>
+                        Verifica se o elemento está habilitado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔴
+                    </div>
+
+                    <h3>
+                        be.disabled
+                    </h3>
+
+                    <p>
+                        Verifica se o elemento está desabilitado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ☑️
+                    </div>
+
+                    <h3>
+                        be.checked
+                    </h3>
+
+                    <p>
+                        Verifica se um checkbox ou radio está selecionado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     SHOULD COM ARGUMENTOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. should() com argumentos
+            </h2>
+
+            <p>
+                Algumas assertions recebem um segundo argumento
+                para especificar o valor esperado.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+.should(<span class="sql-string">'contain'</span>, <span class="sql-string">'Produtos'</span>)</code></pre>
+
+            <p>
+                Nesse caso:
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>contain</strong>
+                    → define o tipo de validação.
+                </p>
+
+                <p>
+                    <strong>'Produtos'</strong>
+                    → define o valor esperado.
+                </p>
+
+            </div>
+
+            <p>
+                Outro exemplo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'input'</span>)
+.should(<span class="sql-string">'have.value'</span>, <span class="sql-string">'Cypress'</span>)</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+     MULTIPLAS ASSERTIONS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Utilizando múltiplas assertions
+            </h2>
+
+            <p>
+                Podemos realizar várias validações sobre o mesmo
+                elemento.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'button'</span>)
+.should(<span class="sql-string">'be.visible'</span>)
+.and(<span class="sql-string">'be.enabled'</span>)</code></pre>
+
+            <p>
+                Nesse exemplo, o botão precisa:
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    ✅ Estar visível.
+                </p>
+
+                <p>
+                    ✅ Estar habilitado.
+                </p>
+
+            </div>
+
+            <p>
+                Também podemos utilizar <strong>and()</strong>
+                para continuar uma cadeia de assertions.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'button'</span>)
+.should(<span class="sql-string">'be.visible'</span>)
+.and(<span class="sql-string">'contain'</span>, <span class="sql-string">'Entrar'</span>)</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+     EXEMPLO COMPLETO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Exemplo completo
+            </h2>
+
+            <p>
+                Podemos combinar navegação, localização, interação
+                e assertions em um mesmo teste.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve exibir a página de login'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'h1'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+        .and(<span class="sql-string">'contain'</span>, <span class="sql-string">'Login'</span>)
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+        .and(<span class="sql-string">'be.enabled'</span>)
+
+    cy.get(<span class="sql-string">'#password'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+
+    cy.get(<span class="sql-string">'button[type="submit"]'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+        .and(<span class="sql-string">'be.enabled'</span>)
+
+})
+
+})</code></pre>
+
+            <p>
+                Esse teste não apenas interage com a página.
+                Ele também verifica se a aplicação está apresentando
+                os elementos esperados.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Ideia principal:</strong>
+
+                <p>
+                    Um teste automatizado deve verificar resultados,
+                    e não apenas executar ações.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RETRY AUTOMATICO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                14. O Cypress espera automaticamente
+            </h2>
+
+            <p>
+                Uma característica importante do Cypress é que suas
+                assertions são automaticamente reavaliadas durante
+                um período de tempo.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.resultado'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                Se o elemento ainda não estiver disponível imediatamente,
+                o Cypress pode aguardar e tentar novamente até que a
+                condição seja satisfeita ou o timeout seja atingido.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    Isso é diferente de simplesmente adicionar esperas
+                    fixas. O Cypress tenta sincronizar a execução do
+                    teste com o comportamento da aplicação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     NÃO USAR WAIT DESNECESSARIO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Evite waits desnecessários
+            </h2>
+
+            <p>
+                Um erro comum é utilizar esperas fixas para tentar
+                resolver problemas de sincronização.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.wait(5000)
+
+cy.get(<span class="sql-string">'.resultado'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                Em muitos casos, podemos deixar a própria assertion
+                verificar o estado esperado:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.resultado'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Prefira esperar por uma condição observável da
+                    aplicação em vez de adicionar um tempo fixo
+                    sem necessidade.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     SHOULD CALLBACK
+====================================================== -->
+
+        <section>
+
+            <h2>
+                16. should() com função
+            </h2>
+
+            <p>
+                O should() também pode receber uma função para
+                realizar validações mais específicas.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.produto'</span>)
+.should(($elemento) =&gt; {
+
+    expect($elemento).to.have.length(1)
+
+})</code></pre>
+
+            <p>
+                Nesse formato, recebemos o elemento encontrado
+                e podemos realizar verificações utilizando
+                JavaScript e asserções do Chai.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Quando utilizar?</strong>
+
+                <p>
+                    Esse formato pode ser útil quando uma validação
+                    não pode ser expressa facilmente utilizando
+                    uma assertion pronta.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ERROS COMUNS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns ao utilizar should()
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Validar o elemento errado
+                    </h3>
+
+                    <p>
+                        Criar uma assertion sobre um elemento que não
+                        representa o comportamento realmente esperado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Usar texto excessivamente específico
+                    </h3>
+
+                    <p>
+                        Criar validações frágeis baseadas em textos
+                        que mudam frequentemente.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Usar wait sem necessidade
+                    </h3>
+
+                    <p>
+                        Adicionar esperas fixas quando uma assertion
+                        poderia aguardar a condição correta.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Validar apenas a existência
+                    </h3>
+
+                    <p>
+                        Verificar somente se um elemento existe quando
+                        o comportamento esperado exige uma validação
+                        mais específica.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRATICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas com should()
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Valide comportamentos importantes
+                    </h3>
+
+                    <p>
+                        Crie assertions que realmente comprovem
+                        o comportamento esperado da aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Utilize seletores confiáveis
+                    </h3>
+
+                    <p>
+                        Combine assertions com seletores estáveis
+                        para reduzir a fragilidade dos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⏱️
+                    </div>
+
+                    <h3>
+                        Aproveite a espera automática
+                    </h3>
+
+                    <p>
+                        Prefira aguardar condições da aplicação
+                        em vez de utilizar waits fixos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧹
+                    </div>
+
+                    <h3>
+                        Mantenha as assertions claras
+                    </h3>
+
+                    <p>
+                        Escreva validações fáceis de entender e
+                        relacionadas ao comportamento esperado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     TABELA RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Principais assertions
+            </h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Assertion</th>
+                            <th>Objetivo</th>
+                            <th>Exemplo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>be.visible</strong>
+                            </td>
+
+                            <td>
+                                Verifica visibilidade.
+                            </td>
+
+                            <td>
+                                cy.get('.menu').should('be.visible')
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>exist</strong>
+                            </td>
+
+                            <td>
+                                Verifica existência.
+                            </td>
+
+                            <td>
+                                cy.get('.menu').should('exist')
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>have.text</strong>
+                            </td>
+
+                            <td>
+                                Valida o texto.
+                            </td>
+
+                            <td>
+                                cy.get('h1').should('have.text', 'Produtos')
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>contain</strong>
+                            </td>
+
+                            <td>
+                                Valida conteúdo.
+                            </td>
+
+                            <td>
+                                cy.get('h1').should('contain', 'Produtos')
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>have.value</strong>
+                            </td>
+
+                            <td>
+                                Valida valor de campo.
+                            </td>
+
+                            <td>
+                                cy.get('#email').should('have.value', 'teste@email.com')
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>have.class</strong>
+                            </td>
+
+                            <td>
+                                Valida classe CSS.
+                            </td>
+
+                            <td>
+                                cy.get('.alert').should('have.class', 'success')
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>have.attr</strong>
+                            </td>
+
+                            <td>
+                                Valida atributo.
+                            </td>
+
+                            <td>
+                                cy.get('a').should('have.attr', 'href')
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>be.enabled</strong>
+                            </td>
+
+                            <td>
+                                Verifica se está habilitado.
+                            </td>
+
+                            <td>
+                                cy.get('button').should('be.enabled')
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>be.disabled</strong>
+                            </td>
+
+                            <td>
+                                Verifica se está desabilitado.
+                            </td>
+
+                            <td>
+                                cy.get('button').should('be.disabled')
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>be.checked</strong>
+                            </td>
+
+                            <td>
+                                Verifica se está selecionado.
+                            </td>
+
+                            <td>
+                                cy.get('#termos').should('be.checked')
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o conceito de assertion.
+                </p>
+
+                <p>
+                    ☐ Entendi como utilizar should().
+                </p>
+
+                <p>
+                    ☐ Aprendi a validar visibilidade.
+                </p>
+
+                <p>
+                    ☐ Aprendi a validar existência.
+                </p>
+
+                <p>
+                    ☐ Aprendi a validar textos.
+                </p>
+
+                <p>
+                    ☐ Aprendi a validar atributos.
+                </p>
+
+                <p>
+                    ☐ Aprendi a validar valores de campos.
+                </p>
+
+                <p>
+                    ☐ Aprendi a validar estados dos elementos.
+                </p>
+
+                <p>
+                    ☐ Aprendi a utilizar not.
+                </p>
+
+                <p>
+                    ☐ Aprendi a utilizar múltiplas assertions.
+                </p>
+
+                <p>
+                    ☐ Entendi a importância de evitar waits desnecessários.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ✅ <strong>should()</strong>
+                    → utilizado para criar assertions.
+                </p>
+
+                <p>
+                    👀 <strong>be.visible</strong>
+                    → verifica se o elemento está visível.
+                </p>
+
+                <p>
+                    🔎 <strong>exist</strong>
+                    → verifica se o elemento existe.
+                </p>
+
+                <p>
+                    📝 <strong>contain</strong>
+                    → verifica se o elemento contém determinado conteúdo.
+                </p>
+
+                <p>
+                    📄 <strong>have.text</strong>
+                    → valida o texto do elemento.
+                </p>
+
+                <p>
+                    🏷️ <strong>have.attr</strong>
+                    → valida atributos.
+                </p>
+
+                <p>
+                    🎨 <strong>have.class</strong>
+                    → valida classes CSS.
+                </p>
+
+                <p>
+                    📝 <strong>have.value</strong>
+                    → valida valores de campos.
+                </p>
+
+                <p>
+                    🟢 <strong>be.enabled</strong>
+                    → verifica se o elemento está habilitado.
+                </p>
+
+                <p>
+                    🔴 <strong>be.disabled</strong>
+                    → verifica se o elemento está desabilitado.
+                </p>
+
+                <p>
+                    ☑️ <strong>be.checked</strong>
+                    → verifica se checkbox ou radio está selecionado.
+                </p>
+
+            </div>
+
+            <p>
+                As assertions são fundamentais para transformar
+                ações automatizadas em testes capazes de verificar
+                se a aplicação realmente apresentou o comportamento
+                esperado.
+            </p>
+
+            <p>
+                Na próxima aula vamos continuar trabalhando com
+                comandos do Cypress e conhecer comandos de navegação,
+                como voltar, avançar e recarregar páginas.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     QUIZ
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 18
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 18 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe utilizar should() para validar
+                elementos, textos, atributos, valores e estados
+                durante seus testes automatizados.
+            </p>
+
+            <a href="../aulas/aula-19.html" class="cta-button">
+                Aula 19 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+
+FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 18 • should() no Cypress
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+
+JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-18.js"></script>
+
+</body>
+
+</html>

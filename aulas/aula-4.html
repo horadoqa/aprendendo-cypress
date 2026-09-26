@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 4 — Introdução ao Cypress</title>
+</head>
+
+<body>
+
+    <header>
+
+        <img
+            class="header-logo"
+            src="../assets/images/logo.png"
+            alt="Hora do QA"
+        >
+
+        <button
+            class="theme-toggle"
+            id="themeToggle"
+            type="button"
+            aria-label="Alternar tema"
+        >
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 4 • INTRODUÇÃO AO CYPRESS
+            </span>
+
+            <h1>
+                Introdução ao Cypress
+            </h1>
+
+            <p>
+                Entenda o que é o Cypress, como ele funciona e
+                quais são os principais conceitos para começar
+                a criar testes automatizados em aplicações web.
+            </p>
+
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <!-- =====================================================
+             OBJETIVOS DA AULA
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Nas aulas anteriores, aprendemos conceitos
+                fundamentais sobre testes de software.
+            </p>
+
+            <p>
+                Agora vamos conhecer a ferramenta que será utilizada
+                durante grande parte da nossa trilha:
+                <strong>Cypress</strong>.
+            </p>
+
+            <p>
+                Nesta aula, você vai aprender:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        O que é Cypress
+                    </h3>
+
+                    <p>
+                        Entender o propósito e as características
+                        principais da ferramenta.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        Aplicações Web
+                    </h3>
+
+                    <p>
+                        Entender como o Cypress interage com
+                        aplicações executadas no navegador.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🤖
+                    </div>
+
+                    <h3>
+                        Automação
+                    </h3>
+
+                    <p>
+                        Entender como comandos podem automatizar
+                        ações e verificações.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔍
+                    </div>
+
+                    <h3>
+                        Assertions
+                    </h3>
+
+                    <p>
+                        Conhecer o conceito de verificar
+                        resultados esperados.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             O QUE É CYPRESS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é Cypress?
+            </h2>
+
+            <p>
+                O <strong>Cypress</strong> é uma ferramenta de testes
+                voltada principalmente para aplicações web.
+            </p>
+
+            <p>
+                Ele permite escrever testes utilizando JavaScript
+                ou TypeScript e executar esses testes em um ambiente
+                que permite observar as interações com a aplicação.
+            </p>
+
+            <div class="highlight">
+
+                <strong>De forma simples:</strong>
+
+                <p>
+                    O Cypress permite escrever código que descreve
+                    ações e verificações que queremos realizar
+                    em uma aplicação web.
+                </p>
+
+            </div>
+
+            <p>
+                Em vez de executar manualmente uma sequência como
+                abrir uma página, preencher um formulário e clicar
+                em um botão, podemos transformar essas ações em
+                código automatizado.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             EXEMPLO CONCEITUAL
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Pensando como o Cypress
+            </h2>
+
+            <p>
+                Imagine que precisamos testar uma tela de login.
+            </p>
+
+            <p>
+                Manualmente, poderíamos realizar os seguintes passos:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        1. Abrir a página
+                    </h3>
+
+                    <p>
+                        Acessar a tela de login da aplicação.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✉️
+                    </div>
+
+                    <h3>
+                        2. Preencher e-mail
+                    </h3>
+
+                    <p>
+                        Informar o e-mail do usuário.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔑
+                    </div>
+
+                    <h3>
+                        3. Preencher senha
+                    </h3>
+
+                    <p>
+                        Informar a senha.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🖱️
+                    </div>
+
+                    <h3>
+                        4. Clicar
+                    </h3>
+
+                    <p>
+                        Acionar o botão de login.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        5. Verificar
+                    </h3>
+
+                    <p>
+                        Confirmar que o login foi realizado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             AUTOMATIZAÇÃO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Transformando ações em código
+            </h2>
+
+            <p>
+                O Cypress permite representar ações da aplicação
+                através de comandos.
+            </p>
+
+            <p>
+                Um exemplo simples:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+    .type(<span class="sql-string">'usuario@email.com'</span>)
+
+cy.get(<span class="sql-string">'[data-testid="senha"]'</span>)
+    .type(<span class="sql-string">'123456'</span>)
+
+cy.get(<span class="sql-string">'[data-testid="entrar"]'</span>)
+    .click()</code></pre>
+
+            <p>
+                Cada comando representa uma operação que o teste
+                precisa realizar.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>cy.visit()</strong>
+                    → acessa uma página.
+                </p>
+
+                <p>
+                    <strong>cy.get()</strong>
+                    → encontra um elemento da aplicação.
+                </p>
+
+                <p>
+                    <strong>.type()</strong>
+                    → insere informações em um campo.
+                </p>
+
+                <p>
+                    <strong>.click()</strong>
+                    → realiza um clique.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CYPRESS NÃO É UMA LINGUAGEM
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Cypress não é uma linguagem de programação
+            </h2>
+
+            <p>
+                É importante diferenciar as tecnologias utilizadas
+                no processo.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Cypress
+                    </h3>
+
+                    <p>
+                        É a ferramenta utilizada para criar e
+                        executar testes.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🟨
+                    </div>
+
+                    <h3>
+                        JavaScript
+                    </h3>
+
+                    <p>
+                        É uma das linguagens que podemos utilizar
+                        para escrever os testes.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔷
+                    </div>
+
+                    <h3>
+                        TypeScript
+                    </h3>
+
+                    <p>
+                        Também pode ser utilizado para escrever
+                        testes com Cypress.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="highlight">
+
+                <strong>Não confunda:</strong>
+
+                <p>
+                    ❌ Cypress não é uma linguagem.
+                </p>
+
+                <p>
+                    ❌ Cypress não é JavaScript.
+                </p>
+
+                <p>
+                    ✅ Cypress é uma ferramenta de testes que
+                    pode ser utilizada com JavaScript ou TypeScript.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             COMO O CYPRESS FUNCIONA
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Como o Cypress funciona?
+            </h2>
+
+            <p>
+                Para entender o Cypress, podemos imaginar uma
+                comunicação entre três elementos principais:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧑‍💻
+                    </div>
+
+                    <h3>
+                        1. Teste
+                    </h3>
+
+                    <p>
+                        O código define as ações e verificações
+                        que queremos executar.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        2. Cypress
+                    </h3>
+
+                    <p>
+                        A ferramenta interpreta e executa os
+                        comandos do teste.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        3. Aplicação
+                    </h3>
+
+                    <p>
+                        A aplicação recebe as ações e apresenta
+                        seus comportamentos.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             FLUXO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Fluxo básico de execução
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🧑‍💻 <strong>Teste</strong>
+                    → define uma ação.
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    🧪 <strong>Cypress</strong>
+                    → executa o comando.
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    🌐 <strong>Aplicação</strong>
+                    → recebe a interação.
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    🔍 <strong>Cypress</strong>
+                    → verifica o resultado.
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    ✅ <strong>Teste</strong>
+                    → apresenta o resultado.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             COMMANDS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que são comandos do Cypress?
+            </h2>
+
+            <p>
+                Os comandos são uma das partes mais importantes
+                da experiência de desenvolvimento com Cypress.
+            </p>
+
+            <p>
+                Eles permitem realizar ações sobre a aplicação
+                e obter informações sobre seus elementos.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <h3>
+                        cy.visit()
+                    </h3>
+
+                    <p>
+                        Acessa uma URL.
+                    </p>
+
+                    <pre><code>cy.visit(<span class="sql-string">'/login'</span>)</code></pre>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        cy.get()
+                    </h3>
+
+                    <p>
+                        Busca um elemento utilizando um seletor.
+                    </p>
+
+                    <pre><code>cy.get(<span class="sql-string">'button'</span>)</code></pre>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        .click()
+                    </h3>
+
+                    <p>
+                        Realiza uma interação de clique.
+                    </p>
+
+                    <pre><code>cy.get(<span class="sql-string">'button'</span>)
+    .click()</code></pre>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        .type()
+                    </h3>
+
+                    <p>
+                        Digita um valor em um campo.
+                    </p>
+
+                    <pre><code>cy.get(<span class="sql-string">'input'</span>)
+    .type(<span class="sql-string">'Cypress'</span>)</code></pre>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             ASSERTIONS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que são Assertions?
+            </h2>
+
+            <p>
+                Uma <strong>assertion</strong> é uma verificação
+                utilizada para confirmar se o comportamento
+                observado corresponde ao resultado esperado.
+            </p>
+
+            <p>
+                Por exemplo, depois de realizar um login,
+                podemos verificar se determinada mensagem apareceu.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-testid="mensagem"]'</span>)
+    .should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>A ideia é:</strong>
+
+                <p>
+                    Ação → comportamento da aplicação →
+                    resultado esperado.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             EXEMPLOS ASSERTIONS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Exemplos de verificações
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <h3>
+                        Elemento visível
+                    </h3>
+
+                    <pre><code>cy.get(<span class="sql-string">'.menu'</span>)
+    .should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        Texto
+                    </h3>
+
+                    <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+    .should(<span class="sql-string">'contain'</span>, <span class="sql-string">'Dashboard'</span>)</code></pre>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        Valor
+                    </h3>
+
+                    <pre><code>cy.get(<span class="sql-string">'input'</span>)
+    .should(<span class="sql-string">'have.value'</span>, <span class="sql-string">'Cypress'</span>)</code></pre>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        URL
+                    </h3>
+
+                    <pre><code>cy.url()
+    .should(<span class="sql-string">'include'</span>, <span class="sql-string">'dashboard'</span>)</code></pre>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             SELETORES
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Como o Cypress encontra elementos?
+            </h2>
+
+            <p>
+                Para interagir com um elemento da página,
+                precisamos identificá-lo.
+            </p>
+
+            <p>
+                Para isso, utilizamos <strong>seletores</strong>.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <h3>
+                        Tag
+                    </h3>
+
+                    <pre><code>cy.get(<span class="sql-string">'button'</span>)</code></pre>
+
+                    <p>
+                        Seleciona elementos pela tag HTML.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        Classe
+                    </h3>
+
+                    <pre><code>cy.get(<span class="sql-string">'.botao'</span>)</code></pre>
+
+                    <p>
+                        Seleciona elementos através de uma classe.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        ID
+                    </h3>
+
+                    <pre><code>cy.get(<span class="sql-string">'#login'</span>)</code></pre>
+
+                    <p>
+                        Seleciona um elemento pelo identificador.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        data-testid
+                    </h3>
+
+                    <pre><code>cy.get(<span class="sql-string">'[data-testid="login"]'</span>)</code></pre>
+
+                    <p>
+                        Permite utilizar um atributo criado
+                        especificamente para facilitar a identificação.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             DATA TESTID
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Por que utilizar data-testid?
+            </h2>
+
+            <p>
+                Em testes automatizados, é importante utilizar
+                seletores que sejam suficientemente estáveis.
+            </p>
+
+            <p>
+                Uma possibilidade é adicionar um atributo
+                <strong>data-testid</strong> ao elemento.
+            </p>
+
+            <pre><code>&lt;button
+    data-testid=<span class="sql-string">"entrar"</span>
+&gt;
+    Entrar
+&lt;/button&gt;</code></pre>
+
+            <p>
+                O teste pode então localizar o botão:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-testid="entrar"]'</span>)
+    .click()</code></pre>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    Não existe um único seletor obrigatório para
+                    todos os testes. A escolha deve considerar a
+                    estrutura e a estabilidade da aplicação.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             RETRY-ABILITY
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Uma característica importante: espera automática
+            </h2>
+
+            <p>
+                Aplicações web modernas possuem comportamentos
+                assíncronos. Elementos podem aparecer depois que
+                uma página é carregada.
+            </p>
+
+            <p>
+                O Cypress possui mecanismos de espera e repetição
+                de determinadas operações e verificações, reduzindo
+                a necessidade de inserir esperas fixas em muitos casos.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Evite pensar assim:</strong>
+
+                <pre><code>// Esperar alguns segundos
+// e depois tentar encontrar o elemento</code></pre>
+
+                <p>
+                    Em muitos casos, podemos deixar o Cypress
+                    aguardar o estado esperado do elemento.
+                </p>
+
+                <pre><code>cy.get(<span class="sql-string">'[data-testid="resultado"]'</span>)
+    .should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             TIME TRAVEL
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Observando a execução do teste
+            </h2>
+
+            <p>
+                Uma característica marcante da experiência de
+                desenvolvimento do Cypress é a possibilidade de
+                observar a execução dos testes e seus comandos.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ▶️
+                    </div>
+
+                    <h3>
+                        Execução
+                    </h3>
+
+                    <p>
+                        Os comandos são executados na aplicação.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔍
+                    </div>
+
+                    <h3>
+                        Inspeção
+                    </h3>
+
+                    <p>
+                        Podemos observar o estado da aplicação
+                        durante o teste.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Falha
+                    </h3>
+
+                    <p>
+                        Quando uma verificação falha, o resultado
+                        ajuda na investigação do problema.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             TESTE COMPLETO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Nosso primeiro exemplo completo
+            </h2>
+
+            <p>
+                Podemos combinar alguns dos conceitos apresentados
+                nesta aula.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve acessar o sistema'</span>, () =&gt; {
+
+        cy.visit(<span class="sql-string">'/login'</span>)
+
+        cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+            .type(<span class="sql-string">'usuario@email.com'</span>)
+
+        cy.get(<span class="sql-string">'[data-testid="senha"]'</span>)
+            .type(<span class="sql-string">'123456'</span>)
+
+        cy.get(<span class="sql-string">'[data-testid="entrar"]'</span>)
+            .click()
+
+        cy.url()
+            .should(<span class="sql-string">'include'</span>, <span class="sql-string">'dashboard'</span>)
+
+    })
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>O teste está fazendo:</strong>
+                </p>
+
+                <p>
+                    1. Acessa a página de login.
+                </p>
+
+                <p>
+                    2. Preenche o e-mail.
+                </p>
+
+                <p>
+                    3. Preenche a senha.
+                </p>
+
+                <p>
+                    4. Clica no botão.
+                </p>
+
+                <p>
+                    5. Verifica a URL.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             O QUE CYPRESS PODE TESTAR
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que podemos testar com Cypress?
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Login
+                    </h3>
+
+                    <p>
+                        Fluxos de autenticação e comportamentos
+                        relacionados à interface.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        Formulários
+                    </h3>
+
+                    <p>
+                        Preenchimento, validações e mensagens
+                        apresentadas ao usuário.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🛒
+                    </div>
+
+                    <h3>
+                        E-commerce
+                    </h3>
+
+                    <p>
+                        Busca de produtos, carrinho e fluxos
+                        relacionados à compra.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧭
+                    </div>
+
+                    <h3>
+                        Navegação
+                    </h3>
+
+                    <p>
+                        Links, páginas, menus e comportamentos
+                        de navegação.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔌
+                    </div>
+
+                    <h3>
+                        APIs
+                    </h3>
+
+                    <p>
+                        O Cypress também possui recursos para
+                        realizar requisições e verificar respostas.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        📱
+                    </div>
+
+                    <h3>
+                        Interfaces responsivas
+                    </h3>
+
+                    <p>
+                        Podemos testar diferentes dimensões de
+                        viewport durante a automação.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CYPRESS E OUTRAS FERRAMENTAS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Cypress e outras ferramentas
+            </h2>
+
+            <p>
+                Existem diversas ferramentas de automação de testes.
+                Cada uma possui características, APIs e formas
+                de funcionamento próprias.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Conceito</th>
+                            <th>Cypress</th>
+                            <th>Objetivo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                Testes web
+                            </td>
+
+                            <td>
+                                ✅
+                            </td>
+
+                            <td>
+                                Automatizar comportamentos de aplicações web.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                JavaScript / TypeScript
+                            </td>
+
+                            <td>
+                                ✅
+                            </td>
+
+                            <td>
+                                Escrever testes e lógica de automação.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                Assertions
+                            </td>
+
+                            <td>
+                                ✅
+                            </td>
+
+                            <td>
+                                Verificar resultados esperados.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                Requisições HTTP
+                            </td>
+
+                            <td>
+                                ✅
+                            </td>
+
+                            <td>
+                                Trabalhar com APIs e respostas HTTP.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             VANTAGENS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Características importantes do Cypress
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        💻
+                    </div>
+
+                    <h3>
+                        Experiência de desenvolvimento
+                    </h3>
+
+                    <p>
+                        Possui uma interface voltada para acompanhar
+                        a execução e investigar testes.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Debug
+                    </h3>
+
+                    <p>
+                        Oferece recursos que ajudam a investigar
+                        falhas durante a execução.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Sintaxe baseada em JavaScript
+                    </h3>
+
+                    <p>
+                        Permite utilizar conceitos familiares
+                        para quem já conhece JavaScript.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔄
+                    </div>
+
+                    <h3>
+                        Reexecução
+                    </h3>
+
+                    <p>
+                        O ambiente de execução facilita repetir
+                        testes durante o desenvolvimento.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             LIMITES
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Entendendo o escopo da ferramenta
+            </h2>
+
+            <p>
+                Nenhuma ferramenta de testes resolve todos os
+                problemas de qualidade de software sozinha.
+            </p>
+
+            <p>
+                Cypress deve ser utilizado dentro de uma estratégia
+                de testes que considere os diferentes níveis,
+                riscos e necessidades da aplicação.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Por isso:</strong>
+
+                <p>
+                    🧩 Testes unitários continuam importantes.
+                </p>
+
+                <p>
+                    🔗 Testes de integração continuam importantes.
+                </p>
+
+                <p>
+                    🌐 Testes E2E podem verificar fluxos completos.
+                </p>
+
+                <p>
+                    🧪 O Cypress pode fazer parte dessa estratégia.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CONCEITOS IMPORTANTES
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Conceitos que você deve guardar
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <h3>
+                        Command
+                    </h3>
+
+                    <p>
+                        Comando utilizado para realizar uma operação
+                        através da API do Cypress.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        Selector
+                    </h3>
+
+                    <p>
+                        Forma utilizada para localizar um elemento
+                        da aplicação.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        Assertion
+                    </h3>
+
+                    <p>
+                        Verificação que confirma um resultado esperado.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        Test
+                    </h3>
+
+                    <p>
+                        Conjunto de ações e verificações que valida
+                        determinado comportamento.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             ERROS COMUNS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <h3>
+                        ❌ "Cypress é uma linguagem"
+                    </h3>
+
+                    <p>
+                        Cypress é uma ferramenta. Os testes podem
+                        ser escritos utilizando JavaScript ou
+                        TypeScript.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        ❌ "cy.get() é uma assertion"
+                    </h3>
+
+                    <p>
+                        <strong>cy.get()</strong> é utilizado para
+                        localizar elementos. Uma assertion pode ser
+                        realizada com métodos como <strong>.should()</strong>.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        ❌ "Todo teste precisa de cy.wait()"
+                    </h3>
+
+                    <p>
+                        O Cypress possui mecanismos de espera e
+                        repetição automáticos. Esperas fixas devem
+                        ser utilizadas com cuidado.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        ❌ "Cypress substitui toda a estratégia de testes"
+                    </h3>
+
+                    <p>
+                        Cypress é uma ferramenta dentro de uma
+                        estratégia maior de qualidade e testes.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             RESUMO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🧪 <strong>Cypress</strong>
+                    → ferramenta de testes para aplicações web.
+                </p>
+
+                <p>
+                    🟨 <strong>JavaScript</strong>
+                    → linguagem que pode ser utilizada para escrever
+                    os testes.
+                </p>
+
+                <p>
+                    ▶️ <strong>Commands</strong>
+                    → permitem realizar ações através da API do Cypress.
+                </p>
+
+                <p>
+                    🎯 <strong>Selectors</strong>
+                    → permitem localizar elementos da aplicação.
+                </p>
+
+                <p>
+                    🔍 <strong>Assertions</strong>
+                    → verificam se o resultado corresponde ao esperado.
+                </p>
+
+                <p>
+                    🌐 <strong>Aplicação</strong>
+                    → é o sistema que será exercitado pelo teste.
+                </p>
+
+                <p>
+                    🤖 <strong>Automação</strong>
+                    → transforma ações e verificações em código
+                    executável.
+                </p>
+
+            </div>
+
+            <p>
+                Na próxima aula, vamos preparar nosso ambiente,
+                instalar o Cypress e criar a estrutura inicial
+                de um projeto de testes.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             CHECKPOINT
+        ====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 4
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CTA
+        ====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 4 concluída!
+            </h2>
+
+            <p>
+                Agora você já conhece o Cypress, seus principais
+                conceitos e como ele pode ser utilizado para
+                automatizar testes de aplicações web.
+            </p>
+
+            <a href="../aulas/aula-5.html" class="cta-button">
+                Aula 5 →
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+       FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 4 • Introdução ao Cypress
+        </p>
+
+    </footer>
+
+
+    <!-- =====================================================
+       JAVASCRIPT
+    ====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-4.js"></script>
+
+</body>
+
+</html>

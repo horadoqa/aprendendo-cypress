@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 6 — Primeiro Teste com Cypress</title>
+</head>
+
+<body>
+
+    <header>
+
+        <img
+            class="header-logo"
+            src="../assets/images/logo.png"
+            alt="Hora do QA"
+        >
+
+        <button
+            class="theme-toggle"
+            id="themeToggle"
+            type="button"
+            aria-label="Alternar tema"
+        >
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 6 • PRIMEIRO TESTE COM CYPRESS
+            </span>
+
+            <h1>
+                Primeiro Teste com Cypress
+            </h1>
+
+            <p>
+                Aprenda a criar seu primeiro teste automatizado,
+                entender a estrutura do código e realizar suas
+                primeiras validações com Cypress.
+            </p>
+
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <!-- =====================================================
+             OBJETIVOS DA AULA
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Na aula anterior, configuramos o ambiente e instalamos
+                o Cypress.
+            </p>
+
+            <p>
+                Agora vamos escrever nosso primeiro teste automatizado
+                e entender cada parte do código.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Criar um teste
+                    </h3>
+
+                    <p>
+                        Criar o primeiro arquivo de teste utilizando
+                        Cypress.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧱
+                    </div>
+
+                    <h3>
+                        Estruturar o teste
+                    </h3>
+
+                    <p>
+                        Entender describe(), it() e a organização
+                        dos casos de teste.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        Acessar páginas
+                    </h3>
+
+                    <p>
+                        Utilizar cy.visit() para navegar pela aplicação.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Validar resultados
+                    </h3>
+
+                    <p>
+                        Utilizar assertions para verificar o
+                        comportamento da aplicação.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             O QUE É UM TESTE CYPRESS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é um teste no Cypress?
+            </h2>
+
+            <p>
+                Um teste no Cypress é um código que descreve ações
+                que devem ser executadas em uma aplicação e condições
+                que precisam ser verificadas.
+            </p>
+
+            <p>
+                Podemos representar um fluxo simples desta forma:
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 Acessar uma página
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    🔎 Localizar um elemento
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    🖱️ Realizar uma ação
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    ✅ Verificar o resultado
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CRIANDO ARQUIVO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Criando o primeiro arquivo
+            </h2>
+
+            <p>
+                Dentro da pasta <strong>cypress/e2e</strong>, vamos
+                criar um arquivo chamado:
+            </p>
+
+            <pre><code>primeiro-teste.cy.js</code></pre>
+
+            <p>
+                A estrutura ficará assim:
+            </p>
+
+            <pre><code>cypress/
+└── e2e/
+    └── primeiro-teste.cy.js</code></pre>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    A extensão <strong>.cy.js</strong> identifica
+                    um arquivo JavaScript destinado aos testes
+                    do Cypress.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             PRIMEIRO CODIGO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Nosso primeiro teste
+            </h2>
+
+            <p>
+                Vamos começar com um exemplo simples:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Minha primeira suíte'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve acessar a página inicial'</span>, () =&gt; {
+
+        cy.visit(<span class="sql-string">'/'</span>)
+
+    })
+
+})</code></pre>
+
+            <p>
+                Mesmo sendo um código pequeno, temos vários conceitos
+                importantes aqui.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             DESCRIBE
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                2. O que é describe()?
+            </h2>
+
+            <p>
+                O <strong>describe()</strong> é utilizado para
+                organizar um conjunto de testes relacionados.
+            </p>
+
+            <p>
+                Podemos utilizá-lo para representar uma funcionalidade,
+                uma página ou um determinado contexto.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+    // testes relacionados ao login
+
+})</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📁
+                    </div>
+
+                    <h3>
+                        Organização
+                    </h3>
+
+                    <p>
+                        Agrupa testes relacionados.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Suíte de testes
+                    </h3>
+
+                    <p>
+                        Representa um contexto ou conjunto
+                        de cenários.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             IT
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                3. O que é it()?
+            </h2>
+
+            <p>
+                O <strong>it()</strong> representa um caso de teste.
+            </p>
+
+            <p>
+                É dentro dele que escrevemos as ações e validações
+                que queremos executar.
+            </p>
+
+            <pre><code>it(<span class="sql-string">'deve exibir a página inicial'</span>, () =&gt; {
+
+    // passos do teste
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Podemos pensar da seguinte maneira:
+                </p>
+
+                <p>
+                    <strong>describe()</strong>
+                    → grupo de testes.
+                </p>
+
+                <p>
+                    <strong>it()</strong>
+                    → um teste dentro desse grupo.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CYPRESS API
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                4. O objeto cy
+            </h2>
+
+            <p>
+                O Cypress disponibiliza o objeto global
+                <strong>cy</strong>, utilizado para executar
+                comandos durante os testes.
+            </p>
+
+            <p>
+                Alguns comandos que veremos ao longo do curso são:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        cy.visit()
+                    </h3>
+
+                    <p>
+                        Acessa uma página da aplicação.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        cy.get()
+                    </h3>
+
+                    <p>
+                        Localiza elementos utilizando seletores.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🖱️
+                    </div>
+
+                    <h3>
+                        cy.click()
+                    </h3>
+
+                    <p>
+                        Executa uma ação de clique em um elemento.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⌨️
+                    </div>
+
+                    <h3>
+                        cy.type()
+                    </h3>
+
+                    <p>
+                        Digita informações em elementos de entrada.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CY VISIT
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Acessando uma página com cy.visit()
+            </h2>
+
+            <p>
+                O comando <strong>cy.visit()</strong> permite
+                navegar para uma URL durante o teste.
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/'</span>)</code></pre>
+
+            <p>
+                Caso a aplicação esteja configurada com uma
+                <strong>baseUrl</strong>, o Cypress utilizará essa
+                URL como referência.
+            </p>
+
+            <p>
+                Também podemos acessar uma URL completa:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'https://example.com'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Exemplo:</strong>
+
+                <p>
+                    Se a baseUrl for
+                    <strong>http://localhost:3000</strong>,
+                    então:
+                </p>
+
+                <pre><code>cy.visit(<span class="sql-string">'/login'</span>)</code></pre>
+
+                <p>
+                    acessará:
+                </p>
+
+                <pre><code>http://localhost:3000/login</code></pre>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             PRIMEIRA ASSERTION
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Fazendo nossa primeira validação
+            </h2>
+
+            <p>
+                Um teste não deve apenas executar ações.
+                Também precisamos verificar se o resultado esperado
+                aconteceu.
+            </p>
+
+            <p>
+                Para isso, utilizamos <strong>assertions</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+    .should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                Nesse exemplo:
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>cy.get('h1')</strong>
+                    → localiza um elemento h1.
+                </p>
+
+                <p>
+                    <strong>should('be.visible')</strong>
+                    → verifica se o elemento está visível.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             PRIMEIRO TESTE COMPLETO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Primeiro teste completo
+            </h2>
+
+            <p>
+                Agora podemos combinar navegação, localização
+                de elementos e validação.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Página inicial'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve carregar corretamente'</span>, () =&gt; {
+
+        cy.visit(<span class="sql-string">'/'</span>)
+
+        cy.get(<span class="sql-string">'h1'</span>)
+            .should(<span class="sql-string">'be.visible'</span>)
+
+    })
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O fluxo do teste é:
+                </p>
+
+                <p>
+                    <strong>1.</strong>
+                    Abrir a aplicação.
+                </p>
+
+                <p>
+                    <strong>2.</strong>
+                    Localizar o título.
+                </p>
+
+                <p>
+                    <strong>3.</strong>
+                    Verificar se o título está visível.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CY GET
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Localizando elementos com cy.get()
+            </h2>
+
+            <p>
+                O <strong>cy.get()</strong> é um dos comandos
+                mais utilizados no Cypress.
+            </p>
+
+            <p>
+                Ele permite localizar elementos utilizando
+                seletores CSS.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#login'</span>)</code></pre>
+
+            <pre><code>cy.get(<span class="sql-string">'.botao-login'</span>)</code></pre>
+
+            <pre><code>cy.get(<span class="sql-string">'input'</span>)</code></pre>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Seletor</th>
+                            <th>Localização</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>#login</strong>
+                            </td>
+
+                            <td>
+                                Elemento com id="login".
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <strong>.botao-login</strong>
+                            </td>
+
+                            <td>
+                                Elemento com a classe botao-login.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <strong>input</strong>
+                            </td>
+
+                            <td>
+                                Elementos HTML do tipo input.
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+                                <strong>button</strong>
+                            </td>
+
+                            <td>
+                                Elementos HTML do tipo button.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CLICK
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Clicando em elementos
+            </h2>
+
+            <p>
+                Para simular um clique, podemos utilizar
+                o comando <strong>.click()</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'button'</span>)
+    .click()</code></pre>
+
+            <p>
+                Podemos também localizar o elemento através
+                de um identificador:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#entrar'</span>)
+    .click()</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O Cypress localiza o elemento e executa
+                    a ação de clique como parte do fluxo do teste.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             TYPE
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Digitando informações
+            </h2>
+
+            <p>
+                Para preencher campos de formulário, podemos
+                utilizar <strong>.type()</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+    .type(<span class="sql-string">'usuario@email.com'</span>)</code></pre>
+
+            <p>
+                Outro exemplo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#senha'</span>)
+    .type(<span class="sql-string">'123456'</span>)</code></pre>
+
+            <p>
+                Podemos combinar o preenchimento com um clique:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+    .type(<span class="sql-string">'usuario@email.com'</span>)
+
+cy.get(<span class="sql-string">'#senha'</span>)
+    .type(<span class="sql-string">'123456'</span>)
+
+cy.get(<span class="sql-string">'#entrar'</span>)
+    .click()</code></pre>
+
+        </section>
+
+
+        <!-- =====================================================
+             FLUXO LOGIN
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Exemplo: teste de login
+            </h2>
+
+            <p>
+                Imagine uma página contendo um formulário de login:
+            </p>
+
+            <pre><code>&lt;input id="email"&gt;
+
+&lt;input id="senha" type="password"&gt;
+
+&lt;button id="entrar"&gt;
+    Entrar
+&lt;/button&gt;</code></pre>
+
+            <p>
+                Podemos automatizar o preenchimento:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve preencher o formulário'</span>, () =&gt; {
+
+        cy.visit(<span class="sql-string">'/login'</span>)
+
+        cy.get(<span class="sql-string">'#email'</span>)
+            .type(<span class="sql-string">'usuario@email.com'</span>)
+
+        cy.get(<span class="sql-string">'#senha'</span>)
+            .type(<span class="sql-string">'123456'</span>)
+
+        cy.get(<span class="sql-string">'#entrar'</span>)
+            .click()
+
+    })
+
+})</code></pre>
+
+        </section>
+
+
+        <!-- =====================================================
+             ASSERTIONS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Assertions
+            </h2>
+
+            <p>
+                Assertions são verificações utilizadas para confirmar
+                se o comportamento observado corresponde ao esperado.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        👁️
+                    </div>
+
+                    <h3>
+                        be.visible
+                    </h3>
+
+                    <p>
+                        Verifica se o elemento está visível.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔤
+                    </div>
+
+                    <h3>
+                        contain
+                    </h3>
+
+                    <p>
+                        Verifica se um elemento contém determinado texto.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✔️
+                    </div>
+
+                    <h3>
+                        exist
+                    </h3>
+
+                    <p>
+                        Verifica se o elemento existe.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        have.value
+                    </h3>
+
+                    <p>
+                        Verifica o valor de um elemento de formulário.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             EXEMPLOS ASSERTIONS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Exemplos de assertions
+            </h2>
+
+            <p>
+                Verificando visibilidade:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+    .should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                Verificando texto:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+    .should(<span class="sql-string">'contain'</span>, <span class="sql-string">'Bem-vindo'</span>)</code></pre>
+
+            <p>
+                Verificando existência:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#mensagem'</span>)
+    .should(<span class="sql-string">'exist'</span>)</code></pre>
+
+            <p>
+                Verificando valor:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+    .should(<span class="sql-string">'have.value'</span>, <span class="sql-string">'usuario@email.com'</span>)</code></pre>
+
+        </section>
+
+
+        <!-- =====================================================
+             MULTIPLOS TESTES
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Criando vários testes
+            </h2>
+
+            <p>
+                Uma mesma suíte pode possuir vários casos de teste.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Página de login'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve exibir o formulário'</span>, () =&gt; {
+
+        cy.visit(<span class="sql-string">'/login'</span>)
+
+        cy.get(<span class="sql-string">'#email'</span>)
+            .should(<span class="sql-string">'be.visible'</span>)
+
+    })
+
+
+    it(<span class="sql-string">'deve exibir o botão entrar'</span>, () =&gt; {
+
+        cy.visit(<span class="sql-string">'/login'</span>)
+
+        cy.get(<span class="sql-string">'#entrar'</span>)
+            .should(<span class="sql-string">'be.visible'</span>)
+
+    })
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Cada <strong>it()</strong> representa um cenário
+                    que pode ser executado e reportado individualmente.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             EXECUTANDO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Executando o teste
+            </h2>
+
+            <p>
+                Podemos abrir o Cypress utilizando:
+            </p>
+
+            <pre><code>npx cypress open</code></pre>
+
+            <p>
+                Depois, selecionamos o tipo de teste configurado
+                e o arquivo que queremos executar.
+            </p>
+
+            <p>
+                Também podemos executar pela linha de comando:
+            </p>
+
+            <pre><code>npx cypress run</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Durante a execução, o Cypress apresenta
+                    informações sobre os testes aprovados e
+                    aqueles que apresentaram falhas.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             TESTE PASSANDO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Quando um teste passa?
+            </h2>
+
+            <p>
+                Um teste passa quando as condições definidas
+                no cenário são atendidas.
+            </p>
+
+            <pre><code>it(<span class="sql-string">'deve exibir o título'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/'</span>)
+
+    cy.get(<span class="sql-string">'h1'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Se o elemento <strong>h1</strong> estiver presente
+                    e visível, a assertion será atendida.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             TESTE FALHANDO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                E quando o teste falha?
+            </h2>
+
+            <p>
+                Um teste falha quando uma condição esperada
+                não é atendida ou quando ocorre um erro durante
+                a execução.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+    .should(<span class="sql-string">'contain'</span>, <span class="sql-string">'Texto que não existe'</span>)</code></pre>
+
+            <p>
+                Se o título não possuir esse conteúdo, a assertion
+                não será atendida e o Cypress registrará a falha.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Um teste falhando não significa necessariamente
+                que o Cypress está com problema.</strong>
+
+                <p>
+                    A falha pode indicar que o comportamento observado
+                    não corresponde ao comportamento esperado definido
+                    pelo teste.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CADEIA DE COMANDOS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                11. A cadeia de comandos
+            </h2>
+
+            <p>
+                Um dos recursos que tornam os testes Cypress
+                expressivos é a possibilidade de encadear comandos.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+    .should(<span class="sql-string">'be.visible'</span>)
+    .type(<span class="sql-string">'usuario@email.com'</span>)</code></pre>
+
+            <p>
+                Nesse exemplo:
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>cy.get()</strong>
+                    → localiza o campo.
+                </p>
+
+                <p>
+                    <strong>should()</strong>
+                    → verifica a condição.
+                </p>
+
+                <p>
+                    <strong>type()</strong>
+                    → digita o conteúdo.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             FLUXO COMPLETO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Fluxo completo de um teste
+            </h2>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve realizar o preenchimento'</span>, () =&gt; {
+
+        cy.visit(<span class="sql-string">'/login'</span>)
+
+        cy.get(<span class="sql-string">'#email'</span>)
+            .should(<span class="sql-string">'be.visible'</span>)
+            .type(<span class="sql-string">'usuario@email.com'</span>)
+
+        cy.get(<span class="sql-string">'#senha'</span>)
+            .should(<span class="sql-string">'be.visible'</span>)
+            .type(<span class="sql-string">'123456'</span>)
+
+        cy.get(<span class="sql-string">'#entrar'</span>)
+            .click()
+
+        cy.get(<span class="sql-string">'h1'</span>)
+            .should(<span class="sql-string">'contain'</span>, <span class="sql-string">'Dashboard'</span>)
+
+    })
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>Visit</strong> → acessa a aplicação.
+                </p>
+
+                <p>
+                    🔎 <strong>Get</strong> → localiza elementos.
+                </p>
+
+                <p>
+                    ⌨️ <strong>Type</strong> → preenche informações.
+                </p>
+
+                <p>
+                    🖱️ <strong>Click</strong> → executa uma ação.
+                </p>
+
+                <p>
+                    ✅ <strong>Should</strong> → verifica o resultado.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             BOAS PRÁTICAS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas desde o primeiro teste
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏷️
+                    </div>
+
+                    <h3>
+                        Dê nomes claros
+                    </h3>
+
+                    <p>
+                        O nome do teste deve explicar o comportamento
+                        que está sendo validado.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Teste um comportamento
+                    </h3>
+
+                    <p>
+                        Evite transformar um único teste em uma
+                        sequência excessivamente grande de cenários.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Use seletores adequados
+                    </h3>
+
+                    <p>
+                        Prefira seletores estáveis e pensados
+                        para automação.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Valide resultados
+                    </h3>
+
+                    <p>
+                        Um teste deve verificar se o comportamento
+                        esperado realmente aconteceu.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             ERROS COMUNS
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <h3>
+                        ❌ Criar um teste sem assertion
+                    </h3>
+
+                    <p>
+                        Apenas executar cliques e navegações não
+                        garante que o comportamento esperado aconteceu.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        ❌ Usar seletores frágeis
+                    </h3>
+
+                    <p>
+                        Seletores baseados em estruturas que mudam
+                        frequentemente podem tornar os testes menos
+                        resistentes às alterações da aplicação.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        ❌ Colocar muitos cenários em um teste
+                    </h3>
+
+                    <p>
+                        Testes excessivamente grandes podem dificultar
+                        a identificação da causa de uma falha.
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        ❌ Confundir ação com validação
+                    </h3>
+
+                    <p>
+                        Clicar em um botão é uma ação.
+                        Confirmar o resultado após o clique é uma
+                        validação.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             RESUMO
+        ====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🧱 <strong>describe()</strong>
+                    → organiza uma suíte de testes.
+                </p>
+
+                <p>
+                    🧪 <strong>it()</strong>
+                    → representa um caso de teste.
+                </p>
+
+                <p>
+                    🌐 <strong>cy.visit()</strong>
+                    → acessa uma página.
+                </p>
+
+                <p>
+                    🔎 <strong>cy.get()</strong>
+                    → localiza elementos.
+                </p>
+
+                <p>
+                    ⌨️ <strong>type()</strong>
+                    → digita informações.
+                </p>
+
+                <p>
+                    🖱️ <strong>click()</strong>
+                    → executa um clique.
+                </p>
+
+                <p>
+                    ✅ <strong>should()</strong>
+                    → realiza uma verificação.
+                </p>
+
+                <p>
+                    📊 <strong>Assertion</strong>
+                    → valida se o resultado esperado foi alcançado.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você já conhece a estrutura básica de um teste
+                Cypress e consegue criar um fluxo simples de
+                navegação, interação e validação.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             CHECKPOINT
+        ====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 6
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             CTA
+        ====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 6 concluída!
+            </h2>
+
+            <p>
+                Agora você já consegue criar testes, acessar páginas,
+                localizar elementos, realizar ações e validar resultados
+                com Cypress.
+            </p>
+
+            <a href="../aulas/aula-7.html" class="cta-button">
+                Aula 7 →
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+       FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 6 • Primeiro Teste com Cypress
+        </p>
+
+    </footer>
+
+
+    <!-- =====================================================
+       JAVASCRIPT
+    ====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-6.js"></script>
+
+</body>
+
+</html>

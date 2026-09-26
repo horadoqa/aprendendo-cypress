@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 16 — click() no Cypress</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 16 • CLICK()
+            </span>
+
+            <h1>
+                click()
+            </h1>
+
+            <p>
+                Aprenda a utilizar o comando click() para automatizar
+                cliques e interações com elementos da aplicação
+                utilizando Cypress.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+         OBJETIVOS DA AULA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Na aula anterior, aprendemos como utilizar seletores
+                para localizar elementos de forma mais confiável.
+            </p>
+
+            <p>
+                Agora vamos aprender a interagir com esses elementos.
+                O comando <strong>click()</strong> é um dos comandos
+                mais utilizados em testes E2E, pois permite simular
+                ações de clique realizadas pelo usuário.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🖱️
+                    </div>
+
+                    <h3>
+                        Utilizar click()
+                    </h3>
+
+                    <p>
+                        Aprender a realizar cliques em elementos
+                        utilizando Cypress.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Trabalhar com seletores
+                    </h3>
+
+                    <p>
+                        Localizar corretamente o elemento que deverá
+                        receber a interação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔗
+                    </div>
+
+                    <h3>
+                        Encadear comandos
+                    </h3>
+
+                    <p>
+                        Combinar comandos de localização e interação
+                        em uma mesma sequência.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Validar resultados
+                    </h3>
+
+                    <p>
+                        Verificar se o clique produziu o comportamento
+                        esperado na aplicação.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         O QUE É CLICK
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é o click()?
+            </h2>
+
+            <p>
+                O <strong>click()</strong> é um comando do Cypress
+                utilizado para realizar uma ação de clique em um
+                elemento da página.
+            </p>
+
+            <p>
+                Ele pode ser utilizado em botões, links, elementos
+                de menu, checkbox e outros elementos que aceitam
+                interação.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'button'</span>).click()</code></pre>
+
+            <p>
+                Nesse exemplo, o Cypress primeiro localiza um botão
+                e depois realiza um clique nesse elemento.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🧭 <strong>Localizar</strong>
+                    → encontrar o elemento.
+                </p>
+
+                <p>
+                    🖱️ <strong>Interagir</strong>
+                    → executar o clique.
+                </p>
+
+                <p>
+                    ✅ <strong>Validar</strong>
+                    → verificar o resultado esperado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         SINTAXE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Sintaxe básica
+            </h2>
+
+            <p>
+                A forma mais simples de utilizar o comando é:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'seletor'</span>).click()</code></pre>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#login'</span>).click()</code></pre>
+
+            <p>
+                Nesse caso, o Cypress procura pelo elemento que possui
+                o ID <strong>login</strong> e executa o clique.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        cy.get()
+                    </h3>
+
+                    <p>
+                        Localiza o elemento que será utilizado
+                        na interação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🖱️
+                    </div>
+
+                    <h3>
+                        click()
+                    </h3>
+
+                    <p>
+                        Executa a ação de clique no elemento
+                        encontrado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CLICK EM BOTAO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Clicando em um botão
+            </h2>
+
+            <p>
+                Um dos usos mais comuns do <strong>click()</strong>
+                é interagir com botões.
+            </p>
+
+            <p>
+                Considere o seguinte HTML:
+            </p>
+
+            <pre><code>&lt;button id="salvar"&gt;
+Salvar
+
+</button></code></pre>
+
+            <p>
+                Podemos automatizar o clique utilizando:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#salvar'</span>).click()</code></pre>
+
+            <p>
+                O Cypress localizará o botão pelo ID e realizará
+                a interação.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Exemplo:</strong>
+
+                <p>
+                    Usuário clica em "Salvar"
+                    → aplicação processa a ação
+                    → mensagem de sucesso é exibida.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CLICK EM LINK
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Clicando em links
+            </h2>
+
+            <p>
+                Também podemos utilizar o <strong>click()</strong>
+                para clicar em links.
+            </p>
+
+            <p>
+                Exemplo:
+            </p>
+
+            <pre><code>&lt;a href="/produtos" id="produtos"&gt;
+Produtos
+
+</a></code></pre>
+
+            <p>
+                O teste pode ser escrito da seguinte forma:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#produtos'</span>).click()</code></pre>
+
+            <p>
+                Depois do clique, podemos validar se a aplicação
+                apresentou o resultado esperado.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#produtos'</span>).click()
+
+cy.url()
+.should(<span class="sql-string">'include'</span>, <span class="sql-string">'/produtos'</span>)</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+         CLICK POR TEXTO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Utilizando contains()
+            </h2>
+
+            <p>
+                Quando queremos localizar um elemento pelo texto
+                apresentado na interface, podemos utilizar
+                <strong>contains()</strong>.
+            </p>
+
+            <pre><code>cy.contains(<span class="sql-string">'Entrar'</span>).click()</code></pre>
+
+            <p>
+                Nesse exemplo, o Cypress procura um elemento que
+                contenha o texto <strong>Entrar</strong> e executa
+                o clique.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Exemplo:</strong>
+
+                <pre><code>&lt;button&gt;
+Entrar
+
+</button></code></pre>
+
+                <p>
+                    Podemos interagir com ele utilizando:
+                </p>
+
+                <pre><code>cy.contains(<span class="sql-string">'Entrar'</span>).click()</code></pre>
+
+            </div>
+
+            <p>
+                Apesar de ser útil, é importante escolher seletores
+                estáveis e específicos quando o projeto possuir
+                elementos com textos semelhantes.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         DATA TEST
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Utilizando data-testid
+            </h2>
+
+            <p>
+                Uma estratégia comum para automação é utilizar
+                atributos específicos para testes.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>&lt;button data-testid="btn-login"&gt;
+Entrar
+
+</button></code></pre>
+
+            <p>
+                O teste pode utilizar:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-testid="btn-login"]'</span>)
+.click()</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🎯 A utilização de atributos destinados à
+                    automação pode reduzir a dependência de classes
+                    e estruturas visuais da aplicação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CLICK + ASSERTION
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Clique e validação
+            </h2>
+
+            <p>
+                Em um teste E2E, normalmente não queremos apenas
+                clicar em um elemento. Também queremos verificar
+                o resultado dessa ação.
+            </p>
+
+            <p>
+                Exemplo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#login'</span>).click()
+
+cy.get(<span class="sql-string">'.mensagem-sucesso'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                Nesse teste:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        1️⃣
+                    </div>
+
+                    <h3>
+                        Localizar
+                    </h3>
+
+                    <p>
+                        O botão de login é localizado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        2️⃣
+                    </div>
+
+                    <h3>
+                        Clicar
+                    </h3>
+
+                    <p>
+                        O Cypress executa o clique.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        3️⃣
+                    </div>
+
+                    <h3>
+                        Validar
+                    </h3>
+
+                    <p>
+                        A mensagem esperada é validada.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CLICK EM CHECKBOX
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Clicando em checkbox
+            </h2>
+
+            <p>
+                O comando <strong>click()</strong> também pode
+                ser utilizado para interagir com elementos como
+                checkbox.
+            </p>
+
+            <p>
+                Exemplo:
+            </p>
+
+            <pre><code>&lt;input
+type="checkbox"
+id="termos"
+
+></code></pre>
+
+            <p>
+                Podemos utilizar:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#termos'</span>).click()</code></pre>
+
+            <p>
+                Depois podemos validar o estado do elemento:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#termos'</span>)
+.should(<span class="sql-string">'be.checked'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O clique representa a ação do usuário,
+                    enquanto a asserção verifica se o estado
+                    esperado foi alcançado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         MULTIPLOS ELEMENTOS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Quando existem vários elementos
+            </h2>
+
+            <p>
+                Um seletor pode encontrar mais de um elemento.
+                Nesse cenário, é importante entender como o Cypress
+                trata a coleção encontrada.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>&lt;button class="produto"&gt;
+Produto 1
+
+</button>
+
+<button class="produto">
+Produto 2
+</button></code></pre>
+
+            <p>
+                Se utilizarmos:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.produto'</span>).click()</code></pre>
+
+            <p>
+                O comportamento padrão pode não ser o que desejamos
+                quando o seletor encontra múltiplos elementos.
+            </p>
+
+            <p>
+                Para clicar especificamente em um elemento,
+                podemos utilizar comandos como <strong>first()</strong>
+                ou <strong>eq()</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.produto'</span>)
+.first()
+.click()</code></pre>
+
+            <p>
+                Ou:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.produto'</span>)
+.eq(1)
+.click()</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+         FORCE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Utilizando { force: true }
+            </h2>
+
+            <p>
+                O Cypress normalmente verifica se o elemento está
+                em uma condição adequada para receber a interação.
+            </p>
+
+            <p>
+                Em algumas situações específicas, podemos utilizar
+                a opção <strong>force</strong>:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#botao'</span>)
+.click({ force: true })</code></pre>
+
+            <p>
+                Essa opção força a execução da ação mesmo quando
+                determinadas verificações de interação normalmente
+                impediriam o clique.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Atenção:</strong>
+
+                <p>
+                    O uso de <strong>force: true</strong> não deve
+                    ser utilizado simplesmente para fazer um teste
+                    passar. Antes de utilizá-lo, investigue por que
+                    o elemento não está interagível.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         OPCOES CLICK
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Opções do click()
+            </h2>
+
+            <p>
+                O comando <strong>click()</strong> aceita opções
+                que permitem controlar determinados comportamentos.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#botao'</span>)
+.click({
+    force: true
+})</code></pre>
+
+            <p>
+                Também podemos utilizar posições específicas:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#botao'</span>)
+.click(<span class="sql-string">'topLeft'</span>)</code></pre>
+
+            <p>
+                Algumas posições disponíveis incluem:
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Posição</th>
+                            <th>Descrição</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>
+                                <strong>topLeft</strong>
+                            </td>
+
+                            <td>
+                                Canto superior esquerdo.
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <strong>topRight</strong>
+                            </td>
+
+                            <td>
+                                Canto superior direito.
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <strong>center</strong>
+                            </td>
+
+                            <td>
+                                Região central do elemento.
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <strong>bottomLeft</strong>
+                            </td>
+
+                            <td>
+                                Canto inferior esquerdo.
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <strong>bottomRight</strong>
+                            </td>
+
+                            <td>
+                                Canto inferior direito.
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         COORDENADAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Clique utilizando coordenadas
+            </h2>
+
+            <p>
+                Também é possível informar coordenadas para definir
+                a posição do clique dentro do elemento.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#area'</span>)
+.click(10, 20)</code></pre>
+
+            <p>
+                Nesse exemplo, o clique será realizado utilizando
+                as coordenadas fornecidas.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Prefira interações baseadas em elementos e
+                    seletores estáveis. O uso de coordenadas pode
+                    tornar os testes mais sensíveis a alterações
+                    de layout.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CLICK EM MENU
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Exemplo completo: menu
+            </h2>
+
+            <p>
+                Vamos imaginar uma aplicação com um botão que
+                abre um menu.
+            </p>
+
+            <pre><code>&lt;button data-testid="menu"&gt;
+Menu
+
+</button>
+
+<nav class="menu">
+Produtos
+Clientes
+Configurações
+</nav></code></pre>
+
+            <p>
+                O teste pode ser:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-testid="menu"]'</span>)
+.click()
+
+cy.get(<span class="sql-string">'.menu'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                Dessa forma, testamos tanto a ação quanto o resultado
+                esperado.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         CLICK EM LOGIN
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Exemplo completo: login
+            </h2>
+
+            <p>
+                Podemos combinar os conhecimentos das aulas anteriores
+                para criar um fluxo simples de login.
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+.type(<span class="sql-string">'usuario@email.com'</span>)
+
+cy.get(<span class="sql-string">'[data-testid="senha"]'</span>)
+.type(<span class="sql-string">'123456'</span>)
+
+cy.get(<span class="sql-string">'[data-testid="btn-login"]'</span>)
+.click()
+
+cy.get(<span class="sql-string">'.dashboard'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>visit()</strong>
+                    → acessa a página.
+                </p>
+
+                <p>
+                    🔎 <strong>get()</strong>
+                    → localiza os campos.
+                </p>
+
+                <p>
+                    ⌨️ <strong>type()</strong>
+                    → preenche os dados.
+                </p>
+
+                <p>
+                    🖱️ <strong>click()</strong>
+                    → executa o login.
+                </p>
+
+                <p>
+                    ✅ <strong>should()</strong>
+                    → valida o resultado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CLICK E FLUXO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Pensando como um teste E2E
+            </h2>
+
+            <p>
+                Um teste automatizado deve representar uma ação
+                relevante do usuário.
+            </p>
+
+            <p>
+                Por isso, podemos pensar no fluxo da seguinte maneira:
+            </p>
+
+            <pre><code>Usuário
+
+↓
+Localiza elemento
+↓
+Clica
+↓
+Aplicação processa ação
+↓
+Novo estado
+↓
+Teste valida resultado</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        👤
+                    </div>
+
+                    <h3>
+                        Ação do usuário
+                    </h3>
+
+                    <p>
+                        O usuário realiza uma interação na aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Automação
+                    </h3>
+
+                    <p>
+                        O Cypress reproduz essa interação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔍
+                    </div>
+
+                    <h3>
+                        Validação
+                    </h3>
+
+                    <p>
+                        O teste verifica o comportamento esperado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ERROS COMUNS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns ao utilizar click()
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Seletor incorreto
+                    </h3>
+
+                    <p>
+                        O teste tenta clicar em um elemento que
+                        não corresponde ao elemento esperado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Ignorar o resultado
+                    </h3>
+
+                    <p>
+                        O teste realiza o clique, mas não verifica
+                        o comportamento produzido pela ação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Utilizar force sem investigar
+                    </h3>
+
+                    <p>
+                        Forçar o clique pode esconder problemas
+                        reais de interação ou sincronização.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Depender de coordenadas
+                    </h3>
+
+                    <p>
+                        Coordenadas podem deixar os testes mais
+                        sensíveis a alterações no layout.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         BOAS PRÁTICAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas com click()
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Utilize seletores estáveis
+                    </h3>
+
+                    <p>
+                        Prefira atributos e seletores pensados
+                        para automação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔍
+                    </div>
+
+                    <h3>
+                        Valide o resultado
+                    </h3>
+
+                    <p>
+                        Depois da interação, verifique se o
+                        comportamento esperado aconteceu.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧹
+                    </div>
+
+                    <h3>
+                        Evite force sem necessidade
+                    </h3>
+
+                    <p>
+                        Investigue primeiro por que o elemento
+                        não está disponível para interação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Mantenha os testes simples
+                    </h3>
+
+                    <p>
+                        Cada interação deve representar uma etapa
+                        clara do comportamento que está sendo testado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CHECKLIST
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o que é o click().
+                </p>
+
+                <p>
+                    ☐ Sei utilizar cy.get().click().
+                </p>
+
+                <p>
+                    ☐ Sei clicar em botões.
+                </p>
+
+                <p>
+                    ☐ Sei clicar em links.
+                </p>
+
+                <p>
+                    ☐ Conheço o uso de contains().
+                </p>
+
+                <p>
+                    ☐ Sei utilizar seletores data-testid.
+                </p>
+
+                <p>
+                    ☐ Sei combinar click() com assertions.
+                </p>
+
+                <p>
+                    ☐ Entendi o uso de force: true.
+                </p>
+
+                <p>
+                    ☐ Conheço o uso de posições no click().
+                </p>
+
+                <p>
+                    ☐ Entendi por que devemos validar o resultado
+                    de uma interação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         RESUMO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🖱️ <strong>click()</strong>
+                    → realiza uma ação de clique.
+                </p>
+
+                <p>
+                    🔎 <strong>cy.get()</strong>
+                    → localiza o elemento que será utilizado.
+                </p>
+
+                <p>
+                    🎯 <strong>contains()</strong>
+                    → permite localizar elementos pelo conteúdo textual.
+                </p>
+
+                <p>
+                    🧪 <strong>data-testid</strong>
+                    → pode ser utilizado como estratégia de seleção
+                    para automação.
+                </p>
+
+                <p>
+                    🔧 <strong>force: true</strong>
+                    → força a interação e deve ser utilizado com
+                    critério.
+                </p>
+
+                <p>
+                    📍 <strong>Posições</strong>
+                    → permitem definir regiões específicas do elemento
+                    para o clique.
+                </p>
+
+                <p>
+                    ✅ <strong>Assertions</strong>
+                    → permitem validar o resultado da interação.
+                </p>
+
+            </div>
+
+            <p>
+                O comando <strong>click()</strong> é fundamental para
+                construir testes E2E, pois permite reproduzir uma das
+                interações mais comuns realizadas pelos usuários.
+            </p>
+
+            <p>
+                Na próxima aula vamos aprender a utilizar o comando
+                <strong>type()</strong> para preencher campos,
+                formulários e outros elementos de entrada.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         QUIZ
+    ====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 16
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 16 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe utilizar o click() para
+                automatizar interações e validar o resultado
+                dessas ações nos seus testes Cypress.
+            </p>
+
+            <a href="../aulas/aula-17.html" class="cta-button">
+                Aula 17 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+     FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 16 • click()
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-16.js"></script>
+
+</body>
+
+</html>

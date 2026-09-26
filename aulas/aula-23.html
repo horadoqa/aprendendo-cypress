@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <title>Aula 23 — Validando Textos no Cypress</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 23 • VALIDANDO TEXTOS
+            </span>
+
+            <h1>
+                Validando Textos
+            </h1>
+
+            <p>
+                Aprenda a validar textos, mensagens e conteúdos
+                exibidos na interface utilizando asserções do Cypress.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS DA AULA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Nas aulas anteriores, aprendemos como localizar
+                elementos e criar asserções utilizando o Cypress.
+            </p>
+
+            <p>
+                Agora vamos aprender a validar textos exibidos
+                pela aplicação e garantir que as informações
+                apresentadas ao usuário estejam corretas.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Localizar textos
+                    </h3>
+
+                    <p>
+                        Encontrar elementos que apresentam textos
+                        na página.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Validar conteúdo
+                    </h3>
+
+                    <p>
+                        Verificar se um elemento apresenta o texto
+                        esperado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        Validar mensagens
+                    </h3>
+
+                    <p>
+                        Testar mensagens de sucesso, erro,
+                        validação e informação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Criar testes confiáveis
+                    </h3>
+
+                    <p>
+                        Utilizar asserções de texto de maneira
+                        clara e objetiva.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE É VALIDAÇÃO DE TEXTO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que significa validar um texto?
+            </h2>
+
+            <p>
+                Validar um texto significa verificar se determinado
+                conteúdo apresentado pela aplicação corresponde
+                ao comportamento esperado.
+            </p>
+
+            <p>
+                Por exemplo, imagine uma página contendo:
+            </p>
+
+            <pre><code>&lt;h1&gt;Produtos&lt;/h1&gt;</code></pre>
+
+            <p>
+                Podemos criar um teste para verificar se o título
+                apresentado realmente é <strong>Produtos</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+.should(<span class="sql-string">'have.text'</span>, <span class="sql-string">'Produtos'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🧪 O objetivo da asserção é comparar o estado
+                    atual da aplicação com o resultado esperado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     HAVE TEXT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Utilizando have.text
+            </h2>
+
+            <p>
+                Uma das formas de validar o conteúdo completo de
+                um elemento é utilizar a asserção
+                <strong>have.text</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+.should(<span class="sql-string">'have.text'</span>, <span class="sql-string">'Produtos'</span>)</code></pre>
+
+            <p>
+                Nesse exemplo, o Cypress verifica se o conteúdo
+                textual do elemento corresponde ao valor informado.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Elemento
+                    </h3>
+
+                    <p>
+                        O primeiro argumento identifica o elemento
+                        que será validado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        have.text
+                    </h3>
+
+                    <p>
+                        Indica que queremos validar o texto do
+                        elemento.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Texto esperado
+                    </h3>
+
+                    <p>
+                        Representa o conteúdo que esperamos
+                        encontrar.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CONTAINS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Utilizando contains
+            </h2>
+
+            <p>
+                Outra forma bastante utilizada para localizar
+                elementos pelo conteúdo textual é o
+                <strong>contains()</strong>.
+            </p>
+
+            <pre><code>cy.contains(<span class="sql-string">'Produtos'</span>)</code></pre>
+
+            <p>
+                Podemos utilizar o comando para localizar um elemento
+                que contenha determinado texto.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.contains(<span class="sql-string">'Bem-vindo ao sistema'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    <strong>contains()</strong> é um comando de
+                    localização. Ele pode ser combinado com uma
+                    asserção para validar o resultado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CONTAINS E SELETOR
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. contains() com seletor
+            </h2>
+
+            <p>
+                Também podemos informar um seletor junto com
+                o texto que queremos encontrar.
+            </p>
+
+            <pre><code>cy.contains(<span class="sql-string">'button'</span>, <span class="sql-string">'Salvar'</span>)</code></pre>
+
+            <p>
+                Nesse caso, o Cypress procura um elemento
+                <strong>button</strong> que contenha o texto
+                <strong>Salvar</strong>.
+            </p>
+
+            <p>
+                Podemos então validar o botão:
+            </p>
+
+            <pre><code>cy.contains(<span class="sql-string">'button'</span>, <span class="sql-string">'Salvar'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Seletor
+                    </h3>
+
+                    <p>
+                        Define o tipo ou elemento que queremos
+                        localizar.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        Texto
+                    </h3>
+
+                    <p>
+                        Define o conteúdo que o elemento deve conter.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     HAVE TEXT VS CONTAIN TEXT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. have.text x contain.text
+            </h2>
+
+            <p>
+                O Cypress possui diferentes formas de validar
+                conteúdos textuais.
+            </p>
+
+            <p>
+                Uma delas é utilizar <strong>have.text</strong>
+                para verificar o conteúdo textual completo.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+.should(<span class="sql-string">'have.text'</span>, <span class="sql-string">'Produtos'</span>)</code></pre>
+
+            <p>
+                Outra possibilidade é utilizar
+                <strong>contain.text</strong> quando queremos
+                verificar se determinado texto está presente.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'p'</span>)
+.should(<span class="sql-string">'contain.text'</span>, <span class="sql-string">'sucesso'</span>)</code></pre>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Asserção</th>
+                            <th>Objetivo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>have.text</strong>
+                            </td>
+
+                            <td>
+                                Verificar o conteúdo textual do elemento.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>contain.text</strong>
+                            </td>
+
+                            <td>
+                                Verificar se o elemento contém determinado texto.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CONTAIN TEXT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Utilizando contain.text
+            </h2>
+
+            <p>
+                A asserção <strong>contain.text</strong> é útil
+                quando o elemento possui outros conteúdos além
+                do texto que queremos verificar.
+            </p>
+
+            <p>
+                Imagine o seguinte HTML:
+            </p>
+
+            <pre><code>&lt;div class="mensagem"&gt;
+
+Pedido realizado com sucesso!
+
+Número do pedido: 12345
+
+</div></code></pre>
+
+            <p>
+                Podemos verificar apenas uma parte do conteúdo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.mensagem'</span>)
+.should(<span class="sql-string">'contain.text'</span>, <span class="sql-string">'Pedido realizado com sucesso'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Dessa forma, não precisamos conhecer todo o
+                    conteúdo textual existente dentro do elemento.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     TEXT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Obtendo o texto de um elemento
+            </h2>
+
+            <p>
+                O Cypress também permite acessar o texto de um
+                elemento utilizando uma função de callback.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>).then(($element) =&gt; {
+
+const texto = $element.text()
+
+cy.log(texto)
+
+})</code></pre>
+
+            <p>
+                O método <strong>.text()</strong> pertence ao
+                objeto jQuery disponibilizado pelo Cypress
+                nesse contexto.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Atenção:</strong>
+
+                <p>
+                    Na maioria dos testes, não é necessário extrair
+                    o texto manualmente. Asserções como
+                    <strong>have.text</strong> e
+                    <strong>contain.text</strong> normalmente deixam
+                    o teste mais simples e direto.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     MATCH
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Validando textos com match
+            </h2>
+
+            <p>
+                Também podemos utilizar expressões regulares
+                para validar padrões de texto.
+            </p>
+
+            <p>
+                Para isso, podemos utilizar a asserção
+                <strong>match</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.email'</span>)
+.should(<span class="sql-string">'match'</span>, /^[^@]+@[^@]+\.[^@]+$/)</code></pre>
+
+            <p>
+                Nesse exemplo, o teste verifica se o conteúdo
+                corresponde ao padrão esperado para um endereço
+                de e-mail.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🔎 Expressões regulares são úteis quando o
+                    conteúdo pode variar, mas precisa respeitar
+                    determinado padrão.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     MENSAGENS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Validando mensagens de sucesso
+            </h2>
+
+            <p>
+                Uma situação comum em testes E2E é validar mensagens
+                exibidas depois de uma ação do usuário.
+            </p>
+
+            <p>
+                Imagine que o usuário clique em um botão para salvar
+                um cadastro:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-cy="salvar"]'</span>)
+.click()
+
+cy.get(<span class="sql-string">'.mensagem-sucesso'</span>)
+.should(<span class="sql-string">'contain.text'</span>, <span class="sql-string">'Cadastro realizado com sucesso'</span>)</code></pre>
+
+            <p>
+                O teste confirma que a mensagem esperada foi
+                apresentada após a ação.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🖱️
+                    </div>
+
+                    <h3>
+                        Ação
+                    </h3>
+
+                    <p>
+                        O usuário realiza uma ação na aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚙️
+                    </div>
+
+                    <h3>
+                        Processamento
+                    </h3>
+
+                    <p>
+                        A aplicação processa a ação realizada.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Validação
+                    </h3>
+
+                    <p>
+                        O teste verifica a mensagem apresentada.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     MENSAGENS DE ERRO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Validando mensagens de erro
+            </h2>
+
+            <p>
+                Também podemos validar mensagens exibidas quando
+                ocorre algum problema durante uma operação.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-cy="login"]'</span>)
+.click()
+
+cy.get(<span class="sql-string">'.erro'</span>)
+.should(<span class="sql-string">'contain.text'</span>, <span class="sql-string">'Usuário ou senha inválidos'</span>)</code></pre>
+
+            <p>
+                Esse tipo de validação ajuda a garantir que a
+                aplicação apresenta informações adequadas ao usuário.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Exemplo:</strong>
+
+                <p>
+                    Se o usuário informar uma senha incorreta,
+                    o teste pode verificar se a mensagem de erro
+                    correspondente foi apresentada.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     TEXTOS DINÂMICOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Trabalhando com textos dinâmicos
+            </h2>
+
+            <p>
+                Nem sempre o texto apresentado pela aplicação
+                será exatamente igual em todas as execuções.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>Pedido criado com sucesso! Número: 12345</code></pre>
+
+            <p>
+                O número do pedido pode mudar a cada execução.
+            </p>
+
+            <p>
+                Nesse caso, podemos validar somente a parte estável:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.mensagem'</span>)
+.should(<span class="sql-string">'contain.text'</span>, <span class="sql-string">'Pedido criado com sucesso'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Quando parte do texto é dinâmica, valide
+                    somente aquilo que representa o comportamento
+                    que realmente precisa ser garantido.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CASE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Atenção a maiúsculas e minúsculas
+            </h2>
+
+            <p>
+                Ao comparar textos, é importante observar se o
+                conteúdo esperado diferencia letras maiúsculas
+                e minúsculas.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+.should(<span class="sql-string">'have.text'</span>, <span class="sql-string">'Produtos'</span>)</code></pre>
+
+            <p>
+                Um texto como:
+            </p>
+
+            <pre><code>produtos</code></pre>
+
+            <p>
+                não é igual a:
+            </p>
+
+            <pre><code>Produtos</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Sempre observe exatamente qual comportamento
+                    a aplicação deve apresentar antes de definir
+                    a asserção.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ESPAÇOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Atenção aos espaços e formatação
+            </h2>
+
+            <p>
+                Espaços, quebras de linha e formatações podem
+                influenciar a comparação de textos.
+            </p>
+
+            <p>
+                Por isso, quando uma validação textual falhar,
+                verifique também o conteúdo real renderizado
+                pelo elemento.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.mensagem'</span>)
+.should(<span class="sql-string">'contain.text'</span>, <span class="sql-string">'Operação realizada'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Dica:</strong>
+
+                <p>
+                    Se a validação não estiver funcionando como
+                    esperado, utilize o Cypress Runner para
+                    inspecionar o elemento e entender qual texto
+                    está realmente sendo renderizado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     TESTE COMPLETO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Exemplo de teste completo
+            </h2>
+
+            <p>
+                Vamos combinar navegação, interação e validação
+                de texto em um único teste.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Cadastro'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve exibir mensagem de sucesso'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/cadastro'</span>)
+
+    cy.get(<span class="sql-string">'[data-cy="nome"]'</span>)
+        .type(<span class="sql-string">'João'</span>)
+
+    cy.get(<span class="sql-string">'[data-cy="email"]'</span>)
+        .type(<span class="sql-string">'joao@email.com'</span>)
+
+    cy.get(<span class="sql-string">'[data-cy="salvar"]'</span>)
+        .click()
+
+    cy.get(<span class="sql-string">'.mensagem-sucesso'</span>)
+        .should(
+            <span class="sql-string">'contain.text'</span>,
+            <span class="sql-string">'Cadastro realizado com sucesso'</span>
+        )
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O teste executa uma ação e depois valida
+                    o resultado apresentado pela aplicação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     MÚLTIPLOS ELEMENTOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Validando textos em listas
+            </h2>
+
+            <p>
+                Também podemos validar textos presentes em listas
+                ou conjuntos de elementos.
+            </p>
+
+            <p>
+                Imagine:
+            </p>
+
+            <pre><code>&lt;ul&gt;
+
+&lt;li&gt;Produto A&lt;/li&gt;
+&lt;li&gt;Produto B&lt;/li&gt;
+&lt;li&gt;Produto C&lt;/li&gt;
+
+</ul></code></pre>
+
+            <p>
+                Podemos verificar se determinado item está presente:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'li'</span>)
+.should(<span class="sql-string">'contain.text'</span>, <span class="sql-string">'Produto B'</span>)</code></pre>
+
+            <p>
+                Ou localizar diretamente pelo conteúdo:
+            </p>
+
+            <pre><code>cy.contains(<span class="sql-string">'Produto B'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+     TEXTOS E SELETORES
+====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Texto como seletor
+            </h2>
+
+            <p>
+                Embora seja possível localizar elementos pelo texto,
+                nem sempre essa é a melhor estratégia para todos
+                os cenários.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.contains(<span class="sql-string">'Salvar'</span>).click()</code></pre>
+
+            <p>
+                Esse teste pode funcionar bem quando o texto
+                representa uma informação estável da interface.
+            </p>
+
+            <p>
+                Entretanto, em aplicações onde o texto pode mudar,
+                um atributo dedicado pode ser mais apropriado:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-cy="salvar"]'</span>).click()</code></pre>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Use o texto quando ele fizer parte importante
+                    do comportamento que você deseja validar.
+                    Para localizar elementos de forma estável,
+                    atributos dedicados como <strong>data-cy</strong>
+                    podem ser uma alternativa adequada.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ERROS COMUNS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns ao validar textos
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Validar texto errado
+                    </h3>
+
+                    <p>
+                        Verificar um texto diferente daquele
+                        realmente apresentado pela aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Ignorar conteúdo dinâmico
+                    </h3>
+
+                    <p>
+                        Comparar exatamente um texto que possui
+                        partes variáveis.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Usar seletores frágeis
+                    </h3>
+
+                    <p>
+                        Depender de estruturas de HTML que podem
+                        mudar frequentemente.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Validar detalhes irrelevantes
+                    </h3>
+
+                    <p>
+                        Criar asserções para informações que não
+                        representam um comportamento importante.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRÁTICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas para validação de textos
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Valide comportamentos importantes
+                    </h3>
+
+                    <p>
+                        Priorize textos que representam resultados
+                        relevantes para o usuário.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Prefira textos estáveis
+                    </h3>
+
+                    <p>
+                        Evite depender de partes que mudam
+                        constantemente.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Escolha a asserção adequada
+                    </h3>
+
+                    <p>
+                        Utilize have.text ou contain.text de acordo
+                        com o objetivo da validação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧹
+                    </div>
+
+                    <h3>
+                        Mantenha os testes claros
+                    </h3>
+
+                    <p>
+                        Escreva asserções que deixem evidente
+                        aquilo que o teste está verificando.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o conceito de validação de texto.
+                </p>
+
+                <p>
+                    ☐ Aprendi a utilizar have.text.
+                </p>
+
+                <p>
+                    ☐ Aprendi a utilizar contain.text.
+                </p>
+
+                <p>
+                    ☐ Aprendi a utilizar contains().
+                </p>
+
+                <p>
+                    ☐ Sei validar mensagens de sucesso.
+                </p>
+
+                <p>
+                    ☐ Sei validar mensagens de erro.
+                </p>
+
+                <p>
+                    ☐ Entendi como lidar com textos dinâmicos.
+                </p>
+
+                <p>
+                    ☐ Entendi a diferença entre texto completo
+                    e conteúdo parcial.
+                </p>
+
+                <p>
+                    ☐ Sei validar textos em listas.
+                </p>
+
+                <p>
+                    ☐ Entendi boas práticas para asserções textuais.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    📝 <strong>have.text</strong>
+                    → valida o conteúdo textual do elemento.
+                </p>
+
+                <p>
+                    🔎 <strong>contain.text</strong>
+                    → verifica se o elemento contém determinado texto.
+                </p>
+
+                <p>
+                    🎯 <strong>cy.contains()</strong>
+                    → localiza elementos utilizando conteúdo textual.
+                </p>
+
+                <p>
+                    ✅ <strong>Mensagens</strong>
+                    → podem ser validadas depois de ações do usuário.
+                </p>
+
+                <p>
+                    🔄 <strong>Textos dinâmicos</strong>
+                    → devem ser validados considerando suas partes estáveis.
+                </p>
+
+                <p>
+                    🧪 <strong>Assertions</strong>
+                    → garantem que o resultado apresentado corresponde
+                    ao comportamento esperado.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você já sabe como validar textos e mensagens
+                utilizando diferentes recursos do Cypress.
+            </p>
+
+            <p>
+                Na próxima aula vamos aprender a validar atributos,
+                classes e propriedades dos elementos da aplicação.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKPOINT
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 23
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 23 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe como validar textos, mensagens
+                de sucesso, mensagens de erro e conteúdos dinâmicos
+                utilizando asserções do Cypress.
+            </p>
+
+            <a href="../aulas/aula-24.html" class="cta-button">
+                Aula 24 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+   FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 23 • Validando Textos
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+   JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-23.js"></script>
+
+</body>
+
+</html>

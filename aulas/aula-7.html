@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 7 — Instalação do Cypress</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 7 • INSTALAÇÃO DO CYPRESS
+            </span>
+
+            <h1>
+                Instalação do Cypress
+            </h1>
+
+            <p>
+                Aprenda a preparar o ambiente, instalar o Cypress
+                utilizando npm e executar a aplicação pela primeira vez.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+         OBJETIVOS DA AULA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Agora que já conhecemos os conceitos básicos de testes
+                e entendemos como funciona um teste Cypress, chegou
+                o momento de preparar nosso ambiente.
+            </p>
+
+            <p>
+                Nesta aula vamos instalar o Cypress em um projeto
+                Node.js e verificar se a instalação está funcionando
+                corretamente.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🖥️
+                    </div>
+
+                    <h3>
+                        Preparar o ambiente
+                    </h3>
+
+                    <p>
+                        Conhecer os requisitos necessários para
+                        trabalhar com Cypress.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Instalar o Cypress
+                    </h3>
+
+                    <p>
+                        Instalar o Cypress utilizando o gerenciador
+                        de pacotes npm.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚙️
+                    </div>
+
+                    <h3>
+                        Criar o projeto
+                    </h3>
+
+                    <p>
+                        Inicializar um projeto Node.js para organizar
+                        os testes automatizados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🚀
+                    </div>
+
+                    <h3>
+                        Executar o Cypress
+                    </h3>
+
+                    <p>
+                        Abrir a interface do Cypress e verificar
+                        se o ambiente está funcionando.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         O QUE É NECESSÁRIO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que precisamos antes de instalar?
+            </h2>
+
+            <p>
+                O Cypress é instalado como uma dependência do projeto.
+                Por isso, antes de começar, precisamos ter um ambiente
+                JavaScript preparado.
+            </p>
+
+            <p>
+                Para acompanhar esta aula, vamos utilizar:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🟢
+                    </div>
+
+                    <h3>
+                        Node.js
+                    </h3>
+
+                    <p>
+                        Ambiente necessário para executar aplicações
+                        JavaScript fora do navegador e utilizar o npm.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        npm
+                    </h3>
+
+                    <p>
+                        Gerenciador de pacotes utilizado para instalar
+                        o Cypress e outras dependências.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        💻
+                    </div>
+
+                    <h3>
+                        Editor de código
+                    </h3>
+
+                    <p>
+                        Um editor como Visual Studio Code para criar
+                        e editar os arquivos do projeto.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         VERIFICANDO NODE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Verificando o Node.js
+            </h2>
+
+            <p>
+                O primeiro passo é verificar se o Node.js está
+                instalado no computador.
+            </p>
+
+            <p>
+                Abra o terminal e execute:
+            </p>
+
+            <pre><code>node --version</code></pre>
+
+            <p>
+                Se o Node.js estiver instalado, o terminal exibirá
+                uma versão semelhante a:
+            </p>
+
+            <pre><code>v22.x.x</code></pre>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    O número da versão pode ser diferente no seu
+                    computador. O importante neste momento é que
+                    o comando seja reconhecido pelo terminal.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         VERIFICANDO NPM
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Verificando o npm
+            </h2>
+
+            <p>
+                O npm normalmente é instalado junto com o Node.js.
+            </p>
+
+            <p>
+                Para verificar se ele está disponível, execute:
+            </p>
+
+            <pre><code>npm --version</code></pre>
+
+            <p>
+                O terminal deverá apresentar o número da versão
+                instalada.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🟢 <strong>node --version</strong>
+                    → verifica o Node.js.
+                </p>
+
+                <p>
+                    📦 <strong>npm --version</strong>
+                    → verifica o gerenciador de pacotes npm.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CRIANDO PROJETO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Criando um projeto para os testes
+            </h2>
+
+            <p>
+                O Cypress será instalado dentro de um projeto.
+                Por isso, vamos criar uma pasta para nossa aplicação
+                de testes.
+            </p>
+
+            <p>
+                No terminal, podemos executar:
+            </p>
+
+            <pre><code>mkdir curso-cypress</code></pre>
+
+            <p>
+                Depois, entramos na pasta:
+            </p>
+
+            <pre><code>cd curso-cypress</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A partir deste momento, os comandos executados
+                    pelo terminal serão realizados dentro da pasta
+                    do projeto.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         NPM INIT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Inicializando o projeto Node.js
+            </h2>
+
+            <p>
+                Agora vamos criar o arquivo
+                <strong>package.json</strong>, que será utilizado
+                para armazenar informações e dependências do projeto.
+            </p>
+
+            <p>
+                Execute:
+            </p>
+
+            <pre><code>npm init -y</code></pre>
+
+            <p>
+                O parâmetro <strong>-y</strong> aceita automaticamente
+                as configurações padrão durante a inicialização.
+            </p>
+
+            <p>
+                Depois do comando, teremos uma estrutura semelhante a:
+            </p>
+
+            <pre><code>curso-cypress/
+
+└── package.json</code></pre>
+
+            <div class="highlight">
+
+                <strong>O que é o package.json?</strong>
+
+                <p>
+                    É um arquivo importante para projetos Node.js.
+                    Ele registra informações do projeto, scripts
+                    e dependências utilizadas pela aplicação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         INSTALANDO CYPRESS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Instalando o Cypress
+            </h2>
+
+            <p>
+                Agora podemos instalar o Cypress como uma dependência
+                de desenvolvimento.
+            </p>
+
+            <p>
+                Execute:
+            </p>
+
+            <pre><code>npm install cypress --save-dev</code></pre>
+
+            <p>
+                Também é possível utilizar a forma abreviada:
+            </p>
+
+            <pre><code>npm install cypress -D</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    📦 <strong>npm install</strong>
+                    → instala uma dependência.
+                </p>
+
+                <p>
+                    🧪 <strong>cypress</strong>
+                    → pacote que queremos instalar.
+                </p>
+
+                <p>
+                    🛠️ <strong>--save-dev</strong>
+                    → registra o Cypress como dependência
+                    de desenvolvimento.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         DEPENDENCIA DEV
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                6. O que é uma dependência de desenvolvimento?
+            </h2>
+
+            <p>
+                Dependências de desenvolvimento são ferramentas
+                utilizadas durante o processo de desenvolvimento,
+                testes e manutenção do projeto.
+            </p>
+
+            <p>
+                O Cypress normalmente é utilizado para executar
+                testes, portanto é comum instalá-lo como uma
+                dependência de desenvolvimento.
+            </p>
+
+            <pre><code>npm install cypress --save-dev</code></pre>
+
+            <p>
+                Depois da instalação, o <strong>package.json</strong>
+                terá uma seção semelhante a:
+            </p>
+
+            <pre><code>{
+"devDependencies": {
+    "cypress": "..."
+}
+
+}</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Dependência
+                    </h3>
+
+                    <p>
+                        Pacote necessário para o funcionamento
+                        da aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🛠️
+                    </div>
+
+                    <h3>
+                        DevDependency
+                    </h3>
+
+                    <p>
+                        Ferramenta utilizada durante desenvolvimento
+                        e testes.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         NODE MODULES
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                7. A pasta node_modules
+            </h2>
+
+            <p>
+                Durante a instalação, o npm cria a pasta
+                <strong>node_modules</strong>.
+            </p>
+
+            <pre><code>curso-cypress/
+
+├── node_modules/
+└── package.json</code></pre>
+
+            <p>
+                Essa pasta contém os pacotes instalados e suas
+                dependências.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    A pasta <strong>node_modules</strong> normalmente
+                    não deve ser versionada no Git. Em projetos reais,
+                    ela costuma ser adicionada ao arquivo
+                    <strong>.gitignore</strong>.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         PACKAGE LOCK
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                8. O arquivo package-lock.json
+            </h2>
+
+            <p>
+                Ao instalar o Cypress, o npm também pode criar ou
+                atualizar o arquivo <strong>package-lock.json</strong>.
+            </p>
+
+            <pre><code>curso-cypress/
+
+├── node_modules/
+├── package-lock.json
+└── package.json</code></pre>
+
+            <p>
+                O arquivo lock registra informações detalhadas
+                sobre as versões das dependências instaladas
+                e suas dependências relacionadas.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>package.json</strong>
+                    → descreve as dependências do projeto.
+                </p>
+
+                <p>
+                    <strong>package-lock.json</strong>
+                    → registra a árvore de dependências instalada.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         VERIFICANDO CYPRESS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Verificando a instalação
+            </h2>
+
+            <p>
+                Depois da instalação, podemos verificar se o Cypress
+                está disponível no projeto.
+            </p>
+
+            <p>
+                Uma forma simples é executar:
+            </p>
+
+            <pre><code>npx cypress --version</code></pre>
+
+            <p>
+                O comando deverá apresentar a versão do Cypress
+                instalada no projeto.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Por que utilizar npx?</strong>
+
+                <p>
+                    O <strong>npx</strong> permite executar pacotes
+                    instalados no projeto sem a necessidade de
+                    instalar o Cypress globalmente.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CYPRESS OPEN
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Abrindo o Cypress
+            </h2>
+
+            <p>
+                Agora que o Cypress está instalado, podemos abrir
+                sua interface utilizando:
+            </p>
+
+            <pre><code>npx cypress open</code></pre>
+
+            <p>
+                O Cypress abrirá sua aplicação de gerenciamento,
+                permitindo configurar e executar os testes.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🚀 <strong>npx cypress open</strong>
+                    → abre a interface do Cypress.
+                </p>
+
+                <p>
+                    🧪 A partir dela podemos criar e executar
+                    nossos testes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         E2E
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Configurando testes E2E
+            </h2>
+
+            <p>
+                Ao abrir o Cypress pela primeira vez em um projeto,
+                podemos configurar o tipo de teste que desejamos
+                utilizar.
+            </p>
+
+            <p>
+                Para este curso, nosso foco principal será
+                <strong>End-to-End Testing</strong>, também conhecido
+                como teste E2E.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        E2E
+                    </h3>
+
+                    <p>
+                        Valida fluxos completos da aplicação
+                        através da perspectiva do usuário.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Testes automatizados
+                    </h3>
+
+                    <p>
+                        Permitem repetir cenários de forma
+                        automatizada e consistente.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Validações
+                    </h3>
+
+                    <p>
+                        Permitem verificar se a aplicação
+                        apresenta o comportamento esperado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ESTRUTURA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Estrutura inicial do projeto
+            </h2>
+
+            <p>
+                Depois de configurar o Cypress para testes E2E,
+                o projeto passará a possuir arquivos e pastas
+                específicos para os testes.
+            </p>
+
+            <p>
+                Uma estrutura inicial pode ser semelhante a:
+            </p>
+
+            <pre><code>curso-cypress/
+
+├── cypress/
+│ └── e2e/
+├── node_modules/
+├── cypress.config.js
+├── package-lock.json
+└── package.json</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    📁 <strong>cypress/</strong>
+                    → contém arquivos relacionados aos testes.
+                </p>
+
+                <p>
+                    🧪 <strong>cypress/e2e/</strong>
+                    → local onde serão organizados os testes E2E.
+                </p>
+
+                <p>
+                    ⚙️ <strong>cypress.config.js</strong>
+                    → arquivo de configuração do Cypress.
+                </p>
+
+                <p>
+                    📦 <strong>package.json</strong>
+                    → informações e dependências do projeto.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CYPRESS CONFIG
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                13. O arquivo cypress.config.js
+            </h2>
+
+            <p>
+                O Cypress utiliza um arquivo de configuração para
+                definir diferentes comportamentos do projeto.
+            </p>
+
+            <p>
+                Um exemplo inicial pode ser:
+            </p>
+
+            <pre><code>const { defineConfig } = require(<span class="sql-string">'cypress'</span>)
+
+module.exports = defineConfig({
+
+e2e: {
+
+}
+
+})</code></pre>
+
+            <p>
+                Ao longo do curso vamos aprender a utilizar esse
+                arquivo para configurar opções como baseUrl,
+                viewport, retries e outras funcionalidades.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Não precisamos configurar tudo agora.</strong>
+
+                <p>
+                    Neste momento, nosso objetivo é apenas entender
+                    que o Cypress possui um arquivo central de
+                    configuração.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         PRIMEIRA EXECUÇÃO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Nossa primeira execução
+            </h2>
+
+            <p>
+                Depois de instalar e configurar o Cypress, podemos
+                abrir a aplicação novamente:
+            </p>
+
+            <pre><code>npx cypress open</code></pre>
+
+            <p>
+                A partir da interface, podemos selecionar
+                <strong>E2E Testing</strong> e iniciar a configuração.
+            </p>
+
+            <p>
+                Depois, o Cypress apresentará a área onde os testes
+                poderão ser criados e executados.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    O objetivo desta etapa é confirmar que o
+                    ambiente está preparado para as próximas aulas.
+                </p>
+
+                <p>
+                    A partir daqui começaremos a trabalhar com a
+                    estrutura de arquivos, configurações e testes
+                    de forma mais detalhada.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         EXECUÇÃO HEADLESS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Executando pelo terminal
+            </h2>
+
+            <p>
+                Além da interface gráfica, também podemos executar
+                o Cypress diretamente pelo terminal.
+            </p>
+
+            <pre><code>npx cypress run</code></pre>
+
+            <p>
+                Essa forma de execução é especialmente importante
+                quando trabalhamos com ambientes automatizados,
+                como pipelines de CI/CD.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🖥️
+                    </div>
+
+                    <h3>
+                        cypress open
+                    </h3>
+
+                    <p>
+                        Abre a interface gráfica para desenvolver
+                        e acompanhar os testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚡
+                    </div>
+
+                    <h3>
+                        cypress run
+                    </h3>
+
+                    <p>
+                        Executa os testes pelo terminal, sem depender
+                        da interface gráfica.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         SCRIPTS NPM
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                16. Criando scripts no package.json
+            </h2>
+
+            <p>
+                Podemos criar scripts npm para facilitar a execução
+                dos comandos utilizados frequentemente.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>{
+"scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run"
+}
+
+}</code></pre>
+
+            <p>
+                Depois podemos executar:
+            </p>
+
+            <pre><code>npm run cy:open</code></pre>
+
+            <p>
+                Ou:
+            </p>
+
+            <pre><code>npm run cy:run</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Scripts ajudam a padronizar os comandos utilizados
+                    pela equipe e tornam a execução mais simples.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         INSTALAÇÃO GLOBAL
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                17. Preciso instalar o Cypress globalmente?
+            </h2>
+
+            <p>
+                Não é necessário instalar o Cypress globalmente
+                para utilizá-lo em um projeto.
+            </p>
+
+            <p>
+                A abordagem recomendada para um projeto é instalar
+                o Cypress como dependência de desenvolvimento:
+            </p>
+
+            <pre><code>npm install cypress --save-dev</code></pre>
+
+            <p>
+                Depois, podemos utilizar o Cypress através do
+                <strong>npx</strong> ou dos scripts definidos
+                no <strong>package.json</strong>.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    📦 <strong>Projeto</strong>
+                    → possui sua própria versão do Cypress.
+                </p>
+
+                <p>
+                    🔒 Isso ajuda a manter o ambiente do projeto
+                    controlado e reproduzível.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         REINSTALANDO DEPENDENCIAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                18. E se eu apagar a pasta node_modules?
+            </h2>
+
+            <p>
+                A pasta <strong>node_modules</strong> pode ser
+                recriada a qualquer momento a partir das dependências
+                registradas no projeto.
+            </p>
+
+            <p>
+                Para instalar novamente as dependências, podemos
+                utilizar:
+            </p>
+
+            <pre><code>npm install</code></pre>
+
+            <p>
+                O npm analisará o <strong>package.json</strong> e o
+                arquivo de lock para instalar novamente as
+                dependências necessárias.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    Isso é especialmente útil quando outra pessoa
+                    baixa o projeto pela primeira vez ou quando
+                    precisamos reconstruir o ambiente.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         GITIGNORE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                19. Criando o .gitignore
+            </h2>
+
+            <p>
+                Em um projeto que utiliza Git, devemos evitar
+                versionar arquivos e pastas que não precisam ser
+                armazenados no repositório.
+            </p>
+
+            <p>
+                Um exemplo de <strong>.gitignore</strong> pode conter:
+            </p>
+
+            <pre><code>node_modules/
+
+.DS_Store</code></pre>
+
+            <p>
+                A pasta <strong>node_modules</strong> pode ser
+                recriada utilizando <strong>npm install</strong>,
+                por isso normalmente não precisamos armazená-la
+                no repositório.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Versione os arquivos necessários para reconstruir
+                    o ambiente, como <strong>package.json</strong>
+                    e <strong>package-lock.json</strong>, em vez
+                    da pasta inteira de dependências.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         FLUXO DE INSTALAÇÃO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Fluxo completo da instalação
+            </h2>
+
+            <p>
+                Podemos resumir o processo de preparação do projeto:
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🟢 <strong>1.</strong>
+                    Verificar o Node.js.
+                </p>
+
+                <p>
+                    📦 <strong>2.</strong>
+                    Verificar o npm.
+                </p>
+
+                <p>
+                    📁 <strong>3.</strong>
+                    Criar a pasta do projeto.
+                </p>
+
+                <p>
+                    ⚙️ <strong>4.</strong>
+                    Executar npm init -y.
+                </p>
+
+                <p>
+                    🧪 <strong>5.</strong>
+                    Instalar o Cypress.
+                </p>
+
+                <p>
+                    🔎 <strong>6.</strong>
+                    Verificar a versão instalada.
+                </p>
+
+                <p>
+                    🚀 <strong>7.</strong>
+                    Executar npx cypress open.
+                </p>
+
+                <p>
+                    🧪 <strong>8.</strong>
+                    Configurar os testes E2E.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         COMANDOS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Principais comandos da aula
+            </h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Comando</th>
+                            <th>Objetivo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>node --version</strong>
+                            </td>
+
+                            <td>
+                                Verifica a versão do Node.js.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>npm --version</strong>
+                            </td>
+
+                            <td>
+                                Verifica a versão do npm.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>npm init -y</strong>
+                            </td>
+
+                            <td>
+                                Inicializa um projeto Node.js.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>npm install cypress --save-dev</strong>
+                            </td>
+
+                            <td>
+                                Instala o Cypress como dependência
+                                de desenvolvimento.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>npx cypress --version</strong>
+                            </td>
+
+                            <td>
+                                Exibe a versão do Cypress instalada.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>npx cypress open</strong>
+                            </td>
+
+                            <td>
+                                Abre a interface do Cypress.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>npx cypress run</strong>
+                            </td>
+
+                            <td>
+                                Executa os testes pelo terminal.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>npm install</strong>
+                            </td>
+
+                            <td>
+                                Instala as dependências registradas
+                                no projeto.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ERROS COMUNS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns durante a instalação
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Node.js não instalado
+                    </h3>
+
+                    <p>
+                        Se o comando node não for reconhecido,
+                        verifique se o Node.js está instalado
+                        e disponível no PATH do sistema.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Executar fora do projeto
+                    </h3>
+
+                    <p>
+                        Verifique se o terminal está aberto na
+                        pasta correta antes de instalar o Cypress.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Problemas de dependências
+                    </h3>
+
+                    <p>
+                        Quando necessário, remova a instalação local
+                        e execute novamente o npm install.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Confundir npx com npm
+                    </h3>
+
+                    <p>
+                        npm é utilizado para gerenciar pacotes,
+                        enquanto npx pode executar pacotes disponíveis
+                        no projeto.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CHECKLIST
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da instalação
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Node.js instalado.
+                </p>
+
+                <p>
+                    ☐ npm disponível no terminal.
+                </p>
+
+                <p>
+                    ☐ Projeto Node.js criado.
+                </p>
+
+                <p>
+                    ☐ package.json criado.
+                </p>
+
+                <p>
+                    ☐ Cypress instalado como devDependency.
+                </p>
+
+                <p>
+                    ☐ node_modules criada.
+                </p>
+
+                <p>
+                    ☐ package-lock.json criado ou atualizado.
+                </p>
+
+                <p>
+                    ☐ Cypress reconhecido pelo comando npx.
+                </p>
+
+                <p>
+                    ☐ Interface do Cypress aberta.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         BOAS PRÁTICAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Instale por projeto
+                    </h3>
+
+                    <p>
+                        Mantenha o Cypress como dependência do
+                        projeto em vez de depender de uma instalação
+                        global.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔒
+                    </div>
+
+                    <h3>
+                        Controle as dependências
+                    </h3>
+
+                    <p>
+                        Mantenha os arquivos de configuração e
+                        gerenciamento de dependências versionados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        Documente os comandos
+                    </h3>
+
+                    <p>
+                        Utilize scripts npm para facilitar a execução
+                        dos comandos utilizados pela equipe.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔄
+                    </div>
+
+                    <h3>
+                        Mantenha o ambiente reproduzível
+                    </h3>
+
+                    <p>
+                        O projeto deve permitir que outro desenvolvedor
+                        instale as mesmas dependências utilizando npm.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         RESUMO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🟢 <strong>Node.js</strong>
+                    → ambiente utilizado pelo projeto.
+                </p>
+
+                <p>
+                    📦 <strong>npm</strong>
+                    → gerenciador de pacotes.
+                </p>
+
+                <p>
+                    ⚙️ <strong>npm init -y</strong>
+                    → inicializa o projeto.
+                </p>
+
+                <p>
+                    🧪 <strong>npm install cypress --save-dev</strong>
+                    → instala o Cypress.
+                </p>
+
+                <p>
+                    🔎 <strong>npx cypress --version</strong>
+                    → verifica a instalação.
+                </p>
+
+                <p>
+                    🚀 <strong>npx cypress open</strong>
+                    → abre a interface do Cypress.
+                </p>
+
+                <p>
+                    ⚡ <strong>npx cypress run</strong>
+                    → executa os testes pelo terminal.
+                </p>
+
+                <p>
+                    📁 <strong>cypress/e2e</strong>
+                    → pasta utilizada para organizar os testes E2E.
+                </p>
+
+            </div>
+
+            <p>
+                Agora o ambiente está preparado para continuarmos
+                nossa jornada com Cypress. Na próxima aula vamos
+                aprofundar a configuração e a estrutura do projeto.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         CHECKPOINT
+    ====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 7
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 7 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe como preparar um projeto Node.js,
+                instalar o Cypress, verificar a instalação e abrir
+                a interface de testes.
+            </p>
+
+            <a href="../aulas/aula-8.html" class="cta-button">
+                Aula 8 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+   FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 7 • Instalação do Cypress
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+   JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-7.js"></script>
+
+</body>
+
+</html>

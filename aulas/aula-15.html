@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <title>Aula 15 — Seletores no Cypress</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 15 • SELETORES
+            </span>
+
+            <h1>
+                Seletores no Cypress
+            </h1>
+
+            <p>
+                Aprenda a localizar elementos de forma confiável
+                utilizando seletores estáveis e boas práticas
+                para automação com Cypress.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS DA AULA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Na aula anterior, aprendemos a utilizar o
+                <strong>cy.get()</strong> para localizar elementos
+                dentro da página.
+            </p>
+
+            <p>
+                Agora vamos aprofundar nosso conhecimento sobre
+                seletores e entender como escolher a melhor forma
+                de identificar elementos durante a automação.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Entender seletores
+                    </h3>
+
+                    <p>
+                        Compreender o que são seletores e como eles
+                        identificam elementos HTML.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Localizar elementos
+                    </h3>
+
+                    <p>
+                        Utilizar diferentes estratégias para encontrar
+                        elementos na aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Utilizar atributos
+                    </h3>
+
+                    <p>
+                        Criar seletores utilizando id, class e
+                        atributos HTML.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🛡️
+                    </div>
+
+                    <h3>
+                        Criar seletores estáveis
+                    </h3>
+
+                    <p>
+                        Evitar seletores frágeis e melhorar a
+                        manutenção dos testes.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE É UM SELETOR
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é um seletor?
+            </h2>
+
+            <p>
+                Um seletor é uma forma de identificar um ou mais
+                elementos dentro de uma página HTML.
+            </p>
+
+            <p>
+                O Cypress utiliza seletores para localizar os
+                elementos com os quais o teste precisa interagir.
+            </p>
+
+            <p>
+                Por exemplo, considere o seguinte botão:
+            </p>
+
+            <pre><code>&lt;button id="login"&gt;
+Entrar
+
+</button></code></pre>
+
+            <p>
+                Podemos localizar esse elemento utilizando seu
+                <strong>id</strong>:
+            </p>
+
+            <pre><code>cy.get('#login')</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🔎 <strong>Seletor</strong>
+                    → identifica um elemento HTML.
+                </p>
+
+                <p>
+                    🧪 <strong>Cypress</strong>
+                    → utiliza o seletor para localizar o elemento.
+                </p>
+
+                <p>
+                    🖱️ <strong>Comando</strong>
+                    → permite interagir com o elemento encontrado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     HTML E DOM
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Seletores e HTML
+            </h2>
+
+            <p>
+                Para trabalhar corretamente com seletores, é
+                importante entender um pouco da estrutura HTML.
+            </p>
+
+            <p>
+                Observe o exemplo:
+            </p>
+
+            <pre><code>&lt;input
+id="email"
+class="form-input"
+type="email"
+name="email"
+
+></code></pre>
+
+            <p>
+                Esse elemento possui diferentes informações que
+                podem ser utilizadas para sua localização.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🆔
+                    </div>
+
+                    <h3>
+                        id
+                    </h3>
+
+                    <p>
+                        Identifica o elemento através de um
+                        identificador único.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎨
+                    </div>
+
+                    <h3>
+                        class
+                    </h3>
+
+                    <p>
+                        Identifica elementos através de uma
+                        classe CSS.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏷️
+                    </div>
+
+                    <h3>
+                        name
+                    </h3>
+
+                    <p>
+                        Representa o nome associado ao elemento.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚙️
+                    </div>
+
+                    <h3>
+                        type
+                    </h3>
+
+                    <p>
+                        Indica o tipo do elemento HTML.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ID
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Selecionando pelo id
+            </h2>
+
+            <p>
+                O atributo <strong>id</strong> pode ser utilizado
+                para identificar um elemento específico.
+            </p>
+
+            <p>
+                HTML:
+            </p>
+
+            <pre><code>&lt;input id="email" type="email"&gt;</code></pre>
+
+            <p>
+                Cypress:
+            </p>
+
+            <pre><code>cy.get('#email')</code></pre>
+
+            <p>
+                Podemos combinar o comando com uma interação:
+            </p>
+
+            <pre><code>cy.get('#email')
+.type('usuario@email.com')</code></pre>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Um id utilizado como seletor deve ser estável
+                    e representar de forma clara o elemento que
+                    será utilizado pelo teste.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CLASS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Selecionando por class
+            </h2>
+
+            <p>
+                Também podemos utilizar classes CSS para localizar
+                elementos.
+            </p>
+
+            <p>
+                HTML:
+            </p>
+
+            <pre><code>&lt;button class="btn-login"&gt;
+Entrar
+
+</button></code></pre>
+
+            <p>
+                Cypress:
+            </p>
+
+            <pre><code>cy.get('.btn-login')</code></pre>
+
+            <p>
+                O ponto <strong>.</strong> indica que estamos
+                procurando uma classe CSS.
+            </p>
+
+            <pre><code>cy.get('.btn-login')
+.click()</code></pre>
+
+            <div class="highlight">
+
+                <strong>Atenção:</strong>
+
+                <p>
+                    Classes criadas apenas para estilização podem
+                    mudar com frequência. Por isso, nem sempre
+                    são bons seletores para automação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     TAG
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Selecionando pela tag HTML
+            </h2>
+
+            <p>
+                Também podemos utilizar diretamente o nome da
+                tag HTML.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.get('button')</code></pre>
+
+            <p>
+                Esse seletor encontra elementos
+                <strong>button</strong> presentes na página.
+            </p>
+
+            <p>
+                Outro exemplo:
+            </p>
+
+            <pre><code>cy.get('input')</code></pre>
+
+            <div class="highlight">
+
+                <strong>Problema:</strong>
+
+                <p>
+                    Seletores baseados apenas na tag podem retornar
+                    vários elementos. Por isso, normalmente é melhor
+                    utilizar um seletor mais específico.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ATRIBUTOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Selecionando por atributos
+            </h2>
+
+            <p>
+                Podemos utilizar atributos HTML para criar
+                seletores mais específicos.
+            </p>
+
+            <p>
+                Considere:
+            </p>
+
+            <pre><code>&lt;input
+type="email"
+name="email"
+
+></code></pre>
+
+            <p>
+                Podemos localizar pelo atributo
+                <strong>name</strong>:
+            </p>
+
+            <pre><code>cy.get('[name="email"]')</code></pre>
+
+            <p>
+                Também podemos utilizar o atributo
+                <strong>type</strong>:
+            </p>
+
+            <pre><code>cy.get('[type="email"]')</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏷️
+                    </div>
+
+                    <h3>
+                        name
+                    </h3>
+
+                    <p>
+                        Pode ser utilizado para identificar campos
+                        de formulários.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚙️
+                    </div>
+
+                    <h3>
+                        type
+                    </h3>
+
+                    <p>
+                        Pode diferenciar tipos de elementos,
+                        como email, password e button.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔗
+                    </div>
+
+                    <h3>
+                        href
+                    </h3>
+
+                    <p>
+                        Pode ser utilizado para identificar links
+                        específicos.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     DATA TEST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Seletores data-testid
+            </h2>
+
+            <p>
+                Uma estratégia muito utilizada em automação é
+                adicionar atributos específicos para testes.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>&lt;button data-testid="login-button"&gt;
+Entrar
+
+</button></code></pre>
+
+            <p>
+                O Cypress pode localizar o elemento através desse
+                atributo:
+            </p>
+
+            <pre><code>cy.get('[data-testid="login-button"]')</code></pre>
+
+            <p>
+                Essa abordagem separa a identificação utilizada
+                pelos testes das classes utilizadas para estilização.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Atributos como <strong>data-testid</strong> podem
+                    ser úteis quando a aplicação não possui
+                    identificadores estáveis adequados para os testes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     DATA CY
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Criando atributos específicos para testes
+            </h2>
+
+            <p>
+                O nome do atributo pode ser definido de acordo
+                com a estratégia adotada pelo projeto.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>&lt;button data-cy="login-button"&gt;
+Entrar
+
+</button></code></pre>
+
+            <p>
+                No Cypress:
+            </p>
+
+            <pre><code>cy.get('[data-cy="login-button"]')
+.click()</code></pre>
+
+            <p>
+                Outra possibilidade seria:
+            </p>
+
+            <pre><code>&lt;input data-test="email"&gt;</code></pre>
+
+            <pre><code>cy.get('[data-test="email"]')
+.type('usuario@email.com')</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O mais importante é definir uma convenção
+                    consistente e utilizá-la em todo o projeto.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     SELETORES COMPOSTOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Seletores compostos
+            </h2>
+
+            <p>
+                Podemos combinar diferentes características para
+                tornar um seletor mais específico.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.get('input[type="email"]')</code></pre>
+
+            <p>
+                Nesse caso, estamos procurando elementos
+                <strong>input</strong> cujo atributo
+                <strong>type</strong> seja <strong>email</strong>.
+            </p>
+
+            <p>
+                Também podemos combinar uma classe e um atributo:
+            </p>
+
+            <pre><code>cy.get('.form-input[type="email"]')</code></pre>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    Quanto mais complexo for um seletor, maior pode
+                    ser sua sensibilidade a alterações na estrutura
+                    da aplicação. Use apenas a especificidade
+                    necessária para identificar o elemento.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     DESCENDENTES
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Selecionando elementos dentro de outros elementos
+            </h2>
+
+            <p>
+                Os seletores CSS também permitem representar
+                relacionamentos entre elementos.
+            </p>
+
+            <p>
+                Considere:
+            </p>
+
+            <pre><code>&lt;form class="login-form"&gt;
+
+&lt;input type="email"&gt;
+
+&lt;input type="password"&gt;
+
+</form></code></pre>
+
+            <p>
+                Podemos localizar o campo de email dentro do formulário:
+            </p>
+
+            <pre><code>cy.get('.login-form input[type="email"]')</code></pre>
+
+            <p>
+                Dessa forma, o seletor considera a relação entre
+                o formulário e o campo.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     CONTAINS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Localizando elementos pelo texto
+            </h2>
+
+            <p>
+                O Cypress também possui o comando
+                <strong>cy.contains()</strong>, que permite localizar
+                elementos pelo conteúdo de texto.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.contains('Entrar')</code></pre>
+
+            <p>
+                Podemos utilizá-lo para encontrar um botão:
+            </p>
+
+            <pre><code>cy.contains('button', 'Entrar')
+.click()</code></pre>
+
+            <div class="highlight">
+
+                <strong>Quando utilizar?</strong>
+
+                <p>
+                    O <strong>cy.contains()</strong> pode ser útil
+                    quando o texto exibido na interface representa
+                    uma informação importante para o comportamento
+                    do teste.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     INDEX
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. O problema de utilizar posições
+            </h2>
+
+            <p>
+                Uma prática que deve ser utilizada com cuidado é
+                localizar elementos apenas pela posição.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.get('button').eq(0).click()</code></pre>
+
+            <p>
+                Esse código considera que o botão desejado sempre
+                será o primeiro botão da página.
+            </p>
+
+            <p>
+                Se outro botão for adicionado antes dele, o teste
+                poderá passar a interagir com o elemento errado.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Prefira:</strong>
+
+                <pre><code>cy.get('[data-cy="login-button"]')
+.click()</code></pre>
+
+                <p>
+                    quando existir um identificador estável para
+                    o elemento.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     SELETORES FRAGEIS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. O que são seletores frágeis?
+            </h2>
+
+            <p>
+                Um seletor frágil é aquele que pode deixar de
+                funcionar facilmente quando a aplicação sofre
+                pequenas alterações.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.get('div.container &gt; div:nth-child(2) &gt; button')</code></pre>
+
+            <p>
+                Esse seletor depende fortemente da estrutura
+                interna do HTML.
+            </p>
+
+            <p>
+                Se um novo elemento for inserido na estrutura,
+                o seletor poderá deixar de representar o botão
+                esperado.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Regra prática:</strong>
+
+                <p>
+                    Quanto mais um seletor depender de detalhes
+                    internos e instáveis da interface, maior tende
+                    a ser o custo de manutenção do teste.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     SELETORES ESTÁVEIS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. O que são seletores estáveis?
+            </h2>
+
+            <p>
+                Um seletor estável utiliza uma característica
+                do elemento que possui baixa probabilidade de
+                sofrer alterações sem uma mudança real no comportamento
+                da aplicação.
+            </p>
+
+            <p>
+                Um exemplo:
+            </p>
+
+            <pre><code>&lt;button data-cy="submit-login"&gt;
+Entrar
+
+</button></code></pre>
+
+            <pre><code>cy.get('[data-cy="submit-login"]')
+.click()</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🛡️
+                    </div>
+
+                    <h3>
+                        Menos manutenção
+                    </h3>
+
+                    <p>
+                        Alterações visuais podem não exigir alterações
+                        nos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Mais precisão
+                    </h3>
+
+                    <p>
+                        O teste identifica diretamente o elemento
+                        que deseja utilizar.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔧
+                    </div>
+
+                    <h3>
+                        Fácil manutenção
+                    </h3>
+
+                    <p>
+                        O código dos testes tende a ser mais simples
+                        de entender e atualizar.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     COMPARAÇÃO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Comparando diferentes seletores
+            </h2>
+
+            <p>
+                Considere o seguinte elemento:
+            </p>
+
+            <pre><code>&lt;button
+id="btn-login"
+class="btn primary"
+data-cy="login-button"
+
+>
+Entrar
+</button></code></pre>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Seletor</th>
+                            <th>Exemplo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                ID
+                            </td>
+
+                            <td>
+                                <code>#btn-login</code>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Classe
+                            </td>
+
+                            <td>
+                                <code>.btn</code>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Atributo
+                            </td>
+
+                            <td>
+                                <code>[data-cy="login-button"]</code>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Texto
+                            </td>
+
+                            <td>
+                                <code>cy.contains('Entrar')</code>
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <p>
+                A escolha depende do contexto da aplicação e da
+                estabilidade da característica utilizada para
+                localizar o elemento.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     DEVTOOLS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Utilizando o DevTools para encontrar seletores
+            </h2>
+
+            <p>
+                O navegador possui ferramentas que ajudam a
+                investigar a estrutura HTML da aplicação.
+            </p>
+
+            <p>
+                Para abrir o DevTools, normalmente podemos utilizar
+                <strong>F12</strong> ou clicar com o botão direito
+                sobre um elemento e selecionar a opção para
+                inspecioná-lo.
+            </p>
+
+            <p>
+                Ao inspecionar um elemento, podemos visualizar
+                seus atributos e sua estrutura HTML.
+            </p>
+
+            <pre><code>&lt;button
+data-cy="login-button"
+type="submit"
+
+>
+Entrar
+</button></code></pre>
+
+            <p>
+                A partir dessas informações, podemos construir
+                o seletor utilizado no teste.
+            </p>
+
+            <pre><code>cy.get('[data-cy="login-button"]')</code></pre>
+
+            <div class="highlight">
+
+                <strong>Dica:</strong>
+
+                <p>
+                    Não escolha automaticamente o primeiro seletor
+                    gerado pelas ferramentas do navegador. Analise
+                    se ele continuará válido quando a aplicação
+                    sofrer alterações.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ESTRATÉGIA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                16. Estratégia de seletores
+            </h2>
+
+            <p>
+                Uma suíte de testes bem estruturada pode adotar
+                uma estratégia clara para identificação dos
+                elementos.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        1️⃣
+                    </div>
+
+                    <h3>
+                        Identificador específico
+                    </h3>
+
+                    <p>
+                        Utilize um identificador estável quando
+                        ele estiver disponível.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        2️⃣
+                    </div>
+
+                    <h3>
+                        Atributo de teste
+                    </h3>
+
+                    <p>
+                        Utilize data-cy, data-testid ou uma
+                        convenção equivalente.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        3️⃣
+                    </div>
+
+                    <h3>
+                        Atributos semânticos
+                    </h3>
+
+                    <p>
+                        Considere atributos que representem
+                        o propósito do elemento.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        4️⃣
+                    </div>
+
+                    <h3>
+                        Texto
+                    </h3>
+
+                    <p>
+                        Utilize texto quando ele fizer parte
+                        importante do comportamento esperado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EXEMPLO PRÁTICO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                17. Exemplo prático
+            </h2>
+
+            <p>
+                Considere uma página de login:
+            </p>
+
+            <pre><code>&lt;form&gt;
+
+&lt;input
+    data-cy="email"
+    type="email"
+&gt;
+
+&lt;input
+    data-cy="password"
+    type="password"
+&gt;
+
+&lt;button
+    data-cy="login-button"
+    type="submit"
+&gt;
+    Entrar
+&lt;/button&gt;
+
+</form></code></pre>
+
+            <p>
+                Podemos criar um teste utilizando os atributos
+                definidos para automação:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve realizar login'</span>, () => {
+
+cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.get(<span class="sql-string">'[data-cy="email"]'</span>)
+    .type(<span class="sql-string">'usuario@email.com'</span>)
+
+cy.get(<span class="sql-string">'[data-cy="password"]'</span>)
+    .type(<span class="sql-string">'123456'</span>)
+
+cy.get(<span class="sql-string">'[data-cy="login-button"]'</span>)
+    .click()
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Nesse exemplo, os testes não dependem das
+                    classes utilizadas pelo CSS da aplicação.
+                </p>
+
+                <p>
+                    Os atributos <strong>data-cy</strong> foram
+                    utilizados especificamente para identificar
+                    os elementos durante a automação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ERROS COMUNS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns com seletores
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Utilizar classes de CSS
+                    </h3>
+
+                    <p>
+                        Depender de classes que existem apenas
+                        para controlar o visual da aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Utilizar posições
+                    </h3>
+
+                    <p>
+                        Depender de índices como primeiro,
+                        segundo ou terceiro elemento.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Seletores muito complexos
+                    </h3>
+
+                    <p>
+                        Criar seletores que dependem de vários
+                        níveis da estrutura HTML.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Ignorar a estratégia do projeto
+                    </h3>
+
+                    <p>
+                        Criar seletores diferentes sem seguir
+                        uma convenção definida pela equipe.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRÁTICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas para seletores
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Prefira seletores estáveis
+                    </h3>
+
+                    <p>
+                        Utilize características que tenham
+                        significado e baixa chance de mudança.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Crie atributos de teste
+                    </h3>
+
+                    <p>
+                        Utilize data-cy, data-testid ou outra
+                        convenção definida pelo projeto.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧹
+                    </div>
+
+                    <h3>
+                        Evite complexidade desnecessária
+                    </h3>
+
+                    <p>
+                        Utilize apenas a especificidade necessária
+                        para localizar o elemento.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📐
+                    </div>
+
+                    <h3>
+                        Padronize a estratégia
+                    </h3>
+
+                    <p>
+                        Mantenha uma convenção de seletores
+                        consistente no projeto.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o que é um seletor.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar seletores por id.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar seletores por classe.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar seletores por atributos.
+                </p>
+
+                <p>
+                    ☐ Conheço data-cy e data-testid.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar cy.contains().
+                </p>
+
+                <p>
+                    ☐ Entendi o problema dos seletores frágeis.
+                </p>
+
+                <p>
+                    ☐ Sei identificar um seletor mais estável.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar o DevTools para investigar elementos.
+                </p>
+
+                <p>
+                    ☐ Entendi a importância de uma estratégia
+                    de seletores.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🎯 <strong>Seletor</strong>
+                    → identifica elementos HTML.
+                </p>
+
+                <p>
+                    🆔 <strong>#id</strong>
+                    → localiza elementos através do id.
+                </p>
+
+                <p>
+                    🎨 <strong>.class</strong>
+                    → localiza elementos através de classes CSS.
+                </p>
+
+                <p>
+                    🏷️ <strong>[atributo="valor"]</strong>
+                    → localiza elementos através de atributos.
+                </p>
+
+                <p>
+                    🧪 <strong>data-cy</strong>
+                    → pode ser utilizado para criar identificadores
+                    específicos para automação.
+                </p>
+
+                <p>
+                    🔎 <strong>cy.contains()</strong>
+                    → permite localizar elementos pelo texto.
+                </p>
+
+                <p>
+                    🛡️ <strong>Seletores estáveis</strong>
+                    → reduzem a dependência de detalhes frágeis
+                    da interface.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você já conhece diferentes estratégias para
+                localizar elementos no Cypress e entende por que
+                a escolha dos seletores influencia diretamente
+                a manutenção dos testes.
+            </p>
+
+            <p>
+                Na próxima aula vamos utilizar esses conhecimentos
+                para aprender a interagir com elementos através
+                do comando <strong>click()</strong>.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKPOINT
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 15
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 15 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe como trabalhar com diferentes
+                tipos de seletores e como criar uma estratégia
+                mais confiável para localizar elementos.
+            </p>
+
+            <a href="../aulas/aula-16.html" class="cta-button">
+                Aula 16 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+
+FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 15 • Seletores no Cypress
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+
+JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-15.js"></script>
+
+</body>
+
+</html>

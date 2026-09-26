@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 28 — cy.fixture()</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 28 • CY.FIXTURE()
+            </span>
+
+            <h1>
+                cy.fixture()
+            </h1>
+
+            <p>
+                Aprenda a carregar dados externos armazenados em
+                fixtures e utilizá-los durante a execução dos testes
+                com Cypress.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+         OBJETIVOS DA AULA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Na aula anterior, aprendemos a criar e organizar
+                massas de dados para utilizar nos testes automatizados.
+            </p>
+
+            <p>
+                Agora vamos aprender como carregar essas informações
+                utilizando o comando <strong>cy.fixture()</strong>.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📁
+                    </div>
+
+                    <h3>
+                        Conhecer fixtures
+                    </h3>
+
+                    <p>
+                        Entender como os arquivos de fixture são
+                        organizados dentro do projeto Cypress.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📥
+                    </div>
+
+                    <h3>
+                        Carregar dados
+                    </h3>
+
+                    <p>
+                        Utilizar o cy.fixture() para acessar dados
+                        armazenados em arquivos externos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Utilizar nos testes
+                    </h3>
+
+                    <p>
+                        Aplicar os dados carregados durante a execução
+                        dos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Reutilizar dados
+                    </h3>
+
+                    <p>
+                        Evitar a duplicação de informações dentro
+                        dos arquivos de teste.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         O QUE É CY.FIXTURE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é cy.fixture()?
+            </h2>
+
+            <p>
+                O <strong>cy.fixture()</strong> é um comando do Cypress
+                utilizado para carregar dados armazenados na pasta
+                <strong>cypress/fixtures</strong>.
+            </p>
+
+            <p>
+                Esses dados normalmente são utilizados como massa
+                de teste durante a execução das specs.
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuario.json'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    📁 <strong>Fixture</strong>
+                    → arquivo que contém dados de teste.
+                </p>
+
+                <p>
+                    📥 <strong>cy.fixture()</strong>
+                    → comando utilizado para carregar esses dados.
+                </p>
+
+                <p>
+                    🧪 <strong>Teste</strong>
+                    → utiliza os dados carregados durante a execução.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ESTRUTURA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Onde ficam os fixtures?
+            </h2>
+
+            <p>
+                Por padrão, os arquivos de fixture ficam dentro
+                da pasta:
+            </p>
+
+            <pre><code>cypress/fixtures/</code></pre>
+
+            <p>
+                Um projeto pode possuir uma estrutura semelhante
+                a esta:
+            </p>
+
+            <pre><code>curso-cypress/
+
+├── cypress/
+│
+│ ├── e2e/
+│ │ └── login.cy.js
+│ │
+│ ├── fixtures/
+│ │ └── usuario.json
+│ │
+│ └── support/
+│
+├── cypress.config.js
+├── package.json
+└── package-lock.json</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O arquivo <strong>usuario.json</strong> será utilizado
+                    como fonte de dados para nossos testes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         PRIMEIRO FIXTURE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Criando nosso primeiro fixture
+            </h2>
+
+            <p>
+                Vamos criar um arquivo chamado:
+            </p>
+
+            <pre><code>cypress/fixtures/usuario.json</code></pre>
+
+            <p>
+                Dentro dele podemos armazenar informações de um
+                usuário de teste:
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"nome"</span>: <span class="sql-string">"Maria"</span>,
+<span class="sql-string">"email"</span>: <span class="sql-string">"maria@teste.com"</span>,
+<span class="sql-string">"senha"</span>: <span class="sql-string">"123456"</span>
+
+}</code></pre>
+
+            <p>
+                Agora temos um conjunto de dados separado do arquivo
+                da spec.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        👤
+                    </div>
+
+                    <h3>
+                        Nome
+                    </h3>
+
+                    <p>
+                        Identificação do usuário utilizado no teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📧
+                    </div>
+
+                    <h3>
+                        E-mail
+                    </h3>
+
+                    <p>
+                        Endereço de e-mail utilizado como massa de teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔑
+                    </div>
+
+                    <h3>
+                        Senha
+                    </h3>
+
+                    <p>
+                        Senha utilizada pelo cenário de teste.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CARREGANDO FIXTURE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Carregando um fixture
+            </h2>
+
+            <p>
+                Para carregar o arquivo, utilizamos o comando
+                <strong>cy.fixture()</strong>.
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuario.json'</span>)</code></pre>
+
+            <p>
+                O Cypress procura o arquivo dentro da pasta
+                configurada para fixtures.
+            </p>
+
+            <p>
+                Por isso, não precisamos informar o caminho completo:
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuario.json'</span>)</code></pre>
+
+            <p>
+                Em vez de:
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'cypress/fixtures/usuario.json'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Utilize o nome do fixture em vez de repetir
+                    o caminho completo da pasta.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         THEN
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Acessando os dados com then()
+            </h2>
+
+            <p>
+                O <strong>cy.fixture()</strong> retorna os dados
+                carregados para a cadeia de comandos do Cypress.
+            </p>
+
+            <p>
+                Podemos acessar essas informações utilizando
+                <strong>.then()</strong>.
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuario.json'</span>).then((usuario) =&gt; {
+
+cy.log(usuario.nome)
+
+})</code></pre>
+
+            <p>
+                Nesse exemplo, o objeto carregado foi armazenado
+                na variável <strong>usuario</strong>.
+            </p>
+
+            <p>
+                Podemos acessar suas propriedades:
+            </p>
+
+            <pre><code>usuario.nome
+
+usuario.email
+
+usuario.senha</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O valor recebido pelo <strong>then()</strong>
+                    representa o conteúdo carregado pelo fixture.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         LOGIN
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Utilizando fixture em um login
+            </h2>
+
+            <p>
+                Uma aplicação bastante comum para fixtures é
+                armazenar credenciais de usuários de teste.
+            </p>
+
+            <p>
+                Considere o arquivo:
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"email"</span>: <span class="sql-string">"usuario@teste.com"</span>,
+<span class="sql-string">"senha"</span>: <span class="sql-string">"123456"</span>
+
+}</code></pre>
+
+            <p>
+                Podemos utilizar essas informações no teste:
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuario.json'</span>).then((usuario) =&gt; {
+
+cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+    .type(usuario.email)
+
+cy.get(<span class="sql-string">'[data-testid="senha"]'</span>)
+    .type(usuario.senha)
+
+cy.get(<span class="sql-string">'[data-testid="login"]'</span>)
+    .click()
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O teste não precisa armazenar diretamente os
+                    dados do usuário dentro da spec.
+                </p>
+
+                <p>
+                    Os dados foram separados em um arquivo próprio.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         FIXTURE E ASSERTIONS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Utilizando fixtures com assertions
+            </h2>
+
+            <p>
+                Os dados carregados também podem ser utilizados
+                para realizar validações.
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuario.json'</span>).then((usuario) =&gt; {
+
+cy.visit(<span class="sql-string">'/perfil'</span>)
+
+cy.get(<span class="sql-string">'[data-testid="nome"]'</span>)
+    .should(<span class="sql-string">'contain'</span>, usuario.nome)
+
+})</code></pre>
+
+            <p>
+                Nesse caso, o valor esperado vem diretamente
+                do arquivo de fixture.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📄
+                    </div>
+
+                    <h3>
+                        Dados esperados
+                    </h3>
+
+                    <p>
+                        O fixture contém os valores esperados
+                        pelo teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Aplicação
+                    </h3>
+
+                    <p>
+                        A aplicação apresenta os dados durante
+                        a execução do cenário.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Assertion
+                    </h3>
+
+                    <p>
+                        O teste compara o resultado com os dados
+                        esperados.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         JSON COMPLEXO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Trabalhando com objetos maiores
+            </h2>
+
+            <p>
+                Um fixture pode possuir estruturas mais completas.
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"usuario"</span>: {
+    <span class="sql-string">"nome"</span>: <span class="sql-string">"Maria"</span>,
+    <span class="sql-string">"email"</span>: <span class="sql-string">"maria@teste.com"</span>
+},
+
+<span class="sql-string">"endereco"</span>: {
+    <span class="sql-string">"cidade"</span>: <span class="sql-string">"São Paulo"</span>,
+    <span class="sql-string">"estado"</span>: <span class="sql-string">"SP"</span>
+}
+
+}</code></pre>
+
+            <p>
+                Podemos acessar propriedades aninhadas:
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'cliente.json'</span>).then((cliente) =&gt; {
+
+cy.log(cliente.usuario.nome)
+
+cy.log(cliente.endereco.cidade)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Estruturas maiores podem ser úteis quando o
+                    cenário precisa de vários dados relacionados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ARRAY
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Fixtures com listas
+            </h2>
+
+            <p>
+                Também podemos armazenar arrays em arquivos JSON.
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"produtos"</span>: [
+    {
+        <span class="sql-string">"nome"</span>: <span class="sql-string">"Notebook"</span>,
+        <span class="sql-string">"preco"</span>: 3500
+    },
+    {
+        <span class="sql-string">"nome"</span>: <span class="sql-string">"Mouse"</span>,
+        <span class="sql-string">"preco"</span>: 150
+    }
+]
+
+}</code></pre>
+
+            <p>
+                Podemos acessar os itens durante o teste:
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'produtos.json'</span>).then((dados) =&gt; {
+
+cy.log(dados.produtos[0].nome)
+
+cy.log(dados.produtos[1].nome)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Arrays são úteis quando precisamos trabalhar
+                    com vários registros de uma mesma entidade.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         TIPOS DE ARQUIVO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Tipos de arquivos utilizados como fixtures
+            </h2>
+
+            <p>
+                Fixtures não precisam ser limitados a arquivos JSON.
+                O Cypress também suporta outros formatos.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Formato</th>
+                            <th>Exemplo</th>
+                            <th>Utilização</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>JSON</strong>
+                            </td>
+
+                            <td>
+                                usuario.json
+                            </td>
+
+                            <td>
+                                Dados estruturados.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>CSV</strong>
+                            </td>
+
+                            <td>
+                                usuarios.csv
+                            </td>
+
+                            <td>
+                                Dados tabulares.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>TXT</strong>
+                            </td>
+
+                            <td>
+                                texto.txt
+                            </td>
+
+                            <td>
+                                Conteúdo textual.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>Imagens</strong>
+                            </td>
+
+                            <td>
+                                imagem.png
+                            </td>
+
+                            <td>
+                                Arquivos utilizados em cenários
+                                específicos.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CARREGANDO OUTROS FORMATOS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Especificando a extensão
+            </h2>
+
+            <p>
+                Em determinadas situações, podemos informar
+                explicitamente o nome do arquivo com sua extensão.
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'dados.json'</span>)</code></pre>
+
+            <p>
+                Para arquivos com outros formatos, a extensão
+                ajuda a identificar o arquivo que será carregado.
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuarios.csv'</span>)
+
+cy.fixture(<span class="sql-string">'texto.txt'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Utilize nomes de arquivos claros e consistentes
+                    para facilitar a manutenção dos testes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         FIXTURE COMO MASSA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Fixtures como massa de teste
+            </h2>
+
+            <p>
+                Uma das principais vantagens dos fixtures é separar
+                os dados da lógica do teste.
+            </p>
+
+            <p>
+                Sem fixture:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#nome'</span>)
+.type(<span class="sql-string">'Maria'</span>)
+
+cy.get(<span class="sql-string">'#email'</span>)
+.type(<span class="sql-string">'maria@teste.com'</span>)</code></pre>
+
+            <p>
+                Utilizando fixture:
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuario.json'</span>).then((usuario) =&gt; {
+
+cy.get(<span class="sql-string">'#nome'</span>)
+    .type(usuario.nome)
+
+cy.get(<span class="sql-string">'#email'</span>)
+    .type(usuario.email)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A segunda abordagem permite alterar os dados
+                    sem precisar modificar a lógica principal do teste.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ALIAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Utilizando alias com fixtures
+            </h2>
+
+            <p>
+                Também podemos criar um alias para os dados
+                carregados.
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuario.json'</span>)
+.as(<span class="sql-string">'usuario'</span>)</code></pre>
+
+            <p>
+                Depois podemos acessar o alias durante o teste:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'@usuario'</span>).then((usuario) =&gt; {
+
+cy.log(usuario.nome)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Aliases podem ajudar quando os mesmos dados
+                    precisam ser acessados em diferentes etapas
+                    de um cenário.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         HOOK
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Carregando fixture com beforeEach()
+            </h2>
+
+            <p>
+                Fixtures podem ser carregados dentro de hooks
+                quando vários testes precisam dos mesmos dados.
+            </p>
+
+            <pre><code>beforeEach(() =&gt; {
+
+cy.fixture(<span class="sql-string">'usuario.json'</span>)
+    .as(<span class="sql-string">'usuario'</span>)
+
+})</code></pre>
+
+            <p>
+                Depois, os testes podem utilizar o alias:
+            </p>
+
+            <pre><code>it(<span class="sql-string">'deve realizar login'</span>, () =&gt; {
+
+cy.get(<span class="sql-string">'@usuario'</span>).then((usuario) =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .type(usuario.email)
+
+    cy.get(<span class="sql-string">'#senha'</span>)
+        .type(usuario.senha)
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Essa abordagem pode ser útil quando diversos
+                    cenários compartilham a mesma massa de dados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ORGANIZAÇÃO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Organizando vários fixtures
+            </h2>
+
+            <p>
+                Projetos maiores podem possuir diversos arquivos
+                de dados.
+            </p>
+
+            <pre><code>cypress/
+
+├── fixtures/
+│
+├── usuario.json
+├── administrador.json
+├── produtos.json
+├── clientes.json
+└── pedidos.json</code></pre>
+
+            <p>
+                Outra possibilidade é organizar os dados em
+                subpastas:
+            </p>
+
+            <pre><code>cypress/
+
+└── fixtures/
+
+├── usuarios/
+│   ├── comum.json
+│   └── administrador.json
+│
+└── produtos/
+    ├── eletronicos.json
+    └── moveis.json</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Em projetos grandes, uma boa organização dos
+                    fixtures facilita a localização e manutenção
+                    dos dados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         EXEMPLO COMPLETO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Exemplo completo
+            </h2>
+
+            <p>
+                Vamos combinar os conceitos estudados em um cenário
+                de login.
+            </p>
+
+            <p>
+                Fixture:
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"email"</span>: <span class="sql-string">"usuario@teste.com"</span>,
+<span class="sql-string">"senha"</span>: <span class="sql-string">"123456"</span>
+
+}</code></pre>
+
+            <p>
+                Teste:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+beforeEach(() =&gt; {
+
+    cy.fixture(<span class="sql-string">'usuario.json'</span>)
+        .as(<span class="sql-string">'usuario'</span>)
+
+})
+
+it(<span class="sql-string">'deve realizar login com sucesso'</span>, () =&gt; {
+
+    cy.get(<span class="sql-string">'@usuario'</span>).then((usuario) =&gt; {
+
+        cy.visit(<span class="sql-string">'/login'</span>)
+
+        cy.get(<span class="sql-string">'#email'</span>)
+            .type(usuario.email)
+
+        cy.get(<span class="sql-string">'#senha'</span>)
+            .type(usuario.senha)
+
+        cy.get(<span class="sql-string">'#login'</span>)
+            .click()
+
+        cy.url()
+            .should(<span class="sql-string">'include'</span>, <span class="sql-string">'dashboard'</span>)
+
+    })
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Observe que o teste contém a lógica do cenário,
+                    enquanto os dados do usuário ficam separados
+                    no fixture.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ERROS COMUNS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns ao utilizar cy.fixture()
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Nome incorreto
+                    </h3>
+
+                    <p>
+                        Informar um nome de arquivo que não existe
+                        na pasta de fixtures.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        JSON inválido
+                    </h3>
+
+                    <p>
+                        Utilizar uma estrutura JSON com erros
+                        de sintaxe.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Propriedade incorreta
+                    </h3>
+
+                    <p>
+                        Tentar acessar uma propriedade que não
+                        existe no objeto carregado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Dados sensíveis
+                    </h3>
+
+                    <p>
+                        Armazenar senhas reais, tokens ou outras
+                        informações sensíveis diretamente no fixture.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         BOAS PRÁTICAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas com fixtures
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📁
+                    </div>
+
+                    <h3>
+                        Organize os arquivos
+                    </h3>
+
+                    <p>
+                        Utilize nomes claros e uma estrutura de
+                        pastas coerente.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Use dados específicos
+                    </h3>
+
+                    <p>
+                        Mantenha os dados relacionados aos cenários
+                        que realmente precisam deles.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Evite duplicação
+                    </h3>
+
+                    <p>
+                        Reutilize fixtures quando os mesmos dados
+                        forem necessários em diferentes testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Proteja dados sensíveis
+                    </h3>
+
+                    <p>
+                        Não utilize credenciais reais ou informações
+                        confidenciais nos arquivos do projeto.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CHECKLIST
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o que são fixtures.
+                </p>
+
+                <p>
+                    ☐ Conheço a pasta cypress/fixtures.
+                </p>
+
+                <p>
+                    ☐ Sei criar um arquivo JSON de fixture.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar cy.fixture().
+                </p>
+
+                <p>
+                    ☐ Sei acessar os dados carregados.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar fixtures em formulários.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar fixtures com assertions.
+                </p>
+
+                <p>
+                    ☐ Entendi como utilizar aliases.
+                </p>
+
+                <p>
+                    ☐ Entendi como utilizar fixtures com hooks.
+                </p>
+
+                <p>
+                    ☐ Sei organizar diferentes arquivos de fixture.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         RESUMO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    📁 <strong>fixtures</strong>
+                    → armazenam dados utilizados pelos testes.
+                </p>
+
+                <p>
+                    📄 <strong>usuario.json</strong>
+                    → exemplo de arquivo contendo massa de teste.
+                </p>
+
+                <p>
+                    📥 <strong>cy.fixture()</strong>
+                    → carrega os dados de um fixture.
+                </p>
+
+                <p>
+                    🔗 <strong>then()</strong>
+                    → permite trabalhar com os dados carregados.
+                </p>
+
+                <p>
+                    🏷️ <strong>as()</strong>
+                    → permite criar um alias para os dados.
+                </p>
+
+                <p>
+                    🔄 <strong>beforeEach()</strong>
+                    → pode carregar dados necessários em diferentes
+                    cenários.
+                </p>
+
+                <p>
+                    🧪 <strong>Massa de teste</strong>
+                    → dados separados da lógica do teste.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você sabe como utilizar o
+                <strong>cy.fixture()</strong> para carregar dados
+                externos e utilizá-los durante seus testes Cypress.
+            </p>
+
+            <p>
+                Na próxima aula vamos aprender sobre
+                <strong>variáveis e aliases</strong>, entendendo
+                diferentes formas de compartilhar informações
+                entre comandos e etapas dos testes.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         QUIZ
+    ====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 28
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 28 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe como criar fixtures, carregar
+                dados com cy.fixture() e utilizar essas informações
+                durante os testes automatizados.
+            </p>
+
+            <a href="../aulas/aula-29.html" class="cta-button">
+                Aula 29 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+     FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 28 • cy.fixture()
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-28.js"></script>
+
+</body>
+
+</html>

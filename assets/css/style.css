@@ -1,0 +1,1185 @@
+/* =====================================================
+   VARIÁVEIS DO TEMA
+===================================================== */
+
+:root {
+    /* Cores principais */
+    --deep-green: #0F3D2E;
+    --moss-green: #3F6F52;
+    --signal-green: #8FE3B0;
+    --gold: #C99A44;
+    --ivory: #F3EFE6;
+    --ink: #12201A;
+
+    /* Tema escuro */
+    --bg: #0F3D2E;
+    --bg-secondary: #0B3024;
+    --surface: #164A38;
+    --surface-hover: #1C5742;
+
+    --text: #F3EFE6;
+    --text-secondary: #B8C9BE;
+    --heading: #F3EFE6;
+
+    --primary: #3F6F52;
+    --primary-dark: #0F3D2E;
+    --secondary: #C99A44;
+
+    --border: rgba(243, 239, 230, 0.14);
+
+    --code-bg: #0A2A20;
+    --code-text: #F3EFE6;
+
+    --highlight-bg: rgba(143, 227, 176, 0.10);
+    --highlight-border: #8FE3B0;
+
+    --table-header: #3F6F52;
+    --table-row: #164A38;
+    --table-row-alt: #123F30;
+
+    --shadow: 0 10px 35px rgba(0, 0, 0, 0.20);
+
+    /* Quiz */
+    --card: #164A38;
+    --muted: #B8C9BE;
+    --button: #1C5742;
+    --button-hover: #3F6F52;
+
+    --success: #3F6F52;
+    --success-light: #8FE3B0;
+
+    --error: #A94A45;
+    --error-light: #F0B5AF;
+}
+
+
+/* =====================================================
+   LIGHT MODE
+===================================================== */
+
+body.light {
+    --bg: #F3EFE6;
+    --bg-secondary: #E8E2D5;
+
+    --surface: #FFFDF8;
+    --surface-hover: #F5F1E8;
+
+    --text: #12201A;
+    --text-secondary: #52665A;
+    --heading: #0F3D2E;
+
+    --primary: #3F6F52;
+    --primary-dark: #0F3D2E;
+    --secondary: #C99A44;
+
+    --border: rgba(18, 32, 26, 0.14);
+
+    --code-bg: #12201A;
+    --code-text: #F3EFE6;
+
+    --highlight-bg: rgba(63, 111, 82, 0.09);
+    --highlight-border: #3F6F52;
+
+    --table-header: #0F3D2E;
+    --table-row: #FFFDF8;
+    --table-row-alt: #F5F1E8;
+
+    --shadow: 0 10px 30px rgba(18, 32, 26, 0.09);
+
+    /* Quiz */
+    --card: #FFFDF8;
+    --muted: #66776D;
+    --button: #F0ECE2;
+    --button-hover: #E4EDE6;
+
+    --success: #3F6F52;
+    --success-light: #2F6B4C;
+
+    --error: #A94A45;
+    --error-light: #A94A45;
+}
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+    line-height: 1.7;
+
+    color: var(--text);
+    background: var(--bg);
+
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+header {
+    position: relative;
+    overflow: hidden;
+
+    color: var(--ivory);
+
+    padding: 90px 20px 100px;
+
+    text-align: center;
+
+    background:
+        radial-gradient(
+            circle at 20% 20%,
+            rgba(63, 111, 82, 0.45),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 80% 80%,
+            rgba(201, 154, 68, 0.18),
+            transparent 35%
+        ),
+        linear-gradient(
+            135deg,
+            #0F3D2E,
+            #12201A 55%,
+            #164A38
+        );
+}
+
+
+/* =====================================================
+   LOGO
+===================================================== */
+
+.header-logo {
+    position: absolute;
+
+    top: 25px;
+    left: 30px;
+
+    width: 90px;
+    height: auto;
+
+    object-fit: contain;
+
+    z-index: 2;
+}
+
+
+/* =====================================================
+   ELEMENTOS DECORATIVOS DO HEADER
+===================================================== */
+
+header::before {
+    content: "";
+
+    position: absolute;
+
+    width: 350px;
+    height: 350px;
+
+    border-radius: 50%;
+
+    background: rgba(143, 227, 176, 0.06);
+
+    top: -180px;
+    left: -120px;
+}
+
+header::after {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    border-radius: 50%;
+
+    background: rgba(201, 154, 68, 0.07);
+
+    right: -100px;
+    bottom: -160px;
+}
+
+
+.header-content {
+    position: relative;
+    z-index: 1;
+
+    max-width: 850px;
+    margin: auto;
+}
+
+
+/* =====================================================
+   EYEBROW
+===================================================== */
+
+.eyebrow {
+    display: inline-block;
+
+    margin-bottom: 18px;
+
+    padding: 6px 14px;
+
+    border: 1px solid rgba(243, 239, 230, 0.18);
+
+    border-radius: 999px;
+
+    background: rgba(243, 239, 230, 0.06);
+
+    color: var(--signal-green);
+
+    font-size: 0.85rem;
+    font-weight: 600;
+
+    letter-spacing: 0.05em;
+}
+
+
+/* =====================================================
+   TÍTULOS DO HEADER
+===================================================== */
+
+header h1 {
+    font-size: clamp(2.2rem, 6vw, 4rem);
+
+    line-height: 1.1;
+
+    margin-bottom: 25px;
+
+    letter-spacing: -0.04em;
+}
+
+header p {
+    max-width: 720px;
+
+    margin: auto;
+
+    color: #D5E1D9;
+
+    font-size: clamp(1rem, 2vw, 1.2rem);
+}
+
+
+/* =====================================================
+   BOTÃO DE TEMA
+===================================================== */
+
+.theme-toggle {
+    position: absolute;
+
+    top: 25px;
+    right: 25px;
+
+    z-index: 10;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 10px 15px;
+
+    border: 1px solid rgba(243, 239, 230, 0.16);
+
+    border-radius: 999px;
+
+    background: rgba(18, 32, 26, 0.72);
+
+    color: var(--ivory);
+
+    cursor: pointer;
+
+    backdrop-filter: blur(10px);
+
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+    background: rgba(63, 111, 82, 0.65);
+
+    border-color: rgba(143, 227, 176, 0.35);
+
+    transform: translateY(-2px);
+}
+
+.theme-icon {
+    font-size: 1.1rem;
+}
+
+
+/* =====================================================
+   CONTEÚDO
+===================================================== */
+
+main {
+    width: min(1100px, calc(100% - 40px));
+
+    margin: 0 auto;
+
+    padding: 60px 0;
+}
+
+section {
+    background: var(--surface);
+
+    padding: 40px;
+
+    margin-bottom: 30px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    box-shadow: var(--shadow);
+
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+section:hover {
+    border-color: color-mix(
+        in srgb,
+        var(--primary) 45%,
+        var(--border)
+    );
+}
+
+h2 {
+    color: var(--heading);
+
+    font-size: 2rem;
+
+    line-height: 1.2;
+
+    margin-bottom: 20px;
+
+    letter-spacing: -0.025em;
+}
+
+h3 {
+    color: var(--heading);
+
+    margin: 25px 0 10px;
+
+    font-size: 1.2rem;
+}
+
+p {
+    margin-bottom: 16px;
+}
+
+strong {
+    color: var(--heading);
+}
+
+
+/* =====================================================
+   DESTAQUE
+===================================================== */
+
+.highlight {
+    margin: 25px 0;
+
+    padding: 22px 24px;
+
+    border-left: 4px solid var(--highlight-border);
+
+    border-radius: 10px;
+
+    background: var(--highlight-bg);
+
+    color: var(--text);
+}
+
+.highlight p:last-child {
+    margin-bottom: 0;
+}
+
+
+/* =====================================================
+   CARDS
+===================================================== */
+
+.cards {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(210px, 1fr));
+
+    gap: 18px;
+
+    margin-top: 25px;
+}
+
+.card {
+    padding: 25px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    background: var(--surface-hover);
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+
+    border-color: var(--moss-green);
+
+    background: var(--surface);
+}
+
+.card .icon {
+    font-size: 2rem;
+
+    margin-bottom: 12px;
+}
+
+.card h3 {
+    margin: 0 0 8px;
+
+    color: var(--heading);
+}
+
+.card p {
+    margin: 0;
+
+    color: var(--text-secondary);
+}
+
+
+/* =====================================================
+   LISTAS
+===================================================== */
+
+ul {
+    margin: 20px 0 0 25px;
+}
+
+li {
+    margin-bottom: 10px;
+
+    color: var(--text);
+}
+
+li::marker {
+    color: var(--gold);
+}
+
+
+/* =====================================================
+   BADGE
+===================================================== */
+
+.badge {
+    display: inline-block;
+
+    margin-bottom: 15px;
+
+    padding: 5px 11px;
+
+    border: 1px solid rgba(201, 154, 68, 0.30);
+
+    border-radius: 999px;
+
+    background: rgba(201, 154, 68, 0.10);
+
+    color: var(--gold);
+
+    font-size: 0.78rem;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.05em;
+}
+
+
+/* =====================================================
+   TABELAS
+===================================================== */
+
+.table-wrapper {
+    overflow-x: auto;
+
+    margin-top: 20px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+}
+
+table {
+    width: 100%;
+
+    min-width: 550px;
+
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 15px;
+
+    text-align: left;
+
+    border-bottom: 1px solid var(--border);
+}
+
+th {
+    background: var(--table-header);
+
+    color: var(--ivory);
+
+    font-weight: 600;
+}
+
+td {
+    color: var(--text);
+}
+
+tbody tr {
+    background: var(--table-row);
+
+    transition: background 0.2s ease;
+}
+
+tbody tr:nth-child(even) {
+    background: var(--table-row-alt);
+}
+
+tbody tr:hover {
+    background: var(--surface-hover);
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =====================================================
+   CÓDIGO
+===================================================== */
+
+code {
+    padding: 3px 7px;
+
+    border-radius: 5px;
+
+    background: rgba(143, 227, 176, 0.10);
+
+    color: var(--signal-green);
+
+    font-family:
+        "JetBrains Mono",
+        "Fira Code",
+        Consolas,
+        monospace;
+
+    font-size: 0.9em;
+}
+
+pre {
+    position: relative;
+
+    margin: 20px 0;
+
+    padding: 25px;
+
+    overflow-x: auto;
+
+    border: 1px solid rgba(243, 239, 230, 0.10);
+
+    border-radius: 12px;
+
+    background: var(--code-bg);
+
+    color: var(--code-text);
+
+    box-shadow:
+        inset 0 1px 0 rgba(243, 239, 230, 0.03),
+        0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+pre code {
+    padding: 0;
+
+    background: transparent;
+
+    color: inherit;
+
+    font-size: 0.9rem;
+
+    line-height: 1.7;
+}
+
+.sql-keyword {
+    color: var(--signal-green);
+
+    font-weight: bold;
+}
+
+.sql-string {
+    color: #D9C18A;
+}
+
+
+/* =====================================================
+   BLOCO CRUD
+===================================================== */
+
+.crud-card {
+    position: relative;
+
+    overflow: hidden;
+}
+
+.crud-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 3px;
+
+    background: var(--moss-green);
+}
+
+.crud-card.create::before {
+    background: var(--signal-green);
+}
+
+.crud-card.read::before {
+    background: var(--moss-green);
+}
+
+.crud-card.update::before {
+    background: var(--gold);
+}
+
+.crud-card.delete::before {
+    background: #A94A45;
+}
+
+
+/* =====================================================
+   CTA
+===================================================== */
+
+.cta {
+    text-align: center;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(143, 227, 176, 0.10),
+            transparent 45%
+        ),
+        radial-gradient(
+            circle at bottom right,
+            rgba(201, 154, 68, 0.08),
+            transparent 40%
+        ),
+        var(--surface);
+}
+
+.cta h2 {
+    margin-bottom: 12px;
+}
+
+.cta p {
+    max-width: 650px;
+
+    margin: 0 auto 25px;
+
+    color: var(--text-secondary);
+}
+
+.cta-button {
+    display: inline-block;
+
+    padding: 12px 22px;
+
+    border-radius: 10px;
+
+    background: var(--deep-green);
+
+    color: var(--ivory);
+
+    text-decoration: none;
+
+    font-weight: 700;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.cta-button:hover {
+    background: var(--moss-green);
+
+    box-shadow: 0 6px 18px rgba(15, 61, 46, 0.25);
+
+    transform: translateY(-2px);
+}
+
+
+/* =====================================================
+   QUIZ
+===================================================== */
+
+#quiz-container {
+    width: 100%;
+    max-width: 760px;
+
+    margin: 32px auto 0;
+
+    background: var(--card);
+
+    padding: 32px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    box-shadow: 0 8px 24px rgba(18, 32, 26, 0.12);
+
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   TELA DO QUIZ
+===================================================== */
+
+#tela-quiz {
+    width: 100%;
+}
+
+
+/* =====================================================
+   TÍTULO DO QUIZ
+===================================================== */
+
+#tela-quiz > h1 {
+    margin: 0 0 12px;
+
+    color: var(--heading);
+
+    font-size: 24px;
+    line-height: 1.3;
+
+    text-align: center;
+}
+
+
+/* =====================================================
+   CONTADOR
+===================================================== */
+
+#contador {
+    margin: 0 0 28px;
+
+    color: var(--muted);
+
+    font-size: 14px;
+    font-weight: 600;
+
+    text-align: center;
+}
+
+
+/* =====================================================
+   PERGUNTA
+===================================================== */
+
+#pergunta {
+    margin: 0 0 24px;
+
+    color: var(--heading);
+
+    font-size: 20px;
+    font-weight: 700;
+
+    line-height: 1.5;
+
+    text-align: left;
+
+    min-height: auto;
+}
+
+
+/* =====================================================
+   OPÇÕES
+===================================================== */
+
+#opcoes {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+.resposta-btn {
+    display: block;
+
+    width: 100%;
+
+    padding: 16px 18px;
+
+    margin: 0;
+
+    box-sizing: border-box;
+
+    background: var(--button);
+
+    color: var(--text);
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    font-family: inherit;
+
+    font-size: 15px;
+    line-height: 1.5;
+
+    cursor: pointer;
+
+    text-align: left;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.15s ease,
+        box-shadow 0.2s ease;
+}
+
+.resposta-btn:hover:not(:disabled) {
+    background: var(--button-hover);
+
+    border-color: var(--moss-green);
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 4px 12px rgba(18, 32, 26, 0.10);
+}
+
+.resposta-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+
+/* =====================================================
+   RESPOSTA CORRETA / ERRADA
+===================================================== */
+
+.resposta-btn.correta {
+    background: var(--success);
+
+    border-color: var(--signal-green);
+
+    color: var(--ivory);
+}
+
+.resposta-btn.errada {
+    background: var(--error);
+
+    border-color: var(--error);
+
+    color: white;
+}
+
+.resposta-btn:disabled {
+    cursor: default;
+
+    opacity: 1;
+}
+
+
+/* =====================================================
+   FEEDBACK
+===================================================== */
+
+#feedback {
+    padding: 12px 16px;
+
+    margin: 24px 0 16px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    line-height: 1.5;
+
+    text-align: center;
+}
+
+#feedback.acerto {
+    color: var(--success-light);
+
+    background: rgba(143, 227, 176, 0.10);
+
+    border: 1px solid rgba(143, 227, 176, 0.28);
+}
+
+#feedback.erro {
+    color: var(--error-light);
+
+    background: rgba(169, 74, 69, 0.10);
+
+    border: 1px solid rgba(169, 74, 69, 0.25);
+}
+
+
+/* =====================================================
+   BOTÃO PRÓXIMA
+===================================================== */
+
+#proxima-btn,
+#reiniciar-btn {
+    display: block;
+
+    width: 100%;
+
+    padding: 14px 18px;
+
+    margin-top: 8px;
+
+    background: var(--primary);
+
+    color: var(--ivory);
+
+    border: none;
+
+    border-radius: 10px;
+
+    font-family: inherit;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.15s ease,
+        box-shadow 0.2s ease;
+}
+
+#proxima-btn:hover,
+#reiniciar-btn:hover {
+    background: var(--deep-green);
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 4px 12px rgba(15, 61, 46, 0.25);
+}
+
+#proxima-btn:active,
+#reiniciar-btn:active {
+    transform: translateY(0);
+}
+
+
+/* =====================================================
+   RESULTADO
+===================================================== */
+
+#tela-resultado {
+    display: none;
+
+    width: 100%;
+
+    text-align: center;
+}
+
+#tela-resultado h2 {
+    margin: 0 0 20px;
+
+    color: var(--heading);
+
+    font-size: 24px;
+}
+
+#pontuacao-final {
+    margin: 0 0 16px;
+
+    color: var(--gold);
+
+    font-size: 48px;
+    font-weight: 800;
+
+    line-height: 1;
+}
+
+#mensagem-final {
+    margin: 0 0 24px;
+
+    color: var(--muted);
+
+    font-size: 16px;
+
+    line-height: 1.6;
+}
+
+
+/* =====================================================
+   SEÇÃO DO QUIZ
+===================================================== */
+
+.quiz-section > p {
+    margin-bottom: 0;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer {
+    padding: 40px 20px;
+
+    border-top: 1px solid var(--border);
+
+    background: var(--bg-secondary);
+
+    color: var(--text-secondary);
+
+    text-align: center;
+}
+
+footer p {
+    margin-bottom: 5px;
+}
+
+
+/* =====================================================
+   RESPONSIVO
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .theme-toggle {
+        top: 15px;
+        right: 15px;
+
+        padding: 8px 11px;
+    }
+
+    .theme-label {
+        display: none;
+    }
+
+    header {
+        padding: 100px 20px 70px;
+    }
+
+    section {
+        padding: 28px 22px;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    main {
+        width: min(100% - 24px, 1100px);
+
+        padding: 35px 0;
+    }
+}
+
+
+/* =====================================================
+   RESPONSIVIDADE DO QUIZ
+===================================================== */
+
+@media (max-width: 600px) {
+
+    #quiz-container {
+        padding: 22px 18px;
+
+        margin-top: 24px;
+
+        border-radius: 12px;
+    }
+
+    #tela-quiz > h1 {
+        font-size: 21px;
+    }
+
+    #pergunta {
+        font-size: 18px;
+    }
+
+    .resposta-btn {
+        padding: 14px;
+
+        font-size: 14px;
+    }
+
+    #pontuacao-final {
+        font-size: 40px;
+    }
+}
+
+
+/* =====================================================
+   ACESSIBILIDADE
+===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+
+        transition: none !important;
+    }
+}

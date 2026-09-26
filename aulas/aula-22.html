@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 22 — should() e expect()</title>
+
+</head>
+
+<body>
+
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 22 • SHOULD E EXPECT
+            </span>
+
+            <h1>
+                should() e expect()
+            </h1>
+
+            <p>
+                Aprenda a utilizar should() e expect() para criar
+                diferentes tipos de validações nos testes automatizados
+                com Cypress.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+         OBJETIVOS DA AULA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Na aula anterior aprendemos o conceito de assertions
+                e conhecemos algumas das principais validações
+                disponíveis no Cypress.
+            </p>
+
+            <p>
+                Nesta aula vamos aprofundar o uso do
+                <strong>should()</strong> e conhecer o
+                <strong>expect()</strong>, entendendo quando utilizar
+                cada abordagem.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Aprofundar should()
+                    </h3>
+
+                    <p>
+                        Conhecer diferentes formas de utilizar
+                        should() nas validações.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Conhecer expect()
+                    </h3>
+
+                    <p>
+                        Aprender a criar assertions utilizando
+                        expect().
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔄
+                    </div>
+
+                    <h3>
+                        Comparar abordagens
+                    </h3>
+
+                    <p>
+                        Entender as diferenças entre should() e
+                        expect().
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Aplicar na prática
+                    </h3>
+
+                    <p>
+                        Utilizar as duas abordagens em testes
+                        reais.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         RELEMBRANDO ASSERTIONS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Relembrando as Assertions
+            </h2>
+
+            <p>
+                Uma assertion é uma verificação utilizada para
+                confirmar se o resultado obtido corresponde ao
+                resultado esperado.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+    .should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                Nesse caso, esperamos que o elemento
+                <strong>h1</strong> esteja visível.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🧪 <strong>Ação:</strong>
+                    executar uma operação na aplicação.
+                </p>
+
+                <p>
+                    🔎 <strong>Assertion:</strong>
+                    verificar se o resultado esperado aconteceu.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         SHOULD
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                1. O que é should()?
+            </h2>
+
+            <p>
+                O <strong>should()</strong> é utilizado para realizar
+                assertions sobre elementos encontrados pelo Cypress
+                ou sobre valores produzidos por comandos.
+            </p>
+
+            <p>
+                Um exemplo simples:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+    .should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                Podemos interpretar esse código como:
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🔎 Encontre o elemento <strong>h1</strong>.
+                </p>
+
+                <p>
+                    ✅ Verifique se ele está visível.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         SHOULD COM VALOR
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                2. should() com valores esperados
+            </h2>
+
+            <p>
+                Algumas assertions recebem um segundo argumento
+                contendo o valor esperado.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+    .should(<span class="sql-string">'have.text'</span>, <span class="sql-string">'Página inicial'</span>)</code></pre>
+
+            <p>
+                Nesse exemplo, o Cypress verifica se o texto do
+                elemento corresponde ao valor informado.
+            </p>
+
+            <p>
+                Outro exemplo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'input'</span>)
+    .should(<span class="sql-string">'have.value'</span>, <span class="sql-string">'usuario@email.com'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>should()</strong>
+                    pode combinar uma condição com um valor esperado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         SHOULD ENCADEADO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Encadeando should() com and()
+            </h2>
+
+            <p>
+                Podemos realizar várias verificações sobre o mesmo
+                elemento utilizando <strong>and()</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'button'</span>)
+    .should(<span class="sql-string">'be.visible'</span>)
+    .and(<span class="sql-string">'be.enabled'</span>)
+    .and(<span class="sql-string">'have.text'</span>, <span class="sql-string">'Entrar'</span>)</code></pre>
+
+            <p>
+                O teste verifica três condições:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        👁️
+                    </div>
+
+                    <h3>
+                        Visível
+                    </h3>
+
+                    <p>
+                        O botão precisa estar visível.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🟢
+                    </div>
+
+                    <h3>
+                        Habilitado
+                    </h3>
+
+                    <p>
+                        O botão precisa estar habilitado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        Texto
+                    </h3>
+
+                    <p>
+                        O botão precisa apresentar o texto esperado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         SHOULD COM CALLBACK
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                4. should() com callback
+            </h2>
+
+            <p>
+                Além de utilizar strings como
+                <strong>be.visible</strong> e
+                <strong>have.text</strong>, também podemos passar
+                uma função para o should().
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.produto'</span>)
+    .should(($elemento) =&gt; {
+
+        expect($elemento).to.have.length(1)
+
+    })</code></pre>
+
+            <p>
+                Nesse formato, recebemos o elemento encontrado
+                e podemos realizar verificações dentro da função.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    O callback deve ser utilizado quando precisamos
+                    de uma lógica de validação que não seja bem
+                    representada por uma assertion simples.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         EXPECT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                5. O que é expect()?
+            </h2>
+
+            <p>
+                O <strong>expect()</strong> é uma forma de criar
+                assertions utilizando a biblioteca de assertions
+                integrada ao ecossistema utilizado pelo Cypress.
+            </p>
+
+            <p>
+                Um exemplo simples:
+            </p>
+
+            <pre><code>expect(10).to.equal(10)</code></pre>
+
+            <p>
+                Nesse caso estamos verificando se o valor
+                <strong>10</strong> é igual a <strong>10</strong>.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>expect()</strong>
+                    permite realizar assertions diretamente
+                    sobre valores e objetos.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         EXPECT COM VALORES
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Utilizando expect() com valores
+            </h2>
+
+            <p>
+                Podemos utilizar expect() para comparar valores
+                diretamente.
+            </p>
+
+            <pre><code>const idade = 30
+
+expect(idade).to.equal(30)</code></pre>
+
+            <p>
+                Podemos também validar strings:
+            </p>
+
+            <pre><code>const nome = <span class="sql-string">'Maria'</span>
+
+expect(nome).to.equal(<span class="sql-string">'Maria'</span>)</code></pre>
+
+            <p>
+                Ou verificar se determinado texto contém outro texto:
+            </p>
+
+            <pre><code>const mensagem = <span class="sql-string">'Cadastro realizado com sucesso'</span>
+
+expect(mensagem).to.include(<span class="sql-string">'sucesso'</span>)</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+         EXPECT COM ELEMENTOS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Utilizando expect() com elementos
+            </h2>
+
+            <p>
+                Podemos utilizar expect() dentro de um callback do
+                Cypress para validar propriedades de um elemento.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+    .then(($titulo) =&gt; {
+
+        expect($titulo).to.be.visible
+
+    })</code></pre>
+
+            <p>
+                Nesse exemplo:
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🔎 <strong>cy.get()</strong>
+                    → localiza o elemento.
+                </p>
+
+                <p>
+                    📦 <strong>$titulo</strong>
+                    → representa o elemento encontrado.
+                </p>
+
+                <p>
+                    ✅ <strong>expect()</strong>
+                    → valida uma condição sobre esse elemento.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         EQUAL
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                8. equal()
+            </h2>
+
+            <p>
+                O matcher <strong>equal()</strong> verifica se dois
+                valores são equivalentes.
+            </p>
+
+            <pre><code>expect(5).to.equal(5)</code></pre>
+
+            <p>
+                Outro exemplo:
+            </p>
+
+            <pre><code>const status = <span class="sql-string">'aprovado'</span>
+
+expect(status).to.equal(<span class="sql-string">'aprovado'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>equal()</strong>
+                    → compara o valor esperado com o valor recebido.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         INCLUDE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                9. include()
+            </h2>
+
+            <p>
+                O matcher <strong>include()</strong> verifica se
+                determinado conteúdo está presente em outro valor.
+            </p>
+
+            <pre><code>const mensagem = <span class="sql-string">'Login realizado com sucesso'</span>
+
+expect(mensagem)
+    .to.include(<span class="sql-string">'sucesso'</span>)</code></pre>
+
+            <p>
+                Nesse caso, não precisamos comparar toda a mensagem.
+                Basta verificar se ela contém a palavra esperada.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         BE TRUE FALSE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Validando valores booleanos
+            </h2>
+
+            <p>
+                Podemos utilizar assertions para validar valores
+                booleanos.
+            </p>
+
+            <pre><code>const usuarioAtivo = true
+
+expect(usuarioAtivo).to.be.true</code></pre>
+
+            <p>
+                Também podemos validar o valor <strong>false</strong>:
+            </p>
+
+            <pre><code>const usuarioBloqueado = false
+
+expect(usuarioBloqueado).to.be.false</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        true
+                    </h3>
+
+                    <p>
+                        Valida que o valor seja verdadeiro.
+                    </p>
+
+                    <pre><code>to.be.true</code></pre>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        false
+                    </h3>
+
+                    <p>
+                        Valida que o valor seja falso.
+                    </p>
+
+                    <pre><code>to.be.false</code></pre>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         EXISTÊNCIA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Validando existência com expect()
+            </h2>
+
+            <p>
+                Podemos verificar se um objeto ou valor existe.
+            </p>
+
+            <pre><code>const usuario = {
+    nome: <span class="sql-string">'João'</span>
+}
+
+expect(usuario).to.exist</code></pre>
+
+            <p>
+                Também podemos validar quando esperamos que um valor
+                não exista:
+            </p>
+
+            <pre><code>expect(null).to.not.exist</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>to.exist</strong>
+                    → espera que o valor exista.
+                </p>
+
+                <p>
+                    <strong>to.not.exist</strong>
+                    → espera que o valor não exista.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         SHOULD X EXPECT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                12. should() x expect()
+            </h2>
+
+            <p>
+                As duas abordagens podem ser utilizadas para criar
+                assertions, mas possuem estilos diferentes.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>should()</th>
+                            <th>expect()</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                Geralmente utilizado em uma cadeia
+                                de comandos Cypress.
+                            </td>
+
+                            <td>
+                                Geralmente utilizado diretamente
+                                sobre um valor ou objeto.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Possui sintaxe integrada ao
+                                encadeamento do Cypress.
+                            </td>
+
+                            <td>
+                                Utiliza uma sintaxe baseada em
+                                expect e matchers.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Muito utilizado para validar
+                                elementos da interface.
+                            </td>
+
+                            <td>
+                                Útil para validar valores,
+                                objetos e resultados intermediários.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Pode utilizar callbacks.
+                            </td>
+
+                            <td>
+                                Pode ser utilizado dentro de
+                                callbacks e outras funções.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         EXEMPLO SHOULD
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Exemplo utilizando should()
+            </h2>
+
+            <p>
+                Imagine que queremos validar o título de uma página.
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/'</span>)
+
+cy.get(<span class="sql-string">'h1'</span>)
+    .should(<span class="sql-string">'be.visible'</span>)
+    .and(<span class="sql-string">'have.text'</span>, <span class="sql-string">'Página inicial'</span>)</code></pre>
+
+            <p>
+                Nesse caso, a validação está diretamente relacionada
+                ao elemento localizado pelo Cypress.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         EXEMPLO EXPECT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Exemplo utilizando expect()
+            </h2>
+
+            <p>
+                Agora podemos obter um valor e realizar uma
+                assertion utilizando expect().
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+    .invoke(<span class="sql-string">'text'</span>)
+    .then((texto) =&gt; {
+
+        expect(texto)
+            .to.equal(<span class="sql-string">'Página inicial'</span>)
+
+    })</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🔎 <strong>invoke()</strong>
+                    → obtém o texto do elemento.
+                </p>
+
+                <p>
+                    📦 <strong>then()</strong>
+                    → recebe o resultado.
+                </p>
+
+                <p>
+                    ✅ <strong>expect()</strong>
+                    → valida o valor obtido.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         EXEMPLO API
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                15. expect() em respostas de API
+            </h2>
+
+            <p>
+                O expect() também pode ser bastante útil para validar
+                dados retornados por uma API.
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'/api/usuarios/1'</span>)
+    .then((response) =&gt; {
+
+        expect(response.status)
+            .to.equal(200)
+
+        expect(response.body.nome)
+            .to.equal(<span class="sql-string">'João'</span>)
+
+    })</code></pre>
+
+            <p>
+                Podemos validar diferentes informações da resposta,
+                como status HTTP e propriedades do corpo.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>response.status</strong>
+                    → status HTTP da resposta.
+                </p>
+
+                <p>
+                    📦 <strong>response.body</strong>
+                    → conteúdo retornado pela API.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         NEGACAO EXPECT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                16. Utilizando not com expect()
+            </h2>
+
+            <p>
+                Assim como nas assertions do should(), podemos
+                utilizar <strong>not</strong> para representar
+                uma condição negativa.
+            </p>
+
+            <pre><code>const status = <span class="sql-string">'cancelado'</span>
+
+expect(status)
+    .to.not.equal(<span class="sql-string">'aprovado'</span>)</code></pre>
+
+            <p>
+                Outro exemplo:
+            </p>
+
+            <pre><code>const mensagem = <span class="sql-string">'Erro inesperado'</span>
+
+expect(mensagem)
+    .to.not.include(<span class="sql-string">'sucesso'</span>)</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+         QUANDO UTILIZAR
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                17. Quando utilizar should()?
+            </h2>
+
+            <p>
+                O should() é especialmente natural quando estamos
+                trabalhando diretamente com elementos e comandos
+                do Cypress.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🖥️
+                    </div>
+
+                    <h3>
+                        Elementos da interface
+                    </h3>
+
+                    <p>
+                        Validar visibilidade, texto, atributos,
+                        classes e estados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔗
+                    </div>
+
+                    <h3>
+                        Encadeamento
+                    </h3>
+
+                    <p>
+                        Realizar várias validações sobre um mesmo
+                        elemento.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Assertions simples
+                    </h3>
+
+                    <p>
+                        Criar verificações utilizando os matchers
+                        fornecidos pelo Cypress.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         QUANDO EXPECT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                18. Quando utilizar expect()?
+            </h2>
+
+            <p>
+                O expect() é especialmente útil quando precisamos
+                trabalhar diretamente com valores obtidos durante
+                a execução do teste.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Valores
+                    </h3>
+
+                    <p>
+                        Comparar strings, números e valores booleanos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        APIs
+                    </h3>
+
+                    <p>
+                        Validar status, body e outras informações
+                        de respostas HTTP.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Objetos
+                    </h3>
+
+                    <p>
+                        Validar propriedades e estruturas de objetos.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         TESTE COMPLETO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                19. Teste completo utilizando as duas abordagens
+            </h2>
+
+            <p>
+                Podemos utilizar should() e expect() no mesmo teste
+                quando isso fizer sentido.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Cadastro'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve realizar cadastro com sucesso'</span>, () =&gt; {
+
+        cy.visit(<span class="sql-string">'/cadastro'</span>)
+
+        cy.get(<span class="sql-string">'[data-testid="nome"]'</span>)
+            .type(<span class="sql-string">'Maria'</span>)
+
+        cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+            .type(<span class="sql-string">'maria@email.com'</span>)
+
+        cy.get(<span class="sql-string">'[data-testid="cadastrar"]'</span>)
+            .click()
+
+        cy.get(<span class="sql-string">'.mensagem'</span>)
+            .should(<span class="sql-string">'be.visible'</span>)
+            .and(<span class="sql-string">'include.text'</span>, <span class="sql-string">'sucesso'</span>)
+
+        cy.get(<span class="sql-string">'.mensagem'</span>)
+            .invoke(<span class="sql-string">'text'</span>)
+            .then((texto) =&gt; {
+
+                expect(texto)
+                    .to.include(<span class="sql-string">'sucesso'</span>)
+
+            })
+
+    })
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O importante não é utilizar as duas abordagens
+                    obrigatoriamente, mas escolher a forma que melhor
+                    representa a validação necessária.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ERROS COMUNS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Confundir ação com assertion
+                    </h3>
+
+                    <p>
+                        Comandos como click() e type() executam ações;
+                        eles não substituem uma validação do resultado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Usar expect() sem necessidade
+                    </h3>
+
+                    <p>
+                        Evite transformar uma validação simples de
+                        elemento em uma lógica desnecessariamente complexa.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Criar assertions irrelevantes
+                    </h3>
+
+                    <p>
+                        Uma assertion deve estar relacionada ao objetivo
+                        do teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Comparar valores incorretamente
+                    </h3>
+
+                    <p>
+                        Verifique se o tipo e o valor esperado realmente
+                        correspondem ao resultado produzido.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         BOAS PRÁTICAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Valide o que importa
+                    </h3>
+
+                    <p>
+                        Crie assertions relacionadas ao comportamento
+                        que realmente precisa ser validado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Prefira clareza
+                    </h3>
+
+                    <p>
+                        Utilize a abordagem que torne a intenção
+                        do teste mais fácil de compreender.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Evite duplicação
+                    </h3>
+
+                    <p>
+                        Não repita várias vezes a mesma validação
+                        sem uma necessidade clara.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📖
+                    </div>
+
+                    <h3>
+                        Mantenha os testes legíveis
+                    </h3>
+
+                    <p>
+                        O código deve deixar claro qual comportamento
+                        está sendo validado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CHECKLIST
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o funcionamento do should().
+                </p>
+
+                <p>
+                    ☐ Aprendi a utilizar should() com valores.
+                </p>
+
+                <p>
+                    ☐ Aprendi a utilizar and().
+                </p>
+
+                <p>
+                    ☐ Conheci should() com callback.
+                </p>
+
+                <p>
+                    ☐ Entendi o funcionamento do expect().
+                </p>
+
+                <p>
+                    ☐ Aprendi a utilizar equal().
+                </p>
+
+                <p>
+                    ☐ Aprendi a utilizar include().
+                </p>
+
+                <p>
+                    ☐ Aprendi a validar valores booleanos.
+                </p>
+
+                <p>
+                    ☐ Aprendi a utilizar not.
+                </p>
+
+                <p>
+                    ☐ Entendi as diferenças entre should() e expect().
+                </p>
+
+                <p>
+                    ☐ Consigo escolher uma abordagem de acordo
+                    com a situação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         RESUMO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🔎 <strong>should()</strong>
+                    → realiza assertions integradas ao fluxo
+                    de comandos do Cypress.
+                </p>
+
+                <p>
+                    🔗 <strong>and()</strong>
+                    → permite encadear outras validações.
+                </p>
+
+                <p>
+                    🧩 <strong>should(callback)</strong>
+                    → permite executar uma lógica personalizada
+                    de validação.
+                </p>
+
+                <p>
+                    ✅ <strong>expect()</strong>
+                    → realiza assertions diretamente sobre
+                    valores e objetos.
+                </p>
+
+                <p>
+                    🎯 <strong>equal()</strong>
+                    → compara valores.
+                </p>
+
+                <p>
+                    🔎 <strong>include()</strong>
+                    → verifica se determinado conteúdo está presente.
+                </p>
+
+                <p>
+                    ❌ <strong>not</strong>
+                    → representa uma condição negativa.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você já conhece duas formas importantes de
+                criar assertions no Cypress e consegue utilizá-las
+                para validar elementos, valores, objetos e respostas
+                obtidas durante os testes.
+            </p>
+
+            <p>
+                Na próxima aula vamos aprender a validar textos
+                exibidos na interface, trabalhando com diferentes
+                formas de verificar o conteúdo apresentado ao usuário.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         QUIZ
+    ====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 22
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 22 concluída!
+            </h2>
+
+            <p>
+                Agora você já conhece should(), expect(), and(),
+                equal(), include() e outras formas de criar
+                assertions no Cypress.
+            </p>
+
+            <a href="../aulas/aula-23.html" class="cta-button">
+                Aula 23 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+       FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 22 • should() e expect()
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+       JAVASCRIPT
+    ====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-22.js"></script>
+
+</body>
+
+</html>

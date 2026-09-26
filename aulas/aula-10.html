@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <title>Aula 10 — Primeiro Teste com Cypress</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 10 • PRIMEIRO TESTE
+            </span>
+
+            <h1>
+                Primeiro Teste com Cypress
+            </h1>
+
+            <p>
+                Aprenda a criar, estruturar e executar seu primeiro
+                teste automatizado utilizando Cypress.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS DA AULA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Nas aulas anteriores, instalamos o Cypress, configuramos
+                o projeto e conhecemos a interface do Cypress App.
+            </p>
+
+            <p>
+                Agora chegou o momento de escrever nosso primeiro
+                teste automatizado e entender como o Cypress executa
+                cada etapa definida no código.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Criar uma Spec
+                    </h3>
+
+                    <p>
+                        Criar o primeiro arquivo de teste E2E do
+                        projeto Cypress.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        Escrever um teste
+                    </h3>
+
+                    <p>
+                        Utilizar describe(), it() e comandos Cypress
+                        para estruturar o teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ▶️
+                    </div>
+
+                    <h3>
+                        Executar o teste
+                    </h3>
+
+                    <p>
+                        Executar o teste pela interface do Cypress
+                        e observar seu resultado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Criar uma validação
+                    </h3>
+
+                    <p>
+                        Utilizar uma asserção para verificar se a
+                        aplicação apresentou o comportamento esperado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE É UM TESTE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é um teste automatizado?
+            </h2>
+
+            <p>
+                Um teste automatizado é um conjunto de instruções
+                executadas por uma ferramenta para verificar se a
+                aplicação apresenta o comportamento esperado.
+            </p>
+
+            <p>
+                Em um teste E2E com Cypress, podemos reproduzir
+                ações semelhantes às realizadas por um usuário:
+                acessar uma página, encontrar um elemento, clicar,
+                preencher um campo e verificar um resultado.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    👤 <strong>Usuário</strong>
+                    → realiza uma ação.
+                </p>
+
+                <p>
+                    🤖 <strong>Cypress</strong>
+                    → automatiza essa ação.
+                </p>
+
+                <p>
+                    🔎 <strong>Assertion</strong>
+                    → verifica se o resultado esperado aconteceu.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PRIMEIRA SPEC
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Criando a primeira Spec
+            </h2>
+
+            <p>
+                Os testes End-to-End ficam dentro da pasta
+                <strong>cypress/e2e</strong>.
+            </p>
+
+            <p>
+                Vamos criar um arquivo chamado:
+            </p>
+
+            <pre><code>cypress/e2e/primeiro-teste.cy.js</code></pre>
+
+            <p>
+                O sufixo <strong>.cy.js</strong> é utilizado para
+                identificar arquivos de teste Cypress escritos em
+                JavaScript.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    📁 <strong>cypress/e2e</strong>
+                    → pasta dos testes E2E.
+                </p>
+
+                <p>
+                    📄 <strong>primeiro-teste.cy.js</strong>
+                    → arquivo contendo os testes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ESTRUTURA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Estrutura básica de um teste
+            </h2>
+
+            <p>
+                Uma estrutura simples de teste pode ser criada
+                utilizando <strong>describe()</strong> e
+                <strong>it()</strong>.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Minha primeira suíte'</span>, () =&gt; {
+
+it(<span class="sql-string">'meu primeiro teste'</span>, () =&gt; {
+
+    // comandos do teste
+
+})
+
+})</code></pre>
+
+            <p>
+                Essa estrutura permite organizar os testes em
+                grupos e definir o comportamento esperado em cada
+                cenário.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        describe()
+                    </h3>
+
+                    <p>
+                        Agrupa testes relacionados a uma determinada
+                        funcionalidade ou contexto.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        it()
+                    </h3>
+
+                    <p>
+                        Representa um caso de teste específico que
+                        será executado pelo Cypress.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PRIMEIRO TESTE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Criando o primeiro teste
+            </h2>
+
+            <p>
+                Vamos criar um teste simples para acessar a página
+                inicial da aplicação.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Página inicial'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve acessar a página inicial'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/'</span>)
+
+})
+
+})</code></pre>
+
+            <p>
+                O comando <strong>cy.visit()</strong> é utilizado
+                para navegar até uma página da aplicação.
+            </p>
+
+            <p>
+                Como configuramos a <strong>baseUrl</strong> na aula
+                anterior, podemos utilizar apenas:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>baseUrl</strong>
+                    → define o endereço principal.
+                </p>
+
+                <p>
+                    🧭 <strong>cy.visit()</strong>
+                    → navega até o endereço informado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PRIMEIRA EXECUÇÃO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Executando o primeiro teste
+            </h2>
+
+            <p>
+                Depois de criar o arquivo, podemos abrir o Cypress
+                utilizando:
+            </p>
+
+            <pre><code>npx cypress open</code></pre>
+
+            <p>
+                Na interface do Cypress, devemos acessar a opção
+                de testes E2E e localizar o arquivo:
+            </p>
+
+            <pre><code>primeiro-teste.cy.js</code></pre>
+
+            <p>
+                Ao selecionar o arquivo, o Cypress abrirá o navegador
+                e executará o teste.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        💻
+                    </div>
+
+                    <h3>
+                        Abrir Cypress
+                    </h3>
+
+                    <p>
+                        Execute npx cypress open para iniciar a
+                        interface do Cypress.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Selecionar E2E
+                    </h3>
+
+                    <p>
+                        Escolha o modo de testes End-to-End.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📄
+                    </div>
+
+                    <h3>
+                        Selecionar a Spec
+                    </h3>
+
+                    <p>
+                        Abra o arquivo primeiro-teste.cy.js.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ▶️
+                    </div>
+
+                    <h3>
+                        Executar
+                    </h3>
+
+                    <p>
+                        O Cypress executará automaticamente os
+                        comandos definidos no teste.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESULTADO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Entendendo o resultado
+            </h2>
+
+            <p>
+                Quando o teste é executado, o Cypress apresenta
+                informações sobre o resultado da execução.
+            </p>
+
+            <p>
+                Quando todas as etapas são concluídas sem falhas,
+                o teste é apresentado como aprovado.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    ✅ <strong>Passed</strong>
+                    → o teste foi executado com sucesso.
+                </p>
+
+                <p>
+                    ❌ <strong>Failed</strong>
+                    → alguma etapa do teste apresentou uma falha.
+                </p>
+
+                <p>
+                    ⏸️ <strong>Pending</strong>
+                    → o teste foi definido, mas não foi executado.
+                </p>
+
+            </div>
+
+            <p>
+                A interface também apresenta detalhes da execução,
+                facilitando a identificação da etapa em que ocorreu
+                algum problema.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     PRIMEIRA ASSERTION
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Adicionando uma asserção
+            </h2>
+
+            <p>
+                Um teste não precisa apenas executar ações. Ele
+                também deve verificar se o resultado esperado
+                realmente aconteceu.
+            </p>
+
+            <p>
+                Para isso, podemos utilizar uma asserção com
+                <strong>should()</strong>.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Página inicial'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve exibir o título da página'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/'</span>)
+
+    cy.get(<span class="sql-string">'h1'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+
+})
+
+})</code></pre>
+
+            <p>
+                Nesse exemplo, o Cypress procura um elemento
+                <strong>h1</strong> e verifica se ele está visível.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🔎 <strong>cy.get()</strong>
+                    → localiza o elemento.
+                </p>
+
+                <p>
+                    ✅ <strong>should()</strong>
+                    → verifica uma condição esperada.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     FLUXO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Entendendo o fluxo do teste
+            </h2>
+
+            <p>
+                Nosso primeiro teste possui um fluxo bastante simples:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/'</span>)
+
+    ↓
+
+cy.get(<span class="sql-string">'h1'</span>)
+
+    ↓
+
+should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                Podemos interpretar esse fluxo da seguinte forma:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        1️⃣
+                    </div>
+
+                    <h3>
+                        Acessar
+                    </h3>
+
+                    <p>
+                        O Cypress acessa a página inicial da aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        2️⃣
+                    </div>
+
+                    <h3>
+                        Localizar
+                    </h3>
+
+                    <p>
+                        O Cypress procura o elemento definido pelo
+                        seletor.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        3️⃣
+                    </div>
+
+                    <h3>
+                        Validar
+                    </h3>
+
+                    <p>
+                        O Cypress verifica se o elemento está visível.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     MAIS DE UM TESTE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Criando mais de um teste
+            </h2>
+
+            <p>
+                Uma mesma Spec pode conter vários casos de teste.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Página inicial'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve acessar a página'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/'</span>)
+
+})
+
+it(<span class="sql-string">'deve exibir o título'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/'</span>)
+
+    cy.get(<span class="sql-string">'h1'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+
+})
+
+})</code></pre>
+
+            <p>
+                Cada chamada de <strong>it()</strong> representa
+                um caso de teste independente dentro da suíte.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Procure criar testes que tenham um objetivo claro.
+                    Isso facilita a leitura e a identificação de
+                    falhas.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     TITULO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Testando o título da página
+            </h2>
+
+            <p>
+                Podemos verificar também o título definido no elemento
+                <strong>&lt;title&gt;</strong> da página.
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/'</span>)
+
+cy.title()
+.should(<span class="sql-string">'eq'</span>, <span class="sql-string">'Minha Aplicação'</span>)</code></pre>
+
+            <p>
+                O comando <strong>cy.title()</strong> obtém o título
+                atual da página.
+            </p>
+
+            <p>
+                Depois utilizamos <strong>should()</strong> para
+                verificar se o valor corresponde ao esperado.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>cy.visit()</strong>
+                    → acessa a página.
+                </p>
+
+                <p>
+                    🏷️ <strong>cy.title()</strong>
+                    → obtém o título da página.
+                </p>
+
+                <p>
+                    ✅ <strong>should('eq', ...)</strong>
+                    → verifica se o valor é igual ao esperado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     TEXTOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Validando textos
+            </h2>
+
+            <p>
+                Outra validação comum é verificar se determinado
+                texto está presente na página.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+.should(<span class="sql-string">'contain'</span>, <span class="sql-string">'Bem-vindo'</span>)</code></pre>
+
+            <p>
+                Nesse exemplo, o Cypress procura o elemento
+                <strong>h1</strong> e verifica se ele contém o
+                texto esperado.
+            </p>
+
+            <p>
+                Também podemos utilizar uma verificação de igualdade
+                quando desejamos validar exatamente o conteúdo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+.should(<span class="sql-string">'have.text'</span>, <span class="sql-string">'Bem-vindo'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Atenção:</strong>
+
+                <p>
+                    A escolha da asserção depende do comportamento
+                    que queremos validar. Em alguns casos, verificar
+                    se um texto está contido no elemento é mais
+                    adequado do que exigir igualdade exata.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     TESTE COMPLETO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Construindo um teste completo
+            </h2>
+
+            <p>
+                Podemos combinar navegação, localização de elementos
+                e validações em um único cenário.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Página inicial'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve carregar corretamente'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/'</span>)
+
+    cy.get(<span class="sql-string">'h1'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+
+    cy.title()
+        .should(<span class="sql-string">'not.be.empty'</span>)
+
+})
+
+})</code></pre>
+
+            <p>
+                Esse teste realiza três ações principais:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        Navegação
+                    </h3>
+
+                    <p>
+                        Acessa a página inicial utilizando cy.visit().
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Localização
+                    </h3>
+
+                    <p>
+                        Localiza o elemento h1 utilizando cy.get().
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Validação
+                    </h3>
+
+                    <p>
+                        Verifica se o elemento está visível e se a
+                        página possui um título.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     COMANDOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. O que são os comandos cy?
+            </h2>
+
+            <p>
+                Os comandos que começam com <strong>cy.</strong>
+                fazem parte da API do Cypress.
+            </p>
+
+            <p>
+                Alguns exemplos que já conhecemos:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/'</span>)
+
+cy.get(<span class="sql-string">'h1'</span>)
+
+cy.title()</code></pre>
+
+            <p>
+                Esses comandos são utilizados para interagir com a
+                aplicação e obter informações durante a execução
+                dos testes.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        cy.visit()
+                    </h3>
+
+                    <p>
+                        Navega para uma URL.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        cy.get()
+                    </h3>
+
+                    <p>
+                        Localiza elementos da página.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏷️
+                    </div>
+
+                    <h3>
+                        cy.title()
+                    </h3>
+
+                    <p>
+                        Obtém o título atual da página.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     COMANDOS EM CADEIA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Encadeando comandos
+            </h2>
+
+            <p>
+                Os comandos do Cypress podem ser utilizados em
+                sequência para representar um fluxo de teste.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'button'</span>)
+.should(<span class="sql-string">'be.visible'</span>)
+.click()</code></pre>
+
+            <p>
+                Nesse exemplo, o Cypress:
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    1️⃣ Localiza o botão.
+                </p>
+
+                <p>
+                    2️⃣ Verifica se o botão está visível.
+                </p>
+
+                <p>
+                    3️⃣ Clica no botão.
+                </p>
+
+            </div>
+
+            <p>
+                Esse tipo de encadeamento será bastante utilizado
+                nas próximas aulas.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     FALHA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                14. O que acontece quando o teste falha?
+            </h2>
+
+            <p>
+                Imagine que nosso teste espera encontrar um elemento
+                <strong>h1</strong>, mas esse elemento não existe
+                na página.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'h1'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                Nesse caso, a asserção não será atendida e o Cypress
+                marcará o teste como falho.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    ❌ <strong>Teste falhou</strong>
+                    → o comportamento esperado não foi encontrado.
+                </p>
+
+                <p>
+                    🔎 <strong>Investigação</strong>
+                    → devemos analisar o motivo da falha.
+                </p>
+
+                <p>
+                    🛠️ <strong>Correção</strong>
+                    → corrigimos a aplicação ou o próprio teste,
+                    conforme a causa identificada.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     DEBUG
+====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Utilizando o Cypress para investigar falhas
+            </h2>
+
+            <p>
+                Uma das características úteis do Cypress é a
+                possibilidade de acompanhar visualmente a execução
+                do teste.
+            </p>
+
+            <p>
+                Quando um teste falha, podemos observar:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🖥️
+                    </div>
+
+                    <h3>
+                        Estado da página
+                    </h3>
+
+                    <p>
+                        Observar como a aplicação estava no momento
+                        da falha.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        Comando que falhou
+                    </h3>
+
+                    <p>
+                        Identificar qual comando ou asserção
+                        apresentou o problema.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔍
+                    </div>
+
+                    <h3>
+                        Mensagem de erro
+                    </h3>
+
+                    <p>
+                        Analisar a mensagem apresentada pelo Cypress
+                        para entender a falha.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RUN HEADLESS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                16. Executando o teste pelo terminal
+            </h2>
+
+            <p>
+                Além da interface gráfica, também podemos executar
+                os testes através do terminal.
+            </p>
+
+            <p>
+                Para executar os testes E2E em modo de execução,
+                podemos utilizar:
+            </p>
+
+            <pre><code>npx cypress run</code></pre>
+
+            <p>
+                Nesse modo, o Cypress executa os testes sem depender
+                da interface interativa do Cypress App.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🖥️ <strong>cypress open</strong>
+                    → utilizado para trabalhar de forma interativa
+                    com a interface do Cypress.
+                </p>
+
+                <p>
+                    ⚙️ <strong>cypress run</strong>
+                    → utilizado para executar os testes pelo terminal.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PRIMEIRO FLUXO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                17. Nosso primeiro fluxo E2E
+            </h2>
+
+            <p>
+                Agora podemos representar um fluxo completo de teste:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Página inicial'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve carregar corretamente'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/'</span>)
+
+    cy.get(<span class="sql-string">'h1'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+
+    cy.title()
+        .should(<span class="sql-string">'not.be.empty'</span>)
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>1. Navegar</strong>
+                    → acessamos a aplicação.
+                </p>
+
+                <p>
+                    🔎 <strong>2. Localizar</strong>
+                    → encontramos um elemento.
+                </p>
+
+                <p>
+                    ✅ <strong>3. Validar</strong>
+                    → verificamos o comportamento esperado.
+                </p>
+
+                <p>
+                    📊 <strong>4. Resultado</strong>
+                    → o Cypress informa se o teste passou ou falhou.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ERROS COMUNS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns ao criar o primeiro teste
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Esquecer a baseUrl
+                    </h3>
+
+                    <p>
+                        Tentar utilizar caminhos relativos sem
+                        configurar corretamente o endereço da aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Seletor incorreto
+                    </h3>
+
+                    <p>
+                        Utilizar um seletor que não corresponde a
+                        nenhum elemento da página.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Não criar uma asserção
+                    </h3>
+
+                    <p>
+                        Executar ações sem verificar se o resultado
+                        esperado realmente aconteceu.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Teste sem objetivo claro
+                    </h3>
+
+                    <p>
+                        Criar cenários muito grandes ou difíceis de
+                        entender desde o início.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRÁTICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas para os primeiros testes
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Tenha um objetivo claro
+                    </h3>
+
+                    <p>
+                        Cada teste deve verificar um comportamento
+                        específico da aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Valide resultados
+                    </h3>
+
+                    <p>
+                        Não apenas execute ações. Verifique se o
+                        resultado esperado realmente aconteceu.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📖
+                    </div>
+
+                    <h3>
+                        Use nomes descritivos
+                    </h3>
+
+                    <p>
+                        Descreva claramente o comportamento que
+                        está sendo testado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧹
+                    </div>
+
+                    <h3>
+                        Mantenha testes simples
+                    </h3>
+
+                    <p>
+                        Prefira cenários fáceis de entender,
+                        executar e investigar.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EXERCÍCIO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Exercício prático
+            </h2>
+
+            <p>
+                Agora é sua vez de criar um teste do zero.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>Objetivo:</strong>
+                </p>
+
+                <p>
+                    Criar uma Spec chamada:
+                </p>
+
+                <pre><code>primeiro-teste.cy.js</code></pre>
+
+                <p>
+                    Depois, crie um teste que:
+                </p>
+
+                <p>
+                    ☐ Acesse a página inicial.
+                </p>
+
+                <p>
+                    ☐ Localize um elemento da página.
+                </p>
+
+                <p>
+                    ☐ Verifique se o elemento está visível.
+                </p>
+
+                <p>
+                    ☐ Execute o teste através do Cypress App.
+                </p>
+
+                <p>
+                    ☐ Observe o resultado da execução.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o que é um teste automatizado.
+                </p>
+
+                <p>
+                    ☐ Entendi o que é uma Spec.
+                </p>
+
+                <p>
+                    ☐ Conheci o arquivo .cy.js.
+                </p>
+
+                <p>
+                    ☐ Aprendi a utilizar describe().
+                </p>
+
+                <p>
+                    ☐ Aprendi a utilizar it().
+                </p>
+
+                <p>
+                    ☐ Criei meu primeiro cy.visit().
+                </p>
+
+                <p>
+                    ☐ Aprendi a utilizar cy.get().
+                </p>
+
+                <p>
+                    ☐ Aprendi a criar uma asserção com should().
+                </p>
+
+                <p>
+                    ☐ Executei um teste pelo Cypress App.
+                </p>
+
+                <p>
+                    ☐ Entendi a diferença entre teste aprovado e
+                    teste falho.
+                </p>
+
+                <p>
+                    ☐ Conheci o comando cypress run.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🧪 <strong>Spec</strong>
+                    → arquivo que contém os testes Cypress.
+                </p>
+
+                <p>
+                    📦 <strong>describe()</strong>
+                    → agrupa testes relacionados.
+                </p>
+
+                <p>
+                    🧪 <strong>it()</strong>
+                    → representa um caso de teste.
+                </p>
+
+                <p>
+                    🌐 <strong>cy.visit()</strong>
+                    → acessa uma página.
+                </p>
+
+                <p>
+                    🔎 <strong>cy.get()</strong>
+                    → localiza elementos.
+                </p>
+
+                <p>
+                    ✅ <strong>should()</strong>
+                    → cria uma asserção.
+                </p>
+
+                <p>
+                    ▶️ <strong>cypress open</strong>
+                    → abre a interface interativa do Cypress.
+                </p>
+
+                <p>
+                    ⚙️ <strong>cypress run</strong>
+                    → executa os testes pelo terminal.
+                </p>
+
+            </div>
+
+            <p>
+                Nesta aula criamos nosso primeiro teste automatizado
+                com Cypress e entendemos o fluxo básico de uma
+                execução E2E.
+            </p>
+
+            <p>
+                Agora já conseguimos acessar uma aplicação, localizar
+                elementos e verificar se determinados comportamentos
+                estão acontecendo conforme o esperado.
+            </p>
+
+            <p>
+                Na próxima aula vamos aprofundar a estrutura de uma
+                Spec e conhecer recursos como context, hooks e formas
+                de organizar melhor nossos casos de teste.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     QUIZ
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 10
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 10 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe criar uma Spec, escrever seu
+                primeiro teste, utilizar comandos Cypress e criar
+                asserções para validar o comportamento da aplicação.
+            </p>
+
+            <a href="../aulas/aula-11.html" class="cta-button">
+                Aula 11 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+
+FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 10 • Primeiro Teste com Cypress
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+
+JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-10.js"></script>
+
+</body>
+
+</html>

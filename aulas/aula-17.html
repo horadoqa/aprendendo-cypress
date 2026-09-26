@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>
+        Aula 17 — type()
+    </title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 17 • TYPE()
+            </span>
+
+            <h1>
+                type()
+            </h1>
+
+            <p>
+                Aprenda a preencher campos de texto, formulários e
+                outros elementos de entrada utilizando o comando
+                type() do Cypress.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+         OBJETIVOS DA AULA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Na aula anterior, aprendemos a utilizar o comando
+                <strong>click()</strong> para realizar interações
+                com elementos da aplicação.
+            </p>
+
+            <p>
+                Agora vamos aprender como preencher campos de texto
+                utilizando o comando <strong>type()</strong>.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⌨️
+                    </div>
+
+                    <h3>
+                        Utilizar type()
+                    </h3>
+
+                    <p>
+                        Aprender a utilizar o comando type() para
+                        inserir informações em campos de texto.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        Preencher formulários
+                    </h3>
+
+                    <p>
+                        Automatizar o preenchimento de campos
+                        utilizados em formulários.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Combinar comandos
+                    </h3>
+
+                    <p>
+                        Utilizar cy.get(), type() e outros comandos
+                        para criar fluxos completos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Criar testes realistas
+                    </h3>
+
+                    <p>
+                        Simular ações de preenchimento realizadas
+                        por usuários.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         O QUE É TYPE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é o type()?
+            </h2>
+
+            <p>
+                O <strong>type()</strong> é um comando utilizado
+                pelo Cypress para inserir texto em elementos que
+                aceitam entrada de dados.
+            </p>
+
+            <p>
+                Ele é muito utilizado para preencher campos de
+                formulários, como nome, e-mail, senha, endereço
+                e outros dados.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'input'</span>)
+.type(<span class="sql-string">'Olá Cypress!'</span>)</code></pre>
+
+            <p>
+                Nesse exemplo, o Cypress localiza um elemento
+                <strong>input</strong> e digita o texto informado.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    ⌨️ <strong>cy.get()</strong>
+                    → localiza o campo.
+                </p>
+
+                <p>
+                    ✍️ <strong>type()</strong>
+                    → insere o texto.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         SINTAXE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Sintaxe do type()
+            </h2>
+
+            <p>
+                A estrutura básica do comando é:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'seletor'</span>)
+.type(<span class="sql-string">'texto'</span>)</code></pre>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#nome'</span>)
+.type(<span class="sql-string">'Maria'</span>)</code></pre>
+
+            <p>
+                Nesse caso, o Cypress irá localizar o elemento
+                com o atributo <strong>id="nome"</strong> e inserir
+                o texto <strong>Maria</strong>.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Seletor
+                    </h3>
+
+                    <p>
+                        Define qual elemento receberá a informação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⌨️
+                    </div>
+
+                    <h3>
+                        Texto
+                    </h3>
+
+                    <p>
+                        Define o conteúdo que será digitado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         INPUT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Preenchendo um input
+            </h2>
+
+            <p>
+                Um dos usos mais comuns do <strong>type()</strong>
+                é preencher elementos <strong>input</strong>.
+            </p>
+
+            <p>
+                Considere o seguinte HTML:
+            </p>
+
+            <pre><code>&lt;input
+type="text"
+id="nome"
+
+></code></pre>
+
+            <p>
+                Podemos preencher esse campo utilizando:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#nome'</span>)
+.type(<span class="sql-string">'João da Silva'</span>)</code></pre>
+
+            <p>
+                O resultado será equivalente à ação de um usuário
+                digitando o nome no campo.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    O elemento precisa estar disponível e aceitar
+                    entrada de texto para que o comando type()
+                    consiga executar a ação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         INPUT EMAIL
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Preenchendo um campo de e-mail
+            </h2>
+
+            <p>
+                O <strong>type()</strong> também pode ser utilizado
+                para preencher campos de e-mail.
+            </p>
+
+            <p>
+                Exemplo:
+            </p>
+
+            <pre><code>&lt;input
+type="email"
+id="email"
+
+></code></pre>
+
+            <p>
+                Teste:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+.type(<span class="sql-string">'usuario@email.com'</span>)</code></pre>
+
+            <p>
+                Podemos combinar o preenchimento com uma validação:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+.type(<span class="sql-string">'usuario@email.com'</span>)
+.should(<span class="sql-string">'have.value'</span>, <span class="sql-string">'usuario@email.com'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    📝 <strong>type()</strong>
+                    → preenche o campo.
+                </p>
+
+                <p>
+                    ✅ <strong>should()</strong>
+                    → verifica o valor preenchido.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         SENHA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Preenchendo um campo de senha
+            </h2>
+
+            <p>
+                Campos do tipo <strong>password</strong> também
+                podem ser preenchidos utilizando type().
+            </p>
+
+            <pre><code>&lt;input
+type="password"
+id="senha"
+
+></code></pre>
+
+            <p>
+                No teste:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#senha'</span>)
+.type(<span class="sql-string">'Senha@123'</span>)</code></pre>
+
+            <p>
+                Um fluxo de login poderia ser:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+.type(<span class="sql-string">'usuario@email.com'</span>)
+
+cy.get(<span class="sql-string">'#senha'</span>)
+.type(<span class="sql-string">'Senha@123'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Atenção:</strong>
+
+                <p>
+                    Evite armazenar senhas reais diretamente no código
+                    dos testes. Em projetos reais, utilize estratégias
+                    apropriadas para gerenciamento de credenciais.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         FORMULARIO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Preenchendo um formulário
+            </h2>
+
+            <p>
+                Podemos utilizar vários comandos type() para preencher
+                diferentes campos de um formulário.
+            </p>
+
+            <p>
+                Imagine o seguinte formulário:
+            </p>
+
+            <pre><code>&lt;input id="nome"&gt;
+
+<input id="email">
+
+<input id="telefone"></code></pre>
+
+            <p>
+                O teste poderia ser:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#nome'</span>)
+.type(<span class="sql-string">'Maria Silva'</span>)
+
+cy.get(<span class="sql-string">'#email'</span>)
+.type(<span class="sql-string">'maria@email.com'</span>)
+
+cy.get(<span class="sql-string">'#telefone'</span>)
+.type(<span class="sql-string">'21999999999'</span>)</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        👤
+                    </div>
+
+                    <h3>
+                        Nome
+                    </h3>
+
+                    <p>
+                        Campo preenchido com o nome do usuário.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📧
+                    </div>
+
+                    <h3>
+                        E-mail
+                    </h3>
+
+                    <p>
+                        Campo preenchido com um endereço de e-mail.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📱
+                    </div>
+
+                    <h3>
+                        Telefone
+                    </h3>
+
+                    <p>
+                        Campo preenchido com um número de telefone.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         COMBINANDO COM CLICK
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Combinando type() com click()
+            </h2>
+
+            <p>
+                Em um fluxo real, frequentemente precisamos
+                preencher campos e depois clicar em um botão.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+.type(<span class="sql-string">'usuario@email.com'</span>)
+
+cy.get(<span class="sql-string">'#senha'</span>)
+.type(<span class="sql-string">'Senha@123'</span>)
+
+cy.get(<span class="sql-string">'#entrar'</span>)
+.click()</code></pre>
+
+            <p>
+                Esse fluxo representa uma ação comum em uma tela
+                de login.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🔎 Localizar
+                    → ⌨️ Preencher
+                    → 🖱️ Clicar
+                    → ✅ Validar
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         LIMPAR CAMPO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Limpando um campo antes de digitar
+            </h2>
+
+            <p>
+                Em algumas situações, o campo pode possuir um valor
+                previamente preenchido.
+            </p>
+
+            <p>
+                Podemos utilizar a opção <strong>{ force: true }</strong>
+                em situações específicas, mas para limpar o conteúdo
+                de um campo existe uma abordagem mais apropriada:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#nome'</span>)
+.clear()
+.type(<span class="sql-string">'Novo Nome'</span>)</code></pre>
+
+            <p>
+                O comando <strong>clear()</strong> remove o conteúdo
+                atual do campo antes de inserir o novo valor.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Utilize clear() quando o objetivo do teste for
+                    substituir explicitamente um valor já existente.
+                    Não é necessário limpar um campo que já está vazio.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CLEAR + TYPE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                8. clear() e type() juntos
+            </h2>
+
+            <p>
+                Uma combinação bastante comum é:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+.clear()
+.type(<span class="sql-string">'novo@email.com'</span>)</code></pre>
+
+            <p>
+                Nesse exemplo:
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🧹 <strong>clear()</strong>
+                    → remove o valor existente.
+                </p>
+
+                <p>
+                    ⌨️ <strong>type()</strong>
+                    → insere o novo valor.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         TYPE COM OPCOES
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Utilizando opções no type()
+            </h2>
+
+            <p>
+                O comando type() aceita opções que permitem controlar
+                alguns aspectos da interação.
+            </p>
+
+            <p>
+                Uma dessas opções é o <strong>delay</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#nome'</span>)
+.type(<span class="sql-string">'Maria'</span>, {
+    delay: 100
+})</code></pre>
+
+            <p>
+                Nesse caso, o Cypress adiciona um intervalo entre
+                as teclas digitadas.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Quando utilizar?</strong>
+
+                <p>
+                    Essa opção pode ser útil quando estamos testando
+                    comportamentos específicos relacionados à
+                    digitação, como componentes que respondem
+                    enquanto o usuário digita.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         FORCE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                10. A opção force
+            </h2>
+
+            <p>
+                O Cypress realiza verificações antes de interagir
+                com um elemento.
+            </p>
+
+            <p>
+                Em situações específicas, podemos encontrar um
+                elemento que está presente no DOM, mas não está
+                disponível para uma interação normal.
+            </p>
+
+            <p>
+                O comando aceita a opção:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#campo'</span>)
+.type(<span class="sql-string">'texto'</span>, {
+    force: true
+})</code></pre>
+
+            <div class="highlight">
+
+                <strong>Atenção:</strong>
+
+                <p>
+                    O uso de force: true deve ser consciente.
+                    Ele pode fazer o Cypress interagir com um
+                    elemento mesmo quando as verificações normais
+                    de interação não seriam satisfeitas.
+                </p>
+
+                <p>
+                    Antes de utilizá-lo, investigue por que o
+                    elemento não está disponível para interação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         SPECIAL CHARACTERS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Caracteres especiais
+            </h2>
+
+            <p>
+                O type() também permite utilizar sequências especiais
+                para simular determinadas teclas do teclado.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#campo'</span>)
+.type(<span class="sql-string">'Texto{enter}'</span>)</code></pre>
+
+            <p>
+                Nesse exemplo, o Cypress digita o texto e depois
+                simula a tecla Enter.
+            </p>
+
+            <p>
+                Outro exemplo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#campo'</span>)
+.type(<span class="sql-string">'Texto{backspace}'</span>)</code></pre>
+
+            <p>
+                A utilização de teclas especiais pode ser útil
+                em componentes que dependem de eventos do teclado.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Exemplo:</strong>
+
+                <p>
+                    Um campo de busca pode executar a pesquisa
+                    quando o usuário pressiona Enter.
+                </p>
+
+                <pre><code>cy.get(<span class="sql-string">'#busca'</span>)
+.type(<span class="sql-string">'Cypress{enter}'</span>)</code></pre>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         TYPE COM ASSERTION
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Validando o valor digitado
+            </h2>
+
+            <p>
+                Depois de utilizar type(), podemos verificar se
+                o valor esperado foi inserido no campo.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#nome'</span>)
+.type(<span class="sql-string">'Maria'</span>)
+.should(<span class="sql-string">'have.value'</span>, <span class="sql-string">'Maria'</span>)</code></pre>
+
+            <p>
+                Nesse exemplo, o teste verifica se o campo possui
+                exatamente o valor informado.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⌨️
+                    </div>
+
+                    <h3>
+                        type()
+                    </h3>
+
+                    <p>
+                        Insere o valor no campo.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        should()
+                    </h3>
+
+                    <p>
+                        Verifica se o valor esperado está presente.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         EXEMPLO COMPLETO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Exemplo completo
+            </h2>
+
+            <p>
+                Vamos combinar os conceitos aprendidos em um
+                pequeno teste de formulário.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Cadastro de usuário'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve preencher o formulário'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/cadastro'</span>)
+
+    cy.get(<span class="sql-string">'#nome'</span>)
+        .type(<span class="sql-string">'Maria Silva'</span>)
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .type(<span class="sql-string">'maria@email.com'</span>)
+
+    cy.get(<span class="sql-string">'#senha'</span>)
+        .type(<span class="sql-string">'Senha@123'</span>)
+
+    cy.get(<span class="sql-string">'#nome'</span>)
+        .should(<span class="sql-string">'have.value'</span>, <span class="sql-string">'Maria Silva'</span>)
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .should(<span class="sql-string">'have.value'</span>, <span class="sql-string">'maria@email.com'</span>)
+
+})
+
+})</code></pre>
+
+            <p>
+                O teste navega até a página, preenche os campos
+                e verifica os valores inseridos.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>cy.visit()</strong>
+                    → acessa a página.
+                </p>
+
+                <p>
+                    🔎 <strong>cy.get()</strong>
+                    → localiza o campo.
+                </p>
+
+                <p>
+                    ⌨️ <strong>type()</strong>
+                    → preenche o campo.
+                </p>
+
+                <p>
+                    ✅ <strong>should()</strong>
+                    → valida o resultado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CAMPOS DIFERENTES
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                14. type() em diferentes tipos de campos
+            </h2>
+
+            <p>
+                O type() pode ser utilizado em diversos elementos
+                que aceitam entrada de texto.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Elemento</th>
+                            <th>Exemplo</th>
+                            <th>Uso</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>input text</strong>
+                            </td>
+
+                            <td>
+                                <code>type()</code>
+                            </td>
+
+                            <td>
+                                Campos de texto.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>input email</strong>
+                            </td>
+
+                            <td>
+                                <code>type()</code>
+                            </td>
+
+                            <td>
+                                Endereços de e-mail.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>input password</strong>
+                            </td>
+
+                            <td>
+                                <code>type()</code>
+                            </td>
+
+                            <td>
+                                Senhas e credenciais.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>textarea</strong>
+                            </td>
+
+                            <td>
+                                <code>type()</code>
+                            </td>
+
+                            <td>
+                                Textos maiores e comentários.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         TEXTAREA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Preenchendo um textarea
+            </h2>
+
+            <p>
+                O type() também pode ser utilizado para preencher
+                elementos <strong>textarea</strong>.
+            </p>
+
+            <p>
+                HTML:
+            </p>
+
+            <pre><code>&lt;textarea id="mensagem"&gt;&lt;/textarea&gt;</code></pre>
+
+            <p>
+                Teste:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#mensagem'</span>)
+.type(<span class="sql-string">'Esta é uma mensagem de teste.'</span>)</code></pre>
+
+            <p>
+                Também podemos validar o conteúdo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#mensagem'</span>)
+.should(
+    <span class="sql-string">'have.value'</span>,
+    <span class="sql-string">'Esta é uma mensagem de teste.'</span>
+)</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+         ERROS COMUNS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns ao utilizar type()
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Seletor incorreto
+                    </h3>
+
+                    <p>
+                        O teste não encontra o campo porque o seletor
+                        utilizado não corresponde ao elemento esperado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Elemento não permite entrada
+                    </h3>
+
+                    <p>
+                        O comando é utilizado em um elemento que não
+                        aceita entrada de texto.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Usar force sem investigar
+                    </h3>
+
+                    <p>
+                        Utilizar force: true para esconder um problema
+                        de sincronização ou de implementação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Não validar o resultado
+                    </h3>
+
+                    <p>
+                        Preencher o campo sem verificar se o valor
+                        esperado realmente foi inserido.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         BOAS PRÁTICAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas com type()
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Utilize bons seletores
+                    </h3>
+
+                    <p>
+                        Prefira seletores estáveis e específicos
+                        para localizar os campos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Valide os valores
+                    </h3>
+
+                    <p>
+                        Utilize assertions quando fizer sentido
+                        verificar o conteúdo preenchido.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧹
+                    </div>
+
+                    <h3>
+                        Use clear() quando necessário
+                    </h3>
+
+                    <p>
+                        Limpe o campo explicitamente quando o teste
+                        precisar substituir um valor existente.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚠️
+                    </div>
+
+                    <h3>
+                        Evite force sem necessidade
+                    </h3>
+
+                    <p>
+                        Investigue problemas de visibilidade,
+                        estado e sincronização antes de usar force.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         FLUXO COMPLETO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Fluxo de automação com type()
+            </h2>
+
+            <p>
+                Um fluxo comum de automação pode seguir esta sequência:
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    1️⃣ <strong>Visitar a página</strong>
+                    → cy.visit()
+                </p>
+
+                <p>
+                    2️⃣ <strong>Localizar o campo</strong>
+                    → cy.get()
+                </p>
+
+                <p>
+                    3️⃣ <strong>Preencher o campo</strong>
+                    → type()
+                </p>
+
+                <p>
+                    4️⃣ <strong>Interagir com outros elementos</strong>
+                    → click()
+                </p>
+
+                <p>
+                    5️⃣ <strong>Validar o resultado</strong>
+                    → should()
+                </p>
+
+            </div>
+
+            <p>
+                Esses comandos podem ser combinados para representar
+                fluxos completos da aplicação.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         EXEMPLO LOGIN
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Exemplo: teste de login
+            </h2>
+
+            <p>
+                Vamos utilizar os comandos estudados para criar
+                um exemplo de login.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve realizar login com sucesso'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+        .type(<span class="sql-string">'usuario@email.com'</span>)
+
+    cy.get(<span class="sql-string">'[data-testid="senha"]'</span>)
+        .type(<span class="sql-string">'Senha@123'</span>)
+
+    cy.get(<span class="sql-string">'[data-testid="entrar"]'</span>)
+        .click()
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <strong>Observe:</strong>
+
+                <p>
+                    O type() é responsável pela entrada dos dados,
+                    enquanto o click() realiza a ação de envio
+                    do formulário.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CHECKLIST
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o objetivo do type().
+                </p>
+
+                <p>
+                    ☐ Sei localizar um campo utilizando cy.get().
+                </p>
+
+                <p>
+                    ☐ Sei preencher inputs com type().
+                </p>
+
+                <p>
+                    ☐ Sei preencher campos de e-mail.
+                </p>
+
+                <p>
+                    ☐ Sei preencher campos de senha.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar clear() antes de type().
+                </p>
+
+                <p>
+                    ☐ Conheço a opção delay.
+                </p>
+
+                <p>
+                    ☐ Entendi o funcionamento de force.
+                </p>
+
+                <p>
+                    ☐ Conheço o uso de teclas especiais.
+                </p>
+
+                <p>
+                    ☐ Sei validar o valor preenchido.
+                </p>
+
+                <p>
+                    ☐ Sei combinar type() com click().
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         RESUMO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ⌨️ <strong>type()</strong>
+                    → insere texto em campos de entrada.
+                </p>
+
+                <p>
+                    🔎 <strong>cy.get()</strong>
+                    → localiza o elemento que será preenchido.
+                </p>
+
+                <p>
+                    🧹 <strong>clear()</strong>
+                    → remove o conteúdo atual do campo.
+                </p>
+
+                <p>
+                    ⏱️ <strong>delay</strong>
+                    → adiciona intervalo entre as teclas digitadas.
+                </p>
+
+                <p>
+                    ⚠️ <strong>force</strong>
+                    → permite forçar a interação em situações
+                    específicas.
+                </p>
+
+                <p>
+                    ⌨️ <strong>Teclas especiais</strong>
+                    → permitem simular ações como Enter e Backspace.
+                </p>
+
+                <p>
+                    ✅ <strong>should()</strong>
+                    → permite validar o valor preenchido.
+                </p>
+
+            </div>
+
+            <p>
+                O comando type() é fundamental para automatizar
+                formulários e fluxos que dependem da entrada de
+                informações pelo usuário.
+            </p>
+
+            <p>
+                Agora que você já sabe localizar elementos e
+                preencher campos, está preparado para avançar
+                para as asserções e validações.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         QUIZ
+    ====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 17
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 17 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe utilizar o type() para preencher
+                campos, formularios e outros elementos de entrada,
+                além de combinar o comando com click(), clear()
+                e should().
+            </p>
+
+            <a href="../aulas/aula-18.html" class="cta-button">
+                Aula 18 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+     FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 17 • type()
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+
+    <script src="../assets/js/aula-17.js"></script>
+
+</body>
+
+</html>
