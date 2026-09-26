@@ -1,0 +1,2008 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 45 — Projeto Final</title>
+
+</head>
+
+<body>
+
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 45 • PROJETO FINAL
+            </span>
+
+            <h1>
+                Projeto Final
+            </h1>
+
+            <p>
+                Construa uma suíte completa de testes E2E com Cypress,
+                aplicando os principais conceitos aprendidos durante
+                toda a trilha de automação.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+         OBJETIVOS DA AULA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos do projeto
+            </h2>
+
+            <p>
+                Chegamos à última aula da trilha. Agora vamos reunir
+                os principais conhecimentos estudados e transformá-los
+                em um projeto de automação de testes completo.
+            </p>
+
+            <p>
+                O objetivo é construir uma suíte organizada, reutilizável
+                e preparada para execução local e em CI/CD.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Criar testes E2E
+                    </h3>
+
+                    <p>
+                        Automatizar cenários completos de uma aplicação
+                        utilizando Cypress.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📁
+                    </div>
+
+                    <h3>
+                        Organizar o projeto
+                    </h3>
+
+                    <p>
+                        Separar specs, fixtures, comandos e outros
+                        recursos de forma estruturada.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔗
+                    </div>
+
+                    <h3>
+                        Reutilizar código
+                    </h3>
+
+                    <p>
+                        Utilizar comandos, funções e dados compartilhados
+                        para reduzir duplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🚀
+                    </div>
+
+                    <h3>
+                        Executar no CI/CD
+                    </h3>
+
+                    <p>
+                        Preparar a suíte para execução automatizada
+                        em um pipeline.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         PROJETO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                1. O projeto
+            </h2>
+
+            <p>
+                Durante o projeto final, vamos imaginar uma aplicação
+                de e-commerce chamada <strong>QA Store</strong>.
+            </p>
+
+            <p>
+                A aplicação possui funcionalidades suficientes para
+                criarmos diferentes cenários de automação.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🛒 <strong>Aplicação:</strong>
+                    QA Store
+                </p>
+
+                <p>
+                    👤 <strong>Usuário:</strong>
+                    cadastro e autenticação
+                </p>
+
+                <p>
+                    📦 <strong>Produtos:</strong>
+                    consulta e seleção de produtos
+                </p>
+
+                <p>
+                    🛍️ <strong>Carrinho:</strong>
+                    inclusão e remoção de produtos
+                </p>
+
+                <p>
+                    💳 <strong>Checkout:</strong>
+                    preenchimento dos dados da compra
+                </p>
+
+                <p>
+                    ✅ <strong>Pedido:</strong>
+                    confirmação da compra
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         REQUISITOS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Requisitos da suíte
+            </h2>
+
+            <p>
+                Nossa suíte deverá cobrir os principais fluxos
+                funcionais da aplicação.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Módulo</th>
+                            <th>Cenário</th>
+                            <th>Resultado esperado</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                Login
+                            </td>
+
+                            <td>
+                                Login com credenciais válidas
+                            </td>
+
+                            <td>
+                                Usuário autenticado.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Login
+                            </td>
+
+                            <td>
+                                Login com senha inválida
+                            </td>
+
+                            <td>
+                                Mensagem de erro exibida.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Produtos
+                            </td>
+
+                            <td>
+                                Visualizar produto
+                            </td>
+
+                            <td>
+                                Detalhes do produto exibidos.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Carrinho
+                            </td>
+
+                            <td>
+                                Adicionar produto
+                            </td>
+
+                            <td>
+                                Produto adicionado ao carrinho.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Checkout
+                            </td>
+
+                            <td>
+                                Finalizar compra
+                            </td>
+
+                            <td>
+                                Pedido confirmado.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         ESTRUTURA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Estrutura do projeto
+            </h2>
+
+            <p>
+                Uma possível estrutura para o projeto final seria:
+            </p>
+
+            <pre><code>curso-cypress/
+
+├── cypress/
+│
+│   ├── e2e/
+│   │   ├── login.cy.js
+│   │   ├── produtos.cy.js
+│   │   ├── carrinho.cy.js
+│   │   └── checkout.cy.js
+│   │
+│   ├── fixtures/
+│   │   ├── usuario.json
+│   │   ├── produto.json
+│   │   └── checkout.json
+│   │
+│   └── support/
+│       ├── commands.js
+│       └── e2e.js
+│
+├── cypress.config.js
+├── package.json
+└── package-lock.json</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A estrutura pode variar conforme as necessidades
+                    do projeto. O mais importante é manter uma
+                    organização consistente.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         CONFIGURACAO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Configurando o Cypress
+            </h2>
+
+            <p>
+                Podemos configurar a URL principal da aplicação
+                utilizando o <strong>baseUrl</strong>.
+            </p>
+
+            <pre><code>const { defineConfig } = require(<span class="sql-string">'cypress'</span>)
+
+module.exports = defineConfig({
+
+    e2e: {
+
+        baseUrl: <span class="sql-string">'http://localhost:3000'</span>
+
+    }
+
+})</code></pre>
+
+            <p>
+                Dessa forma, os testes podem utilizar caminhos
+                relativos:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/login'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Centralizar a URL facilita a configuração do
+                    projeto e evita repetir o endereço completo
+                    em cada teste.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         FIXTURE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Criando a massa de dados
+            </h2>
+
+            <p>
+                Vamos utilizar fixtures para separar os dados
+                utilizados pelos testes.
+            </p>
+
+            <p>
+                Arquivo:
+            </p>
+
+            <pre><code>cypress/fixtures/usuario.json</code></pre>
+
+            <pre><code>{
+    <span class="sql-string">"nome"</span>: <span class="sql-string">"Maria"</span>,
+    <span class="sql-string">"email"</span>: <span class="sql-string">"maria@teste.com"</span>,
+    <span class="sql-string">"senha"</span>: <span class="sql-string">"123456"</span>
+}</code></pre>
+
+            <p>
+                Produto:
+            </p>
+
+            <pre><code>{
+    <span class="sql-string">"nome"</span>: <span class="sql-string">"Notebook"</span>,
+    <span class="sql-string">"preco"</span>: 3500
+}</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Fixtures permitem alterar os dados utilizados
+                    pelos cenários sem precisar modificar toda
+                    a lógica das specs.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         LOGIN
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Criando os testes de login
+            </h2>
+
+            <p>
+                Vamos começar pela autenticação do usuário.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+    beforeEach(() =&gt; {
+
+        cy.visit(<span class="sql-string">'/login'</span>)
+
+    })
+
+    it(<span class="sql-string">'deve realizar login com sucesso'</span>, () =&gt; {
+
+        cy.fixture(<span class="sql-string">'usuario.json'</span>).then((usuario) =&gt; {
+
+            cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+                .type(usuario.email)
+
+            cy.get(<span class="sql-string">'[data-testid="senha"]'</span>)
+                .type(usuario.senha)
+
+            cy.get(<span class="sql-string">'[data-testid="login"]'</span>)
+                .click()
+
+            cy.url()
+                .should(<span class="sql-string">'include'</span>, <span class="sql-string">'dashboard'</span>)
+
+        })
+
+    })
+
+})</code></pre>
+
+            <p>
+                Esse teste combina conceitos estudados em diversas
+                aulas: <strong>fixtures</strong>, <strong>hooks</strong>,
+                <strong>seletores</strong>, <strong>type()</strong>,
+                <strong>click()</strong> e <strong>should()</strong>.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+         TESTE NEGATIVO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Criando um cenário negativo
+            </h2>
+
+            <p>
+                Uma suíte de qualidade não deve testar somente
+                os caminhos de sucesso.
+            </p>
+
+            <p>
+                Também podemos verificar o comportamento da aplicação
+                quando informações inválidas são utilizadas.
+            </p>
+
+            <pre><code>it(<span class="sql-string">'deve exibir erro com senha inválida'</span>, () =&gt; {
+
+    cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+        .type(<span class="sql-string">'usuario@teste.com'</span>)
+
+    cy.get(<span class="sql-string">'[data-testid="senha"]'</span>)
+        .type(<span class="sql-string">'senha-incorreta'</span>)
+
+    cy.get(<span class="sql-string">'[data-testid="login"]'</span>)
+        .click()
+
+    cy.get(<span class="sql-string">'[data-testid="mensagem-erro"]'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Testes negativos ajudam a verificar se a aplicação
+                    responde corretamente diante de entradas inválidas
+                    ou condições inesperadas.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         CUSTOM COMMAND
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Criando um Custom Command
+            </h2>
+
+            <p>
+                Se vários testes precisarem realizar login, podemos
+                criar um comando personalizado.
+            </p>
+
+            <p>
+                Arquivo:
+            </p>
+
+            <pre><code>cypress/support/commands.js</code></pre>
+
+            <pre><code>Cypress.Commands.add(<span class="sql-string">'login'</span>, (email, senha) =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+        .type(email)
+
+    cy.get(<span class="sql-string">'[data-testid="senha"]'</span>)
+        .type(senha)
+
+    cy.get(<span class="sql-string">'[data-testid="login"]'</span>)
+        .click()
+
+})</code></pre>
+
+            <p>
+                Agora o teste pode utilizar:
+            </p>
+
+            <pre><code>cy.login(
+    <span class="sql-string">'usuario@teste.com'</span>,
+    <span class="sql-string">'123456'</span>
+)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Custom Commands são úteis para centralizar
+                    comportamentos que aparecem em diferentes testes.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         PRODUTOS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Testando produtos
+            </h2>
+
+            <p>
+                Depois da autenticação, podemos criar cenários
+                relacionados aos produtos.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Produtos'</span>, () =&gt; {
+
+    beforeEach(() =&gt; {
+
+        cy.login(
+            <span class="sql-string">'usuario@teste.com'</span>,
+            <span class="sql-string">'123456'</span>
+        )
+
+        cy.visit(<span class="sql-string">'/produtos'</span>)
+
+    })
+
+    it(<span class="sql-string">'deve exibir a lista de produtos'</span>, () =&gt; {
+
+        cy.get(<span class="sql-string">'[data-testid="produto"]'</span>)
+            .should(<span class="sql-string">'exist'</span>)
+
+    })
+
+})</code></pre>
+
+            <p>
+                Podemos também validar informações específicas:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-testid="produto-nome"]'</span>)
+    .should(<span class="sql-string">'contain'</span>, <span class="sql-string">'Notebook'</span>)
+
+cy.get(<span class="sql-string">'[data-testid="produto-preco"]'</span>)
+    .should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+        </section>
+
+
+        <!-- =====================================================
+         CARRINHO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Testando o carrinho
+            </h2>
+
+            <p>
+                Agora vamos automatizar a inclusão de um produto
+                no carrinho.
+            </p>
+
+            <pre><code>it(<span class="sql-string">'deve adicionar produto ao carrinho'</span>, () =&gt; {
+
+    cy.login(
+        <span class="sql-string">'usuario@teste.com'</span>,
+        <span class="sql-string">'123456'</span>
+    )
+
+    cy.visit(<span class="sql-string">'/produtos'</span>)
+
+    cy.get(<span class="sql-string">'[data-testid="adicionar-carrinho"]'</span>)
+        .first()
+        .click()
+
+    cy.get(<span class="sql-string">'[data-testid="contador-carrinho"]'</span>)
+        .should(<span class="sql-string">'contain'</span>, <span class="sql-string">'1'</span>)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Observe a sequência do cenário:
+                </p>
+
+                <p>
+                    Login → Produtos → Adicionar → Validar.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         CHECKOUT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Testando o checkout
+            </h2>
+
+            <p>
+                O checkout representa um fluxo E2E completo,
+                envolvendo diferentes páginas e ações.
+            </p>
+
+            <pre><code>it(<span class="sql-string">'deve finalizar uma compra'</span>, () =&gt; {
+
+    cy.login(
+        <span class="sql-string">'usuario@teste.com'</span>,
+        <span class="sql-string">'123456'</span>
+    )
+
+    cy.visit(<span class="sql-string">'/produtos'</span>)
+
+    cy.get(<span class="sql-string">'[data-testid="adicionar-carrinho"]'</span>)
+        .first()
+        .click()
+
+    cy.get(<span class="sql-string">'[data-testid="carrinho"]'</span>)
+        .click()
+
+    cy.get(<span class="sql-string">'[data-testid="checkout"]'</span>)
+        .click()
+
+    cy.get(<span class="sql-string">'[data-testid="nome"]'</span>)
+        .type(<span class="sql-string">'Maria'</span>)
+
+    cy.get(<span class="sql-string">'[data-testid="endereco"]'</span>)
+        .type(<span class="sql-string">'Rua Cypress, 100'</span>)
+
+    cy.get(<span class="sql-string">'[data-testid="finalizar"]'</span>)
+        .click()
+
+    cy.get(<span class="sql-string">'[data-testid="pedido-confirmado"]'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Esse é um exemplo de teste E2E porque valida
+                    uma jornada completa do usuário, desde a
+                    autenticação até a conclusão da compra.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         INTERCEPT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Utilizando cy.intercept()
+            </h2>
+
+            <p>
+                Também podemos controlar requisições durante
+                os testes utilizando <strong>cy.intercept()</strong>.
+            </p>
+
+            <pre><code>cy.intercept(
+    <span class="sql-string">'GET'</span>,
+    <span class="sql-string">'/api/produtos'</span>
+).as(<span class="sql-string">'listarProdutos'</span>)
+
+cy.visit(<span class="sql-string">'/produtos'</span>)
+
+cy.wait(<span class="sql-string">'@listarProdutos'</span>)
+    .its(<span class="sql-string">'response.statusCode'</span>)
+    .should(<span class="sql-string">'eq'</span>, 200)</code></pre>
+
+            <p>
+                Dessa maneira podemos sincronizar o teste com uma
+                requisição específica e validar seu comportamento.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    Interceptação é especialmente útil em cenários
+                    que dependem de APIs.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         API
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Adicionando um teste de API
+            </h2>
+
+            <p>
+                Além dos testes E2E de interface, podemos utilizar
+                o Cypress para validar endpoints diretamente.
+            </p>
+
+            <pre><code>it(<span class="sql-string">'deve retornar produtos'</span>, () =&gt; {
+
+    cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/api/produtos'</span>)
+        .then((response) =&gt; {
+
+            expect(response.status)
+                .to.eq(200)
+
+            expect(response.body)
+                .to.be.an(<span class="sql-string">'array'</span>)
+
+        })
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Assim, o projeto pode combinar testes de interface
+                    e testes de API em uma mesma estratégia de automação.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         PAGE OBJECT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Organizando com Page Objects
+            </h2>
+
+            <p>
+                Em projetos maiores, podemos encapsular elementos
+                e comportamentos de uma página.
+            </p>
+
+            <pre><code>class LoginPage {
+
+    email = <span class="sql-string">'[data-testid="email"]'</span>
+
+    senha = <span class="sql-string">'[data-testid="senha"]'</span>
+
+    botaoLogin = <span class="sql-string">'[data-testid="login"]'</span>
+
+    acessar() {
+
+        cy.visit(<span class="sql-string">'/login'</span>)
+
+    }
+
+    preencherEmail(email) {
+
+        cy.get(this.email)
+            .type(email)
+
+    }
+
+    preencherSenha(senha) {
+
+        cy.get(this.senha)
+            .type(senha)
+
+    }
+
+    entrar() {
+
+        cy.get(this.botaoLogin)
+            .click()
+
+    }
+
+}
+
+export default LoginPage</code></pre>
+
+            <p>
+                O teste pode então utilizar a classe:
+            </p>
+
+            <pre><code>const loginPage = new LoginPage()
+
+loginPage.acessar()
+
+loginPage.preencherEmail(<span class="sql-string">'usuario@teste.com'</span>)
+
+loginPage.preencherSenha(<span class="sql-string">'123456'</span>)
+
+loginPage.entrar()</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A organização deve ser adequada ao tamanho e
+                    às necessidades do projeto. O objetivo principal
+                    é facilitar manutenção e reutilização.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         DADOS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Separando dados da lógica
+            </h2>
+
+            <p>
+                O projeto pode combinar fixtures e comandos
+                personalizados.
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuario.json'</span>).then((usuario) =&gt; {
+
+    cy.login(
+        usuario.email,
+        usuario.senha
+    )
+
+})</code></pre>
+
+            <p>
+                Dessa maneira, os dados ficam armazenados no fixture,
+                enquanto o comportamento permanece na spec ou nos
+                comandos reutilizáveis.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>Dados</strong>
+                    → fixtures.
+                </p>
+
+                <p>
+                    <strong>Comportamentos reutilizáveis</strong>
+                    → Custom Commands.
+                </p>
+
+                <p>
+                    <strong>Cenários</strong>
+                    → Specs.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         ASSERTIONS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                16. Criando assertions significativas
+            </h2>
+
+            <p>
+                Um teste não deve apenas executar ações. Ele precisa
+                verificar se o resultado esperado realmente aconteceu.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-testid="pedido-confirmado"]'</span>)
+    .should(<span class="sql-string">'be.visible'</span>)
+
+cy.get(<span class="sql-string">'[data-testid="numero-pedido"]'</span>)
+    .should(<span class="sql-string">'not.be.empty'</span>)
+
+cy.url()
+    .should(<span class="sql-string">'include'</span>, <span class="sql-string">'pedido'</span>)</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        👀
+                    </div>
+
+                    <h3>
+                        Visibilidade
+                    </h3>
+
+                    <p>
+                        Verificar se um elemento está visível.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        Conteúdo
+                    </h3>
+
+                    <p>
+                        Validar textos e mensagens apresentadas.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔗
+                    </div>
+
+                    <h3>
+                        URL
+                    </h3>
+
+                    <p>
+                        Validar a navegação realizada pelo usuário.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📡
+                    </div>
+
+                    <h3>
+                        Response
+                    </h3>
+
+                    <p>
+                        Validar status e dados retornados por APIs.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         SCREENSHOT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                17. Adicionando evidências
+            </h2>
+
+            <p>
+                Também podemos gerar screenshots para registrar
+                pontos importantes do fluxo.
+            </p>
+
+            <pre><code>cy.screenshot(<span class="sql-string">'pedido-confirmado'</span>)</code></pre>
+
+            <p>
+                Em conjunto com os recursos do CI/CD, essas evidências
+                podem ser armazenadas como artefatos.
+            </p>
+
+            <pre><code>Teste
+  ↓
+Execução
+  ↓
+Resultado
+  ↓
+Screenshot / Vídeo
+  ↓
+Artefato
+  ↓
+Relatório</code></pre>
+
+        </section>
+
+
+        <!-- =====================================================
+         TAGS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                18. Organizando a suíte
+            </h2>
+
+            <p>
+                Conforme a quantidade de testes aumenta, a organização
+                das specs se torna importante.
+            </p>
+
+            <pre><code>cypress/e2e/
+
+├── login.cy.js
+│
+├── produtos.cy.js
+│
+├── carrinho.cy.js
+│
+├── checkout.cy.js
+│
+└── api.cy.js</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Cada arquivo pode representar um domínio funcional
+                    da aplicação, tornando a suíte mais fácil de
+                    navegar e manter.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         EXECUCAO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                19. Executando o projeto
+            </h2>
+
+            <p>
+                Para abrir a interface do Cypress:
+            </p>
+
+            <pre><code>npx cypress open</code></pre>
+
+            <p>
+                Para executar os testes em modo headless:
+            </p>
+
+            <pre><code>npx cypress run</code></pre>
+
+            <p>
+                Para executar uma spec específica:
+            </p>
+
+            <pre><code>npx cypress run --spec <span class="sql-string">'cypress/e2e/login.cy.js'</span></code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A execução headless é especialmente útil em
+                    pipelines de CI/CD.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         CI
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                20. Executando no CI/CD
+            </h2>
+
+            <p>
+                Depois que a suíte estiver funcionando localmente,
+                podemos executá-la automaticamente em uma pipeline.
+            </p>
+
+            <pre><code>name: Cypress Tests
+
+on:
+
+  push:
+
+  pull_request:
+
+jobs:
+
+  cypress:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Executar Cypress
+        run: npx cypress run</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O pipeline pode ser expandido para armazenar
+                    screenshots, vídeos e relatórios como artefatos.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         FLUXO COMPLETO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                21. Fluxo completo do projeto
+            </h2>
+
+            <p>
+                Podemos representar toda a estratégia construída
+                durante o curso da seguinte maneira:
+            </p>
+
+            <pre><code>Repositório
+     ↓
+Instalação
+     ↓
+Aplicação
+     ↓
+Cypress
+     ↓
+Specs
+     ↓
+Fixtures
+     ↓
+Custom Commands
+     ↓
+Testes E2E
+     ↓
+Assertions
+     ↓
+API / Intercept
+     ↓
+Execução Headless
+     ↓
+CI/CD
+     ↓
+Screenshots / Vídeos
+     ↓
+Relatórios
+     ↓
+Análise dos resultados</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Esse fluxo reúne os principais conceitos
+                    apresentados ao longo das 45 aulas.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         DESAFIO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                22. Desafio final
+            </h2>
+
+            <p>
+                Agora é sua vez de construir uma suíte completa.
+            </p>
+
+            <p>
+                Crie pelo menos os seguintes cenários:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Login
+                    </h3>
+
+                    <p>
+                        Login válido e login inválido.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🛒
+                    </div>
+
+                    <h3>
+                        Carrinho
+                    </h3>
+
+                    <p>
+                        Adicionar e remover produtos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        💳
+                    </div>
+
+                    <h3>
+                        Checkout
+                    </h3>
+
+                    <p>
+                        Preencher dados e finalizar uma compra.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📡
+                    </div>
+
+                    <h3>
+                        API
+                    </h3>
+
+                    <p>
+                        Validar pelo menos um endpoint da aplicação.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>Requisito adicional:</strong>
+                    utilize pelo menos um fixture, um Custom Command,
+                    uma interceptação e uma evidência de execução.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         CHECKLIST PROJETO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist do projeto
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Configurei o Cypress.
+                </p>
+
+                <p>
+                    ☐ Configurei o baseUrl.
+                </p>
+
+                <p>
+                    ☐ Criei uma estrutura organizada de specs.
+                </p>
+
+                <p>
+                    ☐ Criei fixtures para os dados de teste.
+                </p>
+
+                <p>
+                    ☐ Criei testes de login.
+                </p>
+
+                <p>
+                    ☐ Criei cenários positivos e negativos.
+                </p>
+
+                <p>
+                    ☐ Criei testes para produtos.
+                </p>
+
+                <p>
+                    ☐ Criei testes para o carrinho.
+                </p>
+
+                <p>
+                    ☐ Criei um cenário completo de checkout.
+                </p>
+
+                <p>
+                    ☐ Utilizei assertions.
+                </p>
+
+                <p>
+                    ☐ Utilizei um Custom Command.
+                </p>
+
+                <p>
+                    ☐ Utilizei cy.intercept().
+                </p>
+
+                <p>
+                    ☐ Criei pelo menos um teste de API.
+                </p>
+
+                <p>
+                    ☐ Adicionei screenshots ou outras evidências.
+                </p>
+
+                <p>
+                    ☐ Executei os testes em modo headless.
+                </p>
+
+                <p>
+                    ☐ Preparei a execução no CI/CD.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         BOAS PRATICAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas para o projeto final
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Teste comportamentos
+                    </h3>
+
+                    <p>
+                        Concentre os testes no comportamento esperado
+                        da aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏷️
+                    </div>
+
+                    <h3>
+                        Utilize seletores estáveis
+                    </h3>
+
+                    <p>
+                        Prefira atributos específicos para automação,
+                        como data-testid.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Evite duplicação
+                    </h3>
+
+                    <p>
+                        Utilize fixtures, commands e outras estratégias
+                        de reutilização quando fizer sentido.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧹
+                    </div>
+
+                    <h3>
+                        Mantenha os testes simples
+                    </h3>
+
+                    <p>
+                        Evite cenários excessivamente grandes e difíceis
+                        de diagnosticar.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Crie assertions claras
+                    </h3>
+
+                    <p>
+                        Cada teste deve verificar resultados relevantes
+                        para o cenário.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🚀
+                    </div>
+
+                    <h3>
+                        Pense no CI/CD
+                    </h3>
+
+                    <p>
+                        Garanta que a suíte possa ser executada
+                        automaticamente.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         O QUE FOI APRENDIDO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que você aprendeu nesta trilha?
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🧪 <strong>Testes de software</strong>
+                    → fundamentos da automação e dos testes E2E.
+                </p>
+
+                <p>
+                    ⚙️ <strong>Cypress</strong>
+                    → instalação, configuração e execução.
+                </p>
+
+                <p>
+                    🖱️ <strong>Comandos</strong>
+                    → visit, get, click, type e navegação.
+                </p>
+
+                <p>
+                    ✅ <strong>Assertions</strong>
+                    → validação dos resultados.
+                </p>
+
+                <p>
+                    📁 <strong>Fixtures</strong>
+                    → organização da massa de dados.
+                </p>
+
+                <p>
+                    📡 <strong>API</strong>
+                    → request, intercept e mocks.
+                </p>
+
+                <p>
+                    ♻️ <strong>Boas práticas</strong>
+                    → commands, hooks, Page Objects e seletores.
+                </p>
+
+                <p>
+                    🚀 <strong>CI/CD</strong>
+                    → execução headless e pipelines.
+                </p>
+
+                <p>
+                    📊 <strong>Evidências</strong>
+                    → screenshots, vídeos e relatórios.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         RESULTADO FINAL
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Resultado esperado
+            </h2>
+
+            <p>
+                Ao finalizar este projeto, você deverá possuir uma
+                suíte de testes capaz de validar diferentes fluxos
+                de uma aplicação e executar esses cenários de maneira
+                automatizada.
+            </p>
+
+            <pre><code>QA Store
+
+├── Login
+│   ├── Login válido
+│   └── Login inválido
+│
+├── Produtos
+│   ├── Listagem
+│   └── Detalhes
+│
+├── Carrinho
+│   ├── Adicionar
+│   └── Remover
+│
+├── Checkout
+│   └── Finalizar compra
+│
+├── API
+│   └── Produtos
+│
+└── CI/CD
+    ├── Execução
+    ├── Evidências
+    └── Relatórios</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O objetivo não é apenas possuir muitos testes,
+                    mas construir uma suíte organizada, confiável
+                    e fácil de manter.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         CHECKLIST FINAL
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist final da trilha
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Sei explicar o que são testes automatizados.
+                </p>
+
+                <p>
+                    ☐ Entendo os principais tipos de testes.
+                </p>
+
+                <p>
+                    ☐ Sei instalar e configurar o Cypress.
+                </p>
+
+                <p>
+                    ☐ Sei criar specs.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar os principais comandos Cypress.
+                </p>
+
+                <p>
+                    ☐ Sei trabalhar com assertions.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar fixtures e massa de dados.
+                </p>
+
+                <p>
+                    ☐ Sei testar APIs.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar cy.intercept().
+                </p>
+
+                <p>
+                    ☐ Sei criar Custom Commands.
+                </p>
+
+                <p>
+                    ☐ Entendo hooks e organização dos testes.
+                </p>
+
+                <p>
+                    ☐ Conheço estratégias de organização e Page Objects.
+                </p>
+
+                <p>
+                    ☐ Sei executar Cypress em modo headless.
+                </p>
+
+                <p>
+                    ☐ Sei integrar Cypress com CI/CD.
+                </p>
+
+                <p>
+                    ☐ Sei trabalhar com screenshots, vídeos e relatórios.
+                </p>
+
+                <p>
+                    ☐ Consigo construir uma suíte E2E completa.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         RESUMO FINAL
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🧪 <strong>Automação</strong>
+                    → transforma cenários manuais em verificações
+                    executáveis automaticamente.
+                </p>
+
+                <p>
+                    🧩 <strong>Cypress</strong>
+                    → fornece recursos para testes de interface,
+                    API e integração.
+                </p>
+
+                <p>
+                    📁 <strong>Organização</strong>
+                    → mantém o projeto sustentável.
+                </p>
+
+                <p>
+                    ♻️ <strong>Reutilização</strong>
+                    → reduz duplicação e facilita manutenção.
+                </p>
+
+                <p>
+                    🔎 <strong>Assertions</strong>
+                    → confirmam se o comportamento esperado aconteceu.
+                </p>
+
+                <p>
+                    📡 <strong>API e interceptação</strong>
+                    → permitem controlar e validar comunicações.
+                </p>
+
+                <p>
+                    🚀 <strong>CI/CD</strong>
+                    → permite executar a suíte automaticamente.
+                </p>
+
+                <p>
+                    📊 <strong>Evidências</strong>
+                    → ajudam a analisar os resultados das execuções.
+                </p>
+
+                <p>
+                    🏆 <strong>Projeto final</strong>
+                    → reúne todos esses conceitos em uma suíte
+                    completa de testes E2E.
+                </p>
+
+            </div>
+
+            <p>
+                Parabéns! Você chegou ao final da trilha de Cypress.
+            </p>
+
+            <p>
+                A partir daqui, o próximo passo é continuar praticando,
+                expandindo sua suíte de testes e aplicando esses
+                conhecimentos em projetos reais.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+         QUIZ
+    ====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 45
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         CTA FINAL
+    ====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                🎉 Trilha concluída!
+            </h2>
+
+            <p>
+                Você chegou ao final do Curso de Cypress. Agora é
+                hora de continuar praticando, criar novos cenários
+                e evoluir sua suíte de automação.
+            </p>
+
+            <a href="../index.html" class="cta-button">
+                Voltar para a trilha →
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+     FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 45 • Projeto Final • E2E • API • CI/CD
+        </p>
+
+    </footer>
+
+
+    <!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-45.js"></script>
+
+</body>
+
+</html>
