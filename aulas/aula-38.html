@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <title>Aula 38 — Page Objects</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 38 • PAGE OBJECTS
+            </span>
+
+            <h1>
+                Page Objects
+            </h1>
+
+            <p>
+                Aprenda a organizar páginas, elementos e comportamentos
+                reutilizáveis para criar testes Cypress mais estruturados
+                e fáceis de manter.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS DA AULA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Na aula anterior, aprendemos como utilizar hooks para
+                organizar a preparação e a finalização dos testes.
+            </p>
+
+            <p>
+                Agora vamos conhecer o padrão <strong>Page Object</strong>
+                e entender como separar os elementos e comportamentos
+                das páginas da lógica dos cenários de teste.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📄
+                    </div>
+
+                    <h3>
+                        Entender Page Objects
+                    </h3>
+
+                    <p>
+                        Compreender o conceito e o objetivo desse
+                        padrão de organização.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Organizar elementos
+                    </h3>
+
+                    <p>
+                        Centralizar seletores e elementos utilizados
+                        pelas páginas.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚙️
+                    </div>
+
+                    <h3>
+                        Criar métodos
+                    </h3>
+
+                    <p>
+                        Encapsular comportamentos reutilizáveis
+                        dentro dos Page Objects.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Facilitar manutenção
+                    </h3>
+
+                    <p>
+                        Reduzir alterações repetidas quando a
+                        interface da aplicação muda.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE É PAGE OBJECT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é Page Object?
+            </h2>
+
+            <p>
+                Page Object é um padrão de organização utilizado
+                para representar uma página ou parte da aplicação
+                dentro do código de automação.
+            </p>
+
+            <p>
+                A ideia principal é separar os detalhes de interação
+                com a interface da lógica que descreve o cenário
+                de teste.
+            </p>
+
+            <pre><code>class LoginPage {
+
+visitar() {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+}
+
+preencherEmail(email) {
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .type(email)
+
+}
+
+}</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    📄 <strong>Page Object</strong>
+                    → representa uma página ou componente da aplicação.
+                </p>
+
+                <p>
+                    🎯 <strong>Elementos</strong>
+                    → contém referências aos elementos utilizados
+                    durante a interação.
+                </p>
+
+                <p>
+                    ⚙️ <strong>Métodos</strong>
+                    → representam ações que podem ser executadas
+                    naquela página.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PROBLEMA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. O problema da duplicação
+            </h2>
+
+            <p>
+                Imagine que vários testes precisam realizar login.
+                Sem uma estratégia de organização, podemos repetir
+                os mesmos seletores em diferentes arquivos.
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.get(<span class="sql-string">'#email'</span>)
+.type(<span class="sql-string">'usuario@teste.com'</span>)
+
+cy.get(<span class="sql-string">'#senha'</span>)
+.type(<span class="sql-string">'123456'</span>)
+
+cy.get(<span class="sql-string">'#login'</span>)
+.click()</code></pre>
+
+            <p>
+                O mesmo código pode acabar aparecendo em vários
+                cenários.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    Se o seletor <strong>#email</strong> mudar para
+                    outro identificador, vários testes poderão
+                    precisar ser alterados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     SOLUÇÃO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Centralizando comportamentos
+            </h2>
+
+            <p>
+                Com um Page Object, podemos centralizar os elementos
+                e ações relacionados à página.
+            </p>
+
+            <pre><code>class LoginPage {
+
+visitar() {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+}
+
+preencherEmail(email) {
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .type(email)
+
+}
+
+preencherSenha(senha) {
+
+    cy.get(<span class="sql-string">'#senha'</span>)
+        .type(senha)
+
+}
+
+clicarLogin() {
+
+    cy.get(<span class="sql-string">'#login'</span>)
+        .click()
+
+}
+
+}
+
+export default LoginPage</code></pre>
+
+            <p>
+                Agora o teste pode utilizar os métodos da página
+                em vez de conhecer todos os detalhes dos seletores.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     ESTRUTURA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Estrutura de pastas
+            </h2>
+
+            <p>
+                Podemos criar uma pasta específica para armazenar
+                os Page Objects.
+            </p>
+
+            <pre><code>curso-cypress/
+
+├── cypress/
+│
+├── e2e/
+│ └── login.cy.js
+│
+├── fixtures/
+│ └── usuario.json
+│
+├── pages/
+│ └── LoginPage.js
+│
+└── support/
+
+├── cypress.config.js
+└── package.json</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Uma estrutura organizada facilita a localização
+                    dos arquivos responsáveis por representar
+                    cada página.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PRIMEIRO PAGE OBJECT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Criando o primeiro Page Object
+            </h2>
+
+            <p>
+                Vamos criar um arquivo chamado:
+            </p>
+
+            <pre><code>cypress/pages/LoginPage.js</code></pre>
+
+            <p>
+                Dentro dele podemos representar a página de login:
+            </p>
+
+            <pre><code>class LoginPage {
+
+visitar() {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+}
+
+preencherEmail(email) {
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .type(email)
+
+}
+
+preencherSenha(senha) {
+
+    cy.get(<span class="sql-string">'#senha'</span>)
+        .type(senha)
+
+}
+
+clicarLogin() {
+
+    cy.get(<span class="sql-string">'#login'</span>)
+        .click()
+
+}
+
+}
+
+export default LoginPage</code></pre>
+
+            <p>
+                O objeto possui métodos que representam as ações
+                disponíveis na página.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     IMPORT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Importando o Page Object
+            </h2>
+
+            <p>
+                Depois de criar o Page Object, precisamos importá-lo
+                no arquivo da spec.
+            </p>
+
+            <pre><code>import LoginPage from <span class="sql-string">'../pages/LoginPage'</span></code></pre>
+
+            <p>
+                Podemos então criar uma instância:
+            </p>
+
+            <pre><code>const loginPage = new LoginPage()</code></pre>
+
+            <p>
+                Agora o teste possui acesso aos métodos definidos
+                na classe.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     TESTE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Utilizando o Page Object no teste
+            </h2>
+
+            <p>
+                O cenário de login pode ficar mais simples:
+            </p>
+
+            <pre><code>import LoginPage from <span class="sql-string">'../pages/LoginPage'</span>
+
+const loginPage = new LoginPage()
+
+describe(<span class="sql-string">'Login'</span>, () => {
+
+it(<span class="sql-string">'deve realizar login com sucesso'</span>, () =&gt; {
+
+    loginPage.visitar()
+
+    loginPage.preencherEmail(
+        <span class="sql-string">'usuario@teste.com'</span>
+    )
+
+    loginPage.preencherSenha(
+        <span class="sql-string">'123456'</span>
+    )
+
+    loginPage.clicarLogin()
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O teste agora descreve melhor o comportamento
+                    esperado e possui menos detalhes de implementação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     MÉTODO LOGIN
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Criando métodos de alto nível
+            </h2>
+
+            <p>
+                Também podemos combinar várias ações em um único
+                método.
+            </p>
+
+            <pre><code>class LoginPage {
+
+visitar() {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+}
+
+login(email, senha) {
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .type(email)
+
+    cy.get(<span class="sql-string">'#senha'</span>)
+        .type(senha)
+
+    cy.get(<span class="sql-string">'#login'</span>)
+        .click()
+
+}
+
+}
+
+export default LoginPage</code></pre>
+
+            <p>
+                O teste pode então utilizar apenas:
+            </p>
+
+            <pre><code>loginPage.visitar()
+
+loginPage.login(
+<span class="sql-string">'usuario@teste.com'</span>,
+<span class="sql-string">'123456'</span>
+)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Métodos de alto nível podem representar ações
+                    completas do usuário, como realizar login,
+                    cadastrar um produto ou finalizar uma compra.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     SELETORES
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Centralizando seletores
+            </h2>
+
+            <p>
+                Uma das vantagens do Page Object é concentrar
+                os seletores relacionados à página.
+            </p>
+
+            <pre><code>class LoginPage {
+
+elementos = {
+
+    email: <span class="sql-string">'#email'</span>,
+
+    senha: <span class="sql-string">'#senha'</span>,
+
+    login: <span class="sql-string">'#login'</span>
+
+}
+
+}</code></pre>
+
+            <p>
+                Podemos utilizar esses seletores nos métodos:
+            </p>
+
+            <pre><code>preencherEmail(email) {
+
+cy.get(this.elementos.email)
+    .type(email)
+
+}
+
+preencherSenha(senha) {
+
+cy.get(this.elementos.senha)
+    .type(senha)
+
+}
+
+clicarLogin() {
+
+cy.get(this.elementos.login)
+    .click()
+
+}</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Dessa maneira, uma alteração de seletor pode
+                    ser concentrada no Page Object.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     DATA TESTID
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Page Objects com data-testid
+            </h2>
+
+            <p>
+                Quando a aplicação utiliza atributos próprios para
+                automação, podemos centralizar esses seletores.
+            </p>
+
+            <pre><code>class LoginPage {
+
+elementos = {
+
+    email: <span class="sql-string">'[data-testid="email"]'</span>,
+
+    senha: <span class="sql-string">'[data-testid="senha"]'</span>,
+
+    login: <span class="sql-string">'[data-testid="login"]'</span>
+
+}
+
+}</code></pre>
+
+            <p>
+                Os métodos continuam utilizando os seletores
+                definidos no objeto:
+            </p>
+
+            <pre><code>login(email, senha) {
+
+cy.get(this.elementos.email)
+    .type(email)
+
+cy.get(this.elementos.senha)
+    .type(senha)
+
+cy.get(this.elementos.login)
+    .click()
+
+}</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A estratégia de seletores deve ser consistente
+                    em todo o projeto.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     FIXTURE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Page Object com fixtures
+            </h2>
+
+            <p>
+                Podemos combinar Page Objects com fixtures para
+                separar comportamento e dados.
+            </p>
+
+            <p>
+                Fixture:
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"email"</span>: <span class="sql-string">"usuario@teste.com"</span>,
+<span class="sql-string">"senha"</span>: <span class="sql-string">"123456"</span>
+
+}</code></pre>
+
+            <p>
+                Teste:
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuario.json'</span>)
+.then((usuario) =&gt; {
+
+    loginPage.visitar()
+
+    loginPage.login(
+        usuario.email,
+        usuario.senha
+    )
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O fixture armazena os dados, enquanto o Page Object
+                    concentra as interações com a página.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PAGE OBJECT E HOOKS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Page Objects com hooks
+            </h2>
+
+            <p>
+                Page Objects também podem ser utilizados em conjunto
+                com hooks.
+            </p>
+
+            <pre><code>const loginPage = new LoginPage()
+
+beforeEach(() => {
+
+loginPage.visitar()
+
+})
+
+it(<span class="sql-string">'deve realizar login'</span>, () => {
+
+loginPage.login(
+    <span class="sql-string">'usuario@teste.com'</span>,
+    <span class="sql-string">'123456'</span>
+)
+
+})</code></pre>
+
+            <p>
+                O hook prepara a página e o teste executa o cenário.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     MAIS DE UMA PÁGINA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Trabalhando com várias páginas
+            </h2>
+
+            <p>
+                Uma aplicação pode possuir vários Page Objects.
+            </p>
+
+            <pre><code>cypress/
+
+└── pages/
+
+├── LoginPage.js
+
+├── DashboardPage.js
+
+├── ProdutoPage.js
+
+├── CarrinhoPage.js
+
+└── CheckoutPage.js</code></pre>
+
+            <p>
+                Cada classe representa uma área ou página da aplicação.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        LoginPage
+                    </h3>
+
+                    <p>
+                        Responsável pelas interações da página
+                        de autenticação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏠
+                    </div>
+
+                    <h3>
+                        DashboardPage
+                    </h3>
+
+                    <p>
+                        Representa os elementos e ações do dashboard.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🛒
+                    </div>
+
+                    <h3>
+                        CarrinhoPage
+                    </h3>
+
+                    <p>
+                        Centraliza as ações relacionadas ao carrinho.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        💳
+                    </div>
+
+                    <h3>
+                        CheckoutPage
+                    </h3>
+
+                    <p>
+                        Representa o processo de finalização da compra.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     FLUXO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Page Object e fluxo do usuário
+            </h2>
+
+            <p>
+                Podemos combinar diferentes Page Objects para
+                representar um fluxo completo.
+            </p>
+
+            <pre><code>loginPage.login(
+<span class="sql-string">'usuario@teste.com'</span>,
+<span class="sql-string">'123456'</span>
+
+)
+
+produtoPage.selecionarProduto(
+<span class="sql-string">'Notebook'</span>
+)
+
+carrinhoPage.abrir()
+
+carrinhoPage.finalizarCompra()
+
+checkoutPage.confirmar()</code></pre>
+
+            <p>
+                O cenário passa a representar o comportamento do
+                usuário enquanto os detalhes de implementação
+                permanecem nas classes.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    O objetivo não é simplesmente reduzir linhas de
+                    código, mas criar uma separação clara entre
+                    comportamento do teste e detalhes da interface.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ASSERTIONS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Assertions dentro ou fora do Page Object?
+            </h2>
+
+            <p>
+                Uma decisão importante é definir onde colocar
+                as validações.
+            </p>
+
+            <p>
+                Uma abordagem é manter o Page Object responsável
+                principalmente pelas interações:
+            </p>
+
+            <pre><code>login() {
+
+cy.get(<span class="sql-string">'#email'</span>)
+    .type(email)
+
+cy.get(<span class="sql-string">'#senha'</span>)
+    .type(senha)
+
+cy.get(<span class="sql-string">'#login'</span>)
+    .click()
+
+}</code></pre>
+
+            <p>
+                E manter a validação no teste:
+            </p>
+
+            <pre><code>loginPage.login(email, senha)
+
+cy.url()
+.should(<span class="sql-string">'include'</span>, <span class="sql-string">'dashboard'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Essa separação pode deixar o cenário mais explícito,
+                    especialmente quando diferentes testes precisam
+                    validar resultados diferentes após a mesma ação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PAGE OBJECT COMPLETO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Exemplo completo
+            </h2>
+
+            <p>
+                Vamos criar um Page Object completo para uma página
+                de login.
+            </p>
+
+            <pre><code>class LoginPage {
+
+elementos = {
+
+    email: <span class="sql-string">'[data-testid="email"]'</span>,
+
+    senha: <span class="sql-string">'[data-testid="senha"]'</span>,
+
+    login: <span class="sql-string">'[data-testid="login"]'</span>,
+
+    mensagem: <span class="sql-string">'[data-testid="mensagem"]'</span>
+
+}
+
+visitar() {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+}
+
+preencherEmail(email) {
+
+    cy.get(this.elementos.email)
+        .type(email)
+
+}
+
+preencherSenha(senha) {
+
+    cy.get(this.elementos.senha)
+        .type(senha)
+
+}
+
+clicarLogin() {
+
+    cy.get(this.elementos.login)
+        .click()
+
+}
+
+login(email, senha) {
+
+    this.preencherEmail(email)
+
+    this.preencherSenha(senha)
+
+    this.clicarLogin()
+
+}
+
+}
+
+export default LoginPage</code></pre>
+
+            <p>
+                E agora podemos utilizá-lo na spec:
+            </p>
+
+            <pre><code>import LoginPage from <span class="sql-string">'../pages/LoginPage'</span>
+
+const loginPage = new LoginPage()
+
+describe(<span class="sql-string">'Login'</span>, () => {
+
+it(<span class="sql-string">'deve realizar login com sucesso'</span>, () =&gt; {
+
+    loginPage.visitar()
+
+    loginPage.login(
+        <span class="sql-string">'usuario@teste.com'</span>,
+        <span class="sql-string">'123456'</span>
+    )
+
+    cy.url()
+        .should(<span class="sql-string">'include'</span>, <span class="sql-string">'dashboard'</span>)
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A spec descreve o cenário, enquanto o Page Object
+                    concentra os detalhes necessários para interagir
+                    com a página.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     VANTAGENS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Vantagens do Page Object
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Reutilização
+                    </h3>
+
+                    <p>
+                        Os mesmos comportamentos podem ser utilizados
+                        em diferentes cenários.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🛠️
+                    </div>
+
+                    <h3>
+                        Manutenção
+                    </h3>
+
+                    <p>
+                        Alterações nos elementos podem ficar
+                        concentradas em um único local.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📖
+                    </div>
+
+                    <h3>
+                        Legibilidade
+                    </h3>
+
+                    <p>
+                        Os testes podem representar melhor as ações
+                        realizadas pelo usuário.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Organização
+                    </h3>
+
+                    <p>
+                        Os detalhes da interface ficam separados
+                        da lógica dos cenários.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CUIDADOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Cuidados ao utilizar Page Objects
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚠️
+                    </div>
+
+                    <h3>
+                        Evite classes gigantes
+                    </h3>
+
+                    <p>
+                        Não concentre toda a aplicação em um único
+                        Page Object.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🚫
+                    </div>
+
+                    <h3>
+                        Evite métodos genéricos demais
+                    </h3>
+
+                    <p>
+                        Os métodos devem representar comportamentos
+                        claros e relacionados à página.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔍
+                    </div>
+
+                    <h3>
+                        Mantenha nomes claros
+                    </h3>
+
+                    <p>
+                        Utilize nomes que expliquem a ação realizada
+                        pelo método.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧠
+                    </div>
+
+                    <h3>
+                        Não esconda tudo
+                    </h3>
+
+                    <p>
+                        O teste ainda deve deixar claro qual
+                        comportamento está sendo validado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PAGE OBJECT X CUSTOM COMMAND
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Page Object x Custom Command
+            </h2>
+
+            <p>
+                Page Objects e Custom Commands podem parecer semelhantes,
+                mas possuem objetivos diferentes.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Recurso</th>
+                            <th>Objetivo</th>
+                            <th>Exemplo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>Page Object</strong>
+                            </td>
+
+                            <td>
+                                Organizar uma página ou área da aplicação.
+                            </td>
+
+                            <td>
+                                LoginPage.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>Custom Command</strong>
+                            </td>
+
+                            <td>
+                                Criar um comando reutilizável do Cypress.
+                            </td>
+
+                            <td>
+                                cy.login().
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="highlight">
+
+                <p>
+                    Os dois padrões podem coexistir em um mesmo projeto,
+                    desde que cada um tenha uma responsabilidade clara.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRÁTICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas com Page Objects
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Uma responsabilidade
+                    </h3>
+
+                    <p>
+                        Organize cada Page Object em torno de uma
+                        página ou área relacionada.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Seletores centralizados
+                    </h3>
+
+                    <p>
+                        Mantenha os seletores da página organizados
+                        e fáceis de localizar.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        Métodos claros
+                    </h3>
+
+                    <p>
+                        Utilize nomes que representem as ações
+                        realizadas pelo usuário.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Reutilização
+                    </h3>
+
+                    <p>
+                        Extraia comportamentos realmente compartilhados
+                        entre diferentes cenários.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o conceito de Page Object.
+                </p>
+
+                <p>
+                    ☐ Entendi por que centralizar comportamentos.
+                </p>
+
+                <p>
+                    ☐ Sei criar uma classe de Page Object.
+                </p>
+
+                <p>
+                    ☐ Sei criar métodos para interagir com uma página.
+                </p>
+
+                <p>
+                    ☐ Sei centralizar seletores.
+                </p>
+
+                <p>
+                    ☐ Sei importar um Page Object na spec.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar Page Objects com fixtures.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar Page Objects com hooks.
+                </p>
+
+                <p>
+                    ☐ Entendo a diferença entre Page Object e
+                    Custom Command.
+                </p>
+
+                <p>
+                    ☐ Sei identificar cuidados ao criar Page Objects.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    📄 <strong>Page Object</strong>
+                    → representa uma página ou área da aplicação.
+                </p>
+
+                <p>
+                    🎯 <strong>Seletores</strong>
+                    → podem ser centralizados no Page Object.
+                </p>
+
+                <p>
+                    ⚙️ <strong>Métodos</strong>
+                    → representam ações e comportamentos da página.
+                </p>
+
+                <p>
+                    ♻️ <strong>Reutilização</strong>
+                    → permite utilizar os mesmos comportamentos
+                    em diferentes cenários.
+                </p>
+
+                <p>
+                    🧩 <strong>Organização</strong>
+                    → separa detalhes da interface da lógica dos testes.
+                </p>
+
+                <p>
+                    🧪 <strong>Spec</strong>
+                    → concentra o cenário e as validações que
+                    precisam ser realizadas.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você sabe como utilizar Page Objects para
+                organizar páginas, seletores e comportamentos
+                reutilizáveis em seus testes Cypress.
+            </p>
+
+            <p>
+                Na próxima aula vamos aprender sobre
+                <strong>data-test e seletores</strong>, criando uma
+                estratégia de localização de elementos mais confiável
+                para automação.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     QUIZ
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 38
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 38 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe como utilizar Page Objects para
+                organizar páginas, seletores e comportamentos
+                reutilizáveis nos seus testes Cypress.
+            </p>
+
+            <a href="../aulas/aula-39.html" class="cta-button">
+                Aula 39 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+ FOOTER
+
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 38 • Page Objects
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+ JAVASCRIPT
+
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-38.js"></script>
+
+</body>
+
+</html>

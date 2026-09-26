@@ -1,0 +1,2001 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <title>Aula 33 — cy.intercept()</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 33 • CY.INTERCEPT()
+            </span>
+
+            <h1>
+                cy.intercept()
+            </h1>
+
+            <p>
+                Aprenda a interceptar, observar, modificar e controlar
+                requisições HTTP durante a execução dos testes com Cypress.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS DA AULA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Na aula anterior, aprendemos a validar respostas de APIs
+                utilizando status codes, headers e corpo das respostas.
+            </p>
+
+            <p>
+                Agora vamos aprender como utilizar o
+                <strong>cy.intercept()</strong> para observar e controlar
+                requisições realizadas pela aplicação durante os testes.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        👀
+                    </div>
+
+                    <h3>
+                        Observar requisições
+                    </h3>
+
+                    <p>
+                        Identificar e acompanhar requisições HTTP
+                        realizadas pela aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏷️
+                    </div>
+
+                    <h3>
+                        Criar aliases
+                    </h3>
+
+                    <p>
+                        Nomear interceptações para aguardar e validar
+                        requisições específicas.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎭
+                    </div>
+
+                    <h3>
+                        Simular respostas
+                    </h3>
+
+                    <p>
+                        Controlar a resposta da API utilizando dados
+                        definidos pelo próprio teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Testar cenários
+                    </h3>
+
+                    <p>
+                        Criar testes previsíveis para diferentes
+                        comportamentos da aplicação.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE É CY.INTERCEPT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é cy.intercept()?
+            </h2>
+
+            <p>
+                O <strong>cy.intercept()</strong> é um comando do Cypress
+                utilizado para observar e controlar requisições e respostas
+                HTTP realizadas pela aplicação.
+            </p>
+
+            <p>
+                Ele pode ser utilizado para monitorar uma requisição,
+                esperar que ela seja concluída, modificar sua resposta
+                ou fornecer uma resposta simulada.
+            </p>
+
+            <pre><code>cy.intercept(<span class="sql-string">'GET'</span>, <span class="sql-string">'/api/usuarios'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    👀 <strong>Interceptar</strong>
+                    → observar uma requisição realizada pela aplicação.
+                </p>
+
+                <p>
+                    🏷️ <strong>Alias</strong>
+                    → identificar uma interceptação durante o teste.
+                </p>
+
+                <p>
+                    🎭 <strong>Stub</strong>
+                    → substituir ou controlar a resposta original.
+                </p>
+
+                <p>
+                    🧪 <strong>Teste</strong>
+                    → validar o comportamento da aplicação diante
+                    daquela comunicação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     SINTAXE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Sintaxe básica
+            </h2>
+
+            <p>
+                A forma mais simples de utilizar o
+                <strong>cy.intercept()</strong> é informar o método HTTP
+                e a URL que desejamos observar.
+            </p>
+
+            <pre><code>cy.intercept(
+<span class="sql-string">'GET'</span>,
+<span class="sql-string">'/api/usuarios'</span>
+
+)</code></pre>
+
+            <p>
+                Nesse exemplo, o Cypress passa a observar requisições
+                GET realizadas para:
+            </p>
+
+            <pre><code>/api/usuarios</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O <strong>cy.intercept()</strong> deve ser configurado
+                    antes da ação que dispara a requisição que queremos
+                    observar.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     MÉTODOS HTTP
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Interceptando diferentes métodos HTTP
+            </h2>
+
+            <p>
+                Podemos informar diferentes métodos HTTP no
+                <strong>cy.intercept()</strong>.
+            </p>
+
+            <pre><code>cy.intercept(<span class="sql-string">'GET'</span>, <span class="sql-string">'/api/usuarios'</span>)
+
+cy.intercept(<span class="sql-string">'POST'</span>, <span class="sql-string">'/api/usuarios'</span>)
+
+cy.intercept(<span class="sql-string">'PUT'</span>, <span class="sql-string">'/api/usuarios/1'</span>)
+
+cy.intercept(<span class="sql-string">'DELETE'</span>, <span class="sql-string">'/api/usuarios/1'</span>)</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📥
+                    </div>
+
+                    <h3>
+                        GET
+                    </h3>
+
+                    <p>
+                        Normalmente utilizado para consultar dados
+                        de uma API.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ➕
+                    </div>
+
+                    <h3>
+                        POST
+                    </h3>
+
+                    <p>
+                        Normalmente utilizado para criar novos
+                        recursos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✏️
+                    </div>
+
+                    <h3>
+                        PUT
+                    </h3>
+
+                    <p>
+                        Normalmente utilizado para atualizar
+                        recursos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🗑️
+                    </div>
+
+                    <h3>
+                        DELETE
+                    </h3>
+
+                    <p>
+                        Normalmente utilizado para remover
+                        recursos.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     URL
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Interceptando uma URL
+            </h2>
+
+            <p>
+                Podemos informar diretamente a rota que queremos
+                observar.
+            </p>
+
+            <pre><code>cy.intercept(
+<span class="sql-string">'GET'</span>,
+<span class="sql-string">'/api/produtos'</span>
+
+)</code></pre>
+
+            <p>
+                Quando a aplicação realizar uma requisição compatível
+                com essa rota, o Cypress poderá capturar essa comunicação.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    O padrão utilizado na URL deve corresponder
+                    à requisição realizada pela aplicação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ALIAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Criando um alias
+            </h2>
+
+            <p>
+                Podemos utilizar <strong>.as()</strong> para atribuir
+                um nome à interceptação.
+            </p>
+
+            <pre><code>cy.intercept(
+<span class="sql-string">'GET'</span>,
+<span class="sql-string">'/api/usuarios'</span>
+
+).as(<span class="sql-string">'buscarUsuarios'</span>)</code></pre>
+
+            <p>
+                Agora a interceptação pode ser referenciada utilizando
+                o alias:
+            </p>
+
+            <pre><code><span class="sql-string">'@buscarUsuarios'</span></code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Aliases tornam os testes mais legíveis e facilitam
+                    a identificação das requisições que estão sendo
+                    observadas.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     WAIT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Utilizando cy.wait()
+            </h2>
+
+            <p>
+                Depois de criar um alias, podemos utilizar
+                <strong>cy.wait()</strong> para aguardar que a
+                requisição seja concluída.
+            </p>
+
+            <pre><code>cy.intercept(
+<span class="sql-string">'GET'</span>,
+<span class="sql-string">'/api/usuarios'</span>
+
+).as(<span class="sql-string">'buscarUsuarios'</span>)
+
+cy.visit(<span class="sql-string">'/usuarios'</span>)
+
+cy.wait(<span class="sql-string">'@buscarUsuarios'</span>)</code></pre>
+
+            <p>
+                Nesse cenário, o Cypress aguarda a requisição associada
+                ao alias antes de continuar para o próximo comando.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Utilize aliases específicos para deixar claro
+                    qual comunicação o teste está aguardando.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     VALIDANDO REQUEST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Validando a requisição
+            </h2>
+
+            <p>
+                O resultado retornado pelo <strong>cy.wait()</strong>
+                pode ser utilizado para validar informações da
+                requisição.
+            </p>
+
+            <pre><code>cy.intercept(
+<span class="sql-string">'POST'</span>,
+<span class="sql-string">'/api/login'</span>
+
+).as(<span class="sql-string">'login'</span>)
+
+cy.get(<span class="sql-string">'#login'</span>)
+.click()
+
+cy.wait(<span class="sql-string">'@login'</span>)
+.its(<span class="sql-string">'request.body.email'</span>)
+.should(<span class="sql-string">'eq'</span>, <span class="sql-string">'usuario@teste.com'</span>)</code></pre>
+
+            <p>
+                Podemos verificar informações como:
+            </p>
+
+            <pre><code>request.method
+
+request.url
+
+request.body
+
+request.headers</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        URL
+                    </h3>
+
+                    <p>
+                        Verificar para qual endereço a requisição
+                        foi enviada.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Body
+                    </h3>
+
+                    <p>
+                        Validar os dados enviados para a API.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        Headers
+                    </h3>
+
+                    <p>
+                        Validar informações presentes nos cabeçalhos
+                        da requisição.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESPONSE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Validando a resposta
+            </h2>
+
+            <p>
+                Além da requisição, também podemos validar a resposta
+                recebida da API.
+            </p>
+
+            <pre><code>cy.intercept(
+<span class="sql-string">'GET'</span>,
+<span class="sql-string">'/api/usuarios'</span>
+
+).as(<span class="sql-string">'usuarios'</span>)
+
+cy.visit(<span class="sql-string">'/usuarios'</span>)
+
+cy.wait(<span class="sql-string">'@usuarios'</span>)
+.its(<span class="sql-string">'response.statusCode'</span>)
+.should(<span class="sql-string">'eq'</span>, 200)</code></pre>
+
+            <p>
+                Também podemos acessar o corpo da resposta:
+            </p>
+
+            <pre><code>cy.wait(<span class="sql-string">'@usuarios'</span>)
+.its(<span class="sql-string">'response.body'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A interceptação permite analisar tanto o que
+                    a aplicação enviou quanto o que recebeu.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     REQUEST E RESPONSE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Request x Response
+            </h2>
+
+            <p>
+                Uma interceptação pode fornecer informações sobre
+                os dois lados da comunicação HTTP.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Objeto</th>
+                            <th>Informação</th>
+                            <th>Exemplo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>request</strong>
+                            </td>
+
+                            <td>
+                                Método HTTP
+                            </td>
+
+                            <td>
+                                POST
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>request</strong>
+                            </td>
+
+                            <td>
+                                URL
+                            </td>
+
+                            <td>
+                                /api/login
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>request</strong>
+                            </td>
+
+                            <td>
+                                Body
+                            </td>
+
+                            <td>
+                                E-mail e senha
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>response</strong>
+                            </td>
+
+                            <td>
+                                Status code
+                            </td>
+
+                            <td>
+                                200
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>response</strong>
+                            </td>
+
+                            <td>
+                                Body
+                            </td>
+
+                            <td>
+                                Dados retornados pela API
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     MATCHER
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Utilizando padrões de URL
+            </h2>
+
+            <p>
+                Podemos utilizar padrões para interceptar diferentes
+                URLs que pertencem a uma mesma rota.
+            </p>
+
+            <pre><code>cy.intercept(
+<span class="sql-string">'GET'</span>,
+<span class="sql-string">'/api/usuarios/*'</span>
+
+).as(<span class="sql-string">'usuario'</span>)</code></pre>
+
+            <p>
+                Outra possibilidade é utilizar curingas para
+                trabalhar com diferentes partes de uma URL.
+            </p>
+
+            <pre><code>cy.intercept(
+<span class="sql-string">'GET'</span>,
+<span class="sql-string">'**/api/usuarios/**'</span>
+
+)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Padrões de URL podem ser úteis quando a aplicação
+                    utiliza identificadores dinâmicos nas rotas.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     QUERY PARAMS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Interceptando requisições com parâmetros
+            </h2>
+
+            <p>
+                Uma aplicação pode enviar parâmetros na URL.
+            </p>
+
+            <pre><code>/api/produtos?categoria=notebook</code></pre>
+
+            <p>
+                Podemos interceptar a rota utilizando um padrão
+                compatível com a requisição.
+            </p>
+
+            <pre><code>cy.intercept(
+<span class="sql-string">'GET'</span>,
+<span class="sql-string">'/api/produtos*'</span>
+
+).as(<span class="sql-string">'produtos'</span>)</code></pre>
+
+            <p>
+                Depois podemos aguardar a requisição:
+            </p>
+
+            <pre><code>cy.wait(<span class="sql-string">'@produtos'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Em cenários mais específicos, podemos utilizar
+                    matchers para controlar exatamente quais
+                    requisições devem ser interceptadas.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     STUB
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Simulando uma resposta
+            </h2>
+
+            <p>
+                Uma das funcionalidades mais importantes do
+                <strong>cy.intercept()</strong> é permitir que o teste
+                forneça uma resposta simulada.
+            </p>
+
+            <pre><code>cy.intercept(
+<span class="sql-string">'GET'</span>,
+<span class="sql-string">'/api/usuarios'</span>,
+{
+    statusCode: 200,
+    body: {
+        usuarios: [
+            {
+                id: 1,
+                nome: <span class="sql-string">'Maria'</span>
+            }
+        ]
+    }
+}
+
+)</code></pre>
+
+            <p>
+                Nesse caso, o teste define a resposta que será
+                utilizada quando a requisição for interceptada.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    Essa técnica é conhecida como
+                    <strong>stub</strong> ou simulação de resposta.
+                </p>
+
+                <p>
+                    Ela permite testar comportamentos da interface
+                    sem depender do resultado real da API.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     STATUS CODE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Simulando diferentes status codes
+            </h2>
+
+            <p>
+                Podemos simular diferentes respostas HTTP para
+                verificar como a aplicação reage a cada cenário.
+            </p>
+
+            <p>
+                Exemplo de sucesso:
+            </p>
+
+            <pre><code>cy.intercept(
+<span class="sql-string">'GET'</span>,
+<span class="sql-string">'/api/usuarios'</span>,
+{
+    statusCode: 200,
+    body: {
+        usuarios: []
+    }
+}
+
+)</code></pre>
+
+            <p>
+                Exemplo de erro:
+            </p>
+
+            <pre><code>cy.intercept(
+<span class="sql-string">'GET'</span>,
+<span class="sql-string">'/api/usuarios'</span>,
+{
+    statusCode: 500,
+    body: {
+        mensagem: <span class="sql-string">'Erro interno do servidor'</span>
+    }
+}
+
+)</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        200
+                    </h3>
+
+                    <p>
+                        Permite testar o comportamento esperado
+                        em uma resposta de sucesso.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        401
+                    </h3>
+
+                    <p>
+                        Pode ser utilizado para testar cenários
+                        de autenticação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🚫
+                    </div>
+
+                    <h3>
+                        403
+                    </h3>
+
+                    <p>
+                        Pode representar acesso não autorizado
+                        ao recurso.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        💥
+                    </div>
+
+                    <h3>
+                        500
+                    </h3>
+
+                    <p>
+                        Permite testar o tratamento de erros
+                        do servidor.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     MOCK
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Criando um mock de API
+            </h2>
+
+            <p>
+                Podemos utilizar o intercept para criar um cenário
+                completamente controlado pelo teste.
+            </p>
+
+            <pre><code>cy.intercept(
+<span class="sql-string">'GET'</span>,
+<span class="sql-string">'/api/produtos'</span>,
+{
+    statusCode: 200,
+    body: {
+        produtos: [
+            {
+                id: 1,
+                nome: <span class="sql-string">'Notebook'</span>,
+                preco: 3500
+            },
+            {
+                id: 2,
+                nome: <span class="sql-string">'Mouse'</span>,
+                preco: 150
+            }
+        ]
+    }
+}
+
+).as(<span class="sql-string">'listarProdutos'</span>)
+
+cy.visit(<span class="sql-string">'/produtos'</span>)
+
+cy.wait(<span class="sql-string">'@listarProdutos'</span>)</code></pre>
+
+            <p>
+                A interface receberá os dados definidos pelo teste,
+                independentemente dos dados disponíveis no ambiente
+                real da API.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    Mocks são especialmente úteis para reproduzir
+                    cenários específicos de teste.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EMPTY RESPONSE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Testando uma lista vazia
+            </h2>
+
+            <p>
+                Podemos simular uma API que retorna uma lista vazia
+                para verificar se a interface apresenta corretamente
+                o estado de ausência de dados.
+            </p>
+
+            <pre><code>cy.intercept(
+<span class="sql-string">'GET'</span>,
+<span class="sql-string">'/api/produtos'</span>,
+{
+    statusCode: 200,
+    body: {
+        produtos: []
+    }
+}
+
+).as(<span class="sql-string">'produtos'</span>)
+
+cy.visit(<span class="sql-string">'/produtos'</span>)
+
+cy.wait(<span class="sql-string">'@produtos'</span>)
+
+cy.contains(<span class="sql-string">'Nenhum produto encontrado'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Esse tipo de cenário permite testar estados que
+                    podem ser difíceis de reproduzir utilizando
+                    apenas os dados reais da aplicação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ERRO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Testando mensagens de erro
+            </h2>
+
+            <p>
+                Também podemos simular uma falha da API e verificar
+                se a aplicação apresenta uma mensagem adequada.
+            </p>
+
+            <pre><code>cy.intercept(
+<span class="sql-string">'GET'</span>,
+<span class="sql-string">'/api/produtos'</span>,
+{
+    statusCode: 500,
+    body: {
+        mensagem: <span class="sql-string">'Erro interno'</span>
+    }
+}
+
+).as(<span class="sql-string">'produtos'</span>)
+
+cy.visit(<span class="sql-string">'/produtos'</span>)
+
+cy.wait(<span class="sql-string">'@produtos'</span>)
+
+cy.contains(<span class="sql-string">'Não foi possível carregar os produtos'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O objetivo é validar o comportamento da interface
+                    quando a comunicação com o backend apresenta
+                    um problema.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     MODIFY RESPONSE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                16. Modificando a resposta
+            </h2>
+
+            <p>
+                O intercept também pode ser utilizado para modificar
+                informações antes que a resposta seja entregue
+                ao código da aplicação.
+            </p>
+
+            <pre><code>cy.intercept(
+<span class="sql-string">'GET'</span>,
+<span class="sql-string">'/api/usuarios'</span>,
+(interception) =&gt; {
+
+    interception.reply({
+        statusCode: 200,
+        body: {
+            usuarios: [
+                {
+                    id: 1,
+                    nome: <span class="sql-string">'Usuário de teste'</span>
+                }
+            ]
+        }
+    })
+
+}
+
+)</code></pre>
+
+            <p>
+                Nesse cenário, o teste assume o controle da resposta
+                que será entregue à aplicação.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Atenção:</strong>
+
+                <p>
+                    Use essa abordagem de maneira consciente para que
+                    os testes continuem representando cenários
+                    relevantes da aplicação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     REQUEST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                17. Inspecionando a requisição
+            </h2>
+
+            <p>
+                Também podemos utilizar uma função para analisar
+                informações da requisição.
+            </p>
+
+            <pre><code>cy.intercept(
+<span class="sql-string">'POST'</span>,
+<span class="sql-string">'/api/login'</span>,
+(req) =&gt; {
+
+    console.log(req.body)
+
+}
+
+)</code></pre>
+
+            <p>
+                O objeto <strong>req</strong> representa a requisição
+                interceptada.
+            </p>
+
+            <pre><code>req.method
+
+req.url
+
+req.body
+
+req.headers</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Isso pode ser útil para compreender exatamente
+                    quais dados a aplicação está enviando ao backend.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     REPLACE REQUEST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                18. Alterando dados da requisição
+            </h2>
+
+            <p>
+                Em cenários específicos, também podemos modificar
+                informações da requisição antes que ela continue
+                seu fluxo.
+            </p>
+
+            <pre><code>cy.intercept(
+<span class="sql-string">'POST'</span>,
+<span class="sql-string">'/api/login'</span>,
+(req) =&gt; {
+
+    req.body.email = <span class="sql-string">'teste@exemplo.com'</span>
+
+}
+
+)</code></pre>
+
+            <p>
+                Dessa forma, o teste consegue controlar os dados
+                enviados ao servidor.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    Alterações de request devem ser utilizadas quando
+                    fizerem parte do objetivo do cenário de teste.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BEFORE VISIT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                19. Configure o intercept antes da ação
+            </h2>
+
+            <p>
+                Um ponto importante é configurar a interceptação
+                antes de executar a ação que dispara a requisição.
+            </p>
+
+            <p>
+                Exemplo correto:
+            </p>
+
+            <pre><code>cy.intercept(
+<span class="sql-string">'GET'</span>,
+<span class="sql-string">'/api/produtos'</span>
+
+).as(<span class="sql-string">'produtos'</span>)
+
+cy.visit(<span class="sql-string">'/produtos'</span>)
+
+cy.wait(<span class="sql-string">'@produtos'</span>)</code></pre>
+
+            <p>
+                Dessa forma, o Cypress já está observando a rota
+                quando a aplicação realiza a requisição.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Configure intercepts antes de executar cliques,
+                    navegações ou outras ações que possam disparar
+                    requisições.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     LOGIN COMPLETO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                20. Exemplo completo: login
+            </h2>
+
+            <p>
+                Vamos combinar os conceitos estudados em um cenário
+                de login.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve realizar login com sucesso'</span>, () =&gt; {
+
+    cy.intercept(
+        <span class="sql-string">'POST'</span>,
+        <span class="sql-string">'/api/login'</span>
+    ).as(<span class="sql-string">'login'</span>)
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .type(<span class="sql-string">'usuario@teste.com'</span>)
+
+    cy.get(<span class="sql-string">'#senha'</span>)
+        .type(<span class="sql-string">'123456'</span>)
+
+    cy.get(<span class="sql-string">'#login'</span>)
+        .click()
+
+    cy.wait(<span class="sql-string">'@login'</span>)
+        .its(<span class="sql-string">'response.statusCode'</span>)
+        .should(<span class="sql-string">'eq'</span>, 200)
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O teste executa a ação de login e aguarda
+                    explicitamente a comunicação com a API.
+                </p>
+
+                <p>
+                    Dessa forma, podemos validar se a requisição
+                    ocorreu conforme esperado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     MOCK LOGIN
+====================================================== -->
+
+        <section>
+
+            <h2>
+                21. Exemplo completo com mock
+            </h2>
+
+            <p>
+                Também podemos controlar completamente a resposta
+                da API.
+            </p>
+
+            <pre><code>cy.intercept(
+<span class="sql-string">'POST'</span>,
+<span class="sql-string">'/api/login'</span>,
+{
+    statusCode: 200,
+    body: {
+        token: <span class="sql-string">'token-teste'</span>,
+        usuario: {
+            nome: <span class="sql-string">'Maria'</span>
+        }
+    }
+}
+
+).as(<span class="sql-string">'login'</span>)
+
+cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.get(<span class="sql-string">'#email'</span>)
+.type(<span class="sql-string">'usuario@teste.com'</span>)
+
+cy.get(<span class="sql-string">'#senha'</span>)
+.type(<span class="sql-string">'123456'</span>)
+
+cy.get(<span class="sql-string">'#login'</span>)
+.click()
+
+cy.wait(<span class="sql-string">'@login'</span>)
+
+cy.contains(<span class="sql-string">'Maria'</span>)
+.should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Nesse exemplo, o teste não depende da resposta
+                    real do backend para validar o comportamento
+                    da interface.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CASOS DE USO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                22. Quando utilizar cy.intercept()?
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        👀
+                    </div>
+
+                    <h3>
+                        Observar chamadas
+                    </h3>
+
+                    <p>
+                        Verificar se determinada requisição foi
+                        realizada pela aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⏳
+                    </div>
+
+                    <h3>
+                        Aguardar APIs
+                    </h3>
+
+                    <p>
+                        Sincronizar o teste com uma requisição
+                        específica.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎭
+                    </div>
+
+                    <h3>
+                        Criar mocks
+                    </h3>
+
+                    <p>
+                        Simular respostas para cenários específicos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚠️
+                    </div>
+
+                    <h3>
+                        Testar erros
+                    </h3>
+
+                    <p>
+                        Simular falhas e verificar o tratamento
+                        realizado pela interface.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     INTERCEPT X REQUEST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                23. cy.intercept() x cy.request()
+            </h2>
+
+            <p>
+                Embora os dois comandos trabalhem com HTTP, eles
+                possuem objetivos diferentes.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Comando</th>
+                            <th>Objetivo principal</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>cy.request()</strong>
+                            </td>
+
+                            <td>
+                                Enviar uma requisição HTTP diretamente
+                                pelo teste.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>cy.intercept()</strong>
+                            </td>
+
+                            <td>
+                                Observar ou controlar requisições
+                                realizadas pela aplicação.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="highlight">
+
+                <p>
+                    Pense em <strong>cy.request()</strong> como uma
+                    forma de realizar uma chamada HTTP diretamente.
+                </p>
+
+                <p>
+                    Já o <strong>cy.intercept()</strong> permite
+                    observar e controlar a comunicação da aplicação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ERROS COMUNS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns ao utilizar cy.intercept()
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Interceptar depois da ação
+                    </h3>
+
+                    <p>
+                        Criar o intercept depois que a aplicação
+                        já realizou a requisição.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        URL incorreta
+                    </h3>
+
+                    <p>
+                        Utilizar uma rota que não corresponde
+                        à requisição real.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Alias pouco claro
+                    </h3>
+
+                    <p>
+                        Utilizar nomes genéricos que dificultam
+                        entender qual requisição está sendo aguardada.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Mock excessivo
+                    </h3>
+
+                    <p>
+                        Simular todas as respostas sem considerar
+                        quais cenários realmente precisam de controle.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRÁTICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas com cy.intercept()
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Use aliases claros
+                    </h3>
+
+                    <p>
+                        Escolha nomes que expliquem qual requisição
+                        está sendo interceptada.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⏱️
+                    </div>
+
+                    <h3>
+                        Intercepte antes
+                    </h3>
+
+                    <p>
+                        Configure o intercept antes da ação que
+                        dispara a requisição.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Valide o comportamento
+                    </h3>
+
+                    <p>
+                        Utilize interceptações para validar
+                        comunicação e comportamento da aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎭
+                    </div>
+
+                    <h3>
+                        Use mocks com propósito
+                    </h3>
+
+                    <p>
+                        Simule respostas quando isso ajudar a
+                        reproduzir cenários importantes.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o que é cy.intercept().
+                </p>
+
+                <p>
+                    ☐ Sei interceptar requisições HTTP.
+                </p>
+
+                <p>
+                    ☐ Sei trabalhar com diferentes métodos HTTP.
+                </p>
+
+                <p>
+                    ☐ Sei criar aliases para interceptações.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar cy.wait() com um intercept.
+                </p>
+
+                <p>
+                    ☐ Sei validar informações da requisição.
+                </p>
+
+                <p>
+                    ☐ Sei validar informações da resposta.
+                </p>
+
+                <p>
+                    ☐ Entendi como utilizar padrões de URL.
+                </p>
+
+                <p>
+                    ☐ Sei criar respostas simuladas.
+                </p>
+
+                <p>
+                    ☐ Sei testar cenários de erro utilizando mocks.
+                </p>
+
+                <p>
+                    ☐ Entendi a diferença entre cy.intercept()
+                    e cy.request().
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>cy.intercept()</strong>
+                    → observa e controla requisições HTTP.
+                </p>
+
+                <p>
+                    🏷️ <strong>as()</strong>
+                    → cria um alias para a interceptação.
+                </p>
+
+                <p>
+                    ⏳ <strong>cy.wait()</strong>
+                    → aguarda uma requisição interceptada.
+                </p>
+
+                <p>
+                    📤 <strong>request</strong>
+                    → representa informações enviadas pela aplicação.
+                </p>
+
+                <p>
+                    📥 <strong>response</strong>
+                    → representa a resposta recebida da API.
+                </p>
+
+                <p>
+                    🎭 <strong>Stub / Mock</strong>
+                    → permite simular respostas controladas pelo teste.
+                </p>
+
+                <p>
+                    🧪 <strong>Validação</strong>
+                    → permite verificar comunicação e comportamento
+                    da aplicação.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você sabe como utilizar o
+                <strong>cy.intercept()</strong> para observar,
+                aguardar, validar e controlar requisições HTTP
+                durante seus testes Cypress.
+            </p>
+
+            <p>
+                Na próxima aula vamos aprender sobre
+                <strong>mock de APIs</strong>, aprofundando a utilização
+                de respostas simuladas para construir cenários de
+                teste previsíveis e controlados.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     QUIZ
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 33
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 33 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe como utilizar cy.intercept()
+                para observar, aguardar, validar e controlar
+                requisições HTTP durante seus testes Cypress.
+            </p>
+
+            <a href="../aulas/aula-34.html" class="cta-button">
+                Aula 34 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+ FOOTER
+
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 33 • cy.intercept()
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+ JAVASCRIPT
+
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-33.js"></script>
+
+</body>
+
+</html>

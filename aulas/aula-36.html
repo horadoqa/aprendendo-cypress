@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 36 — Custom Commands</title>
+
+</head>
+
+<body>
+
+    <header>
+
+        <img
+            class="header-logo"
+            src="../assets/images/logo.png"
+            alt="Hora do QA"
+        >
+
+        <button
+            class="theme-toggle"
+            id="themeToggle"
+            type="button"
+            aria-label="Alternar tema"
+        >
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 36 • CUSTOM COMMANDS
+            </span>
+
+            <h1>
+                Custom Commands
+            </h1>
+
+            <p>
+                Aprenda a criar comandos personalizados no Cypress
+                para reutilizar comportamentos e deixar seus testes
+                mais organizados e fáceis de manter.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+         OBJETIVOS DA AULA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Nas aulas anteriores, aprendemos a trabalhar com
+                fixtures, aliases, interceptações e diferentes
+                estratégias para organizar nossos testes.
+            </p>
+
+            <p>
+                Agora vamos aprender a criar nossos próprios comandos
+                utilizando <strong>Cypress.Commands</strong>.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Entender Custom Commands
+                    </h3>
+
+                    <p>
+                        Compreender o que são comandos personalizados
+                        e por que utilizá-los.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚙️
+                    </div>
+
+                    <h3>
+                        Criar comandos
+                    </h3>
+
+                    <p>
+                        Aprender a criar comandos utilizando
+                        Cypress.Commands.add().
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Reutilizar comportamentos
+                    </h3>
+
+                    <p>
+                        Transformar sequências repetitivas de comandos
+                        em funcionalidades reutilizáveis.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Aplicar nos testes
+                    </h3>
+
+                    <p>
+                        Utilizar comandos personalizados em cenários
+                        reais de automação.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         O QUE É CUSTOM COMMAND
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é um Custom Command?
+            </h2>
+
+            <p>
+                Um <strong>Custom Command</strong> é um comando
+                personalizado criado pelo projeto para encapsular
+                uma sequência de ações que pode ser reutilizada
+                em diferentes testes.
+            </p>
+
+            <p>
+                Em vez de repetir várias linhas de código, podemos
+                criar um único comando responsável por executar
+                determinado comportamento.
+            </p>
+
+            <pre><code>Cypress.Commands.add(<span class="sql-string">'login'</span>, () =&gt; {
+
+    // comandos do login
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🧩 <strong>Custom Command</strong>
+                    → comportamento reutilizável.
+                </p>
+
+                <p>
+                    ♻️ <strong>Reutilização</strong>
+                    → evita repetir a mesma sequência de comandos.
+                </p>
+
+                <p>
+                    🧹 <strong>Organização</strong>
+                    → mantém as specs mais simples e legíveis.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ONDE FICAM
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Onde ficam os Custom Commands?
+            </h2>
+
+            <p>
+                Os comandos personalizados normalmente são definidos
+                no arquivo:
+            </p>
+
+            <pre><code>cypress/support/commands.js</code></pre>
+
+            <p>
+                Uma estrutura comum de projeto pode ser:
+            </p>
+
+            <pre><code>curso-cypress/
+
+├── cypress/
+│
+├── e2e/
+│   └── login.cy.js
+│
+├── fixtures/
+│   └── usuario.json
+│
+└── support/
+    ├── commands.js
+    └── e2e.js
+
+├── cypress.config.js
+├── package.json
+└── package-lock.json</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O arquivo <strong>commands.js</strong> é utilizado
+                    para centralizar comandos personalizados que podem
+                    ser utilizados pelas specs.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         PRIMEIRO COMMAND
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Criando nosso primeiro Custom Command
+            </h2>
+
+            <p>
+                Vamos criar um comando chamado
+                <strong>login</strong>.
+            </p>
+
+            <pre><code>Cypress.Commands.add(<span class="sql-string">'login'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+})</code></pre>
+
+            <p>
+                Depois de criado, podemos utilizar o comando
+                diretamente na spec:
+            </p>
+
+            <pre><code>cy.login()</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O comando personalizado passa a fazer parte da
+                    API de comandos do projeto.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         COMANDO COM ARGUMENTOS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Custom Command com argumentos
+            </h2>
+
+            <p>
+                Um comando personalizado também pode receber
+                informações como argumentos.
+            </p>
+
+            <p>
+                Por exemplo, podemos criar um comando de login
+                que recebe e-mail e senha.
+            </p>
+
+            <pre><code>Cypress.Commands.add(
+    <span class="sql-string">'login'</span>,
+    (email, senha) =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .type(email)
+
+    cy.get(<span class="sql-string">'#senha'</span>)
+        .type(senha)
+
+    cy.get(<span class="sql-string">'#login'</span>)
+        .click()
+
+})</code></pre>
+
+            <p>
+                Agora podemos chamar o comando informando
+                os valores necessários:
+            </p>
+
+            <pre><code>cy.login(
+    <span class="sql-string">'usuario@teste.com'</span>,
+    <span class="sql-string">'123456'</span>
+)</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📧
+                    </div>
+
+                    <h3>
+                        Email
+                    </h3>
+
+                    <p>
+                        Primeiro argumento recebido pelo comando.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔑
+                    </div>
+
+                    <h3>
+                        Senha
+                    </h3>
+
+                    <p>
+                        Segundo argumento utilizado durante o login.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔄
+                    </div>
+
+                    <h3>
+                        Reutilização
+                    </h3>
+
+                    <p>
+                        O mesmo comando pode ser utilizado com
+                        diferentes usuários.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         LOGIN
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Criando um comando de login
+            </h2>
+
+            <p>
+                Login é um dos exemplos mais comuns de aplicação
+                de Custom Commands.
+            </p>
+
+            <p>
+                Sem um comando personalizado, poderíamos ter:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.get(<span class="sql-string">'#email'</span>)
+    .type(<span class="sql-string">'usuario@teste.com'</span>)
+
+cy.get(<span class="sql-string">'#senha'</span>)
+    .type(<span class="sql-string">'123456'</span>)
+
+cy.get(<span class="sql-string">'#login'</span>)
+    .click()</code></pre>
+
+            <p>
+                Podemos transformar esse comportamento em um comando:
+            </p>
+
+            <pre><code>Cypress.Commands.add(
+    <span class="sql-string">'login'</span>,
+    (email, senha) =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .type(email)
+
+    cy.get(<span class="sql-string">'#senha'</span>)
+        .type(senha)
+
+    cy.get(<span class="sql-string">'#login'</span>)
+        .click()
+
+})</code></pre>
+
+            <p>
+                E então utilizar:
+            </p>
+
+            <pre><code>cy.login(
+    <span class="sql-string">'usuario@teste.com'</span>,
+    <span class="sql-string">'123456'</span>
+)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O teste fica mais curto porque os detalhes
+                    da implementação do login foram encapsulados
+                    no Custom Command.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         FIXTURE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Custom Command utilizando fixture
+            </h2>
+
+            <p>
+                Também podemos combinar Custom Commands com fixtures.
+            </p>
+
+            <p>
+                Considere o arquivo:
+            </p>
+
+            <pre><code>{
+    <span class="sql-string">"email"</span>: <span class="sql-string">"usuario@teste.com"</span>,
+    <span class="sql-string">"senha"</span>: <span class="sql-string">"123456"</span>
+}</code></pre>
+
+            <p>
+                Podemos criar um comando que recebe os dados:
+            </p>
+
+            <pre><code>Cypress.Commands.add(
+    <span class="sql-string">'login'</span>,
+    (usuario) =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .type(usuario.email)
+
+    cy.get(<span class="sql-string">'#senha'</span>)
+        .type(usuario.senha)
+
+    cy.get(<span class="sql-string">'#login'</span>)
+        .click()
+
+})</code></pre>
+
+            <p>
+                Na spec:
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuario.json'</span>)
+    .then((usuario) =&gt; {
+
+        cy.login(usuario)
+
+    })</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Dessa forma, o fixture fica responsável pelos
+                    dados enquanto o Custom Command fica responsável
+                    pelo comportamento.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         SELECT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Criando comandos para elementos
+            </h2>
+
+            <p>
+                Custom Commands também podem encapsular ações
+                comuns realizadas em elementos.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>Cypress.Commands.add(
+    <span class="sql-string">'preencherEmail'</span>,
+    (email) =&gt; {
+
+    cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+        .clear()
+        .type(email)
+
+})</code></pre>
+
+            <p>
+                Utilização:
+            </p>
+
+            <pre><code>cy.preencherEmail(
+    <span class="sql-string">'usuario@teste.com'</span>
+)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Esse tipo de comando pode ser útil quando
+                    determinada interação aparece repetidamente
+                    em diferentes cenários.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         COMANDO COM CHAIN
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Comandos encadeáveis
+            </h2>
+
+            <p>
+                Alguns Custom Commands podem retornar um elemento
+                para continuar o encadeamento de comandos.
+            </p>
+
+            <p>
+                Um exemplo é um comando para localizar um elemento
+                por <strong>data-testid</strong>.
+            </p>
+
+            <pre><code>Cypress.Commands.add(
+    <span class="sql-string">'getByTestId'</span>,
+    (testId) =&gt; {
+
+    return cy.get(
+        <span class="sql-string">`[data-testid="${testId}"]`</span>
+    )
+
+})</code></pre>
+
+            <p>
+                Agora podemos utilizar:
+            </p>
+
+            <pre><code>cy.getByTestId(<span class="sql-string">'email'</span>)
+    .should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                Ou:
+            </p>
+
+            <pre><code>cy.getByTestId(<span class="sql-string">'email'</span>)
+    .type(<span class="sql-string">'usuario@teste.com'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Quando um comando retorna um objeto da cadeia
+                    do Cypress, outros comandos podem continuar
+                    sendo encadeados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         COMANDOS COM ASSERTION
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Custom Commands com validações
+            </h2>
+
+            <p>
+                Um Custom Command também pode encapsular uma
+                validação utilizada frequentemente.
+            </p>
+
+            <pre><code>Cypress.Commands.add(
+    <span class="sql-string">'validarLogin'</span>,
+    () =&gt; {
+
+    cy.url()
+        .should(<span class="sql-string">'include'</span>, <span class="sql-string">'dashboard'</span>)
+
+})</code></pre>
+
+            <p>
+                No teste:
+            </p>
+
+            <pre><code>cy.login(
+    <span class="sql-string">'usuario@teste.com'</span>,
+    <span class="sql-string">'123456'</span>
+)
+
+cy.validarLogin()</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Ação
+                    </h3>
+
+                    <p>
+                        O comando pode executar as ações necessárias
+                        para determinado comportamento.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Validação
+                    </h3>
+
+                    <p>
+                        O comando também pode centralizar uma
+                        validação recorrente.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Reutilização
+                    </h3>
+
+                    <p>
+                        A mesma lógica pode ser utilizada por
+                        vários testes.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         COMMANDS VS FUNÇÃO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Custom Command x função JavaScript
+            </h2>
+
+            <p>
+                Nem toda lógica reutilizável precisa ser transformada
+                em um Custom Command.
+            </p>
+
+            <p>
+                Uma função JavaScript pode ser suficiente quando
+                não precisamos interagir diretamente com a cadeia
+                de comandos do Cypress.
+            </p>
+
+            <pre><code>function gerarNome() {
+
+    return <span class="sql-string">'Maria'</span>
+
+}</code></pre>
+
+            <p>
+                Já um Custom Command é apropriado quando queremos
+                adicionar um comportamento à API do Cypress.
+            </p>
+
+            <pre><code>Cypress.Commands.add(
+    <span class="sql-string">'login'</span>,
+    (email, senha) =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .type(email)
+
+    cy.get(<span class="sql-string">'#senha'</span>)
+        .type(senha)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    Custom Commands devem representar comportamentos
+                    úteis e reutilizáveis. Criar comandos para toda
+                    e qualquer pequena ação pode tornar o projeto
+                    mais difícil de entender.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ORGANIZAÇÃO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Organizando os Custom Commands
+            </h2>
+
+            <p>
+                Conforme o projeto cresce, podemos ter vários
+                comandos personalizados.
+            </p>
+
+            <pre><code>cypress/
+
+└── support/
+
+    ├── commands.js
+    └── e2e.js</code></pre>
+
+            <p>
+                O arquivo <strong>commands.js</strong> pode conter
+                comandos relacionados a diferentes funcionalidades:
+            </p>
+
+            <pre><code>Cypress.Commands.add(
+    <span class="sql-string">'login'</span>,
+    (email, senha) =&gt; {
+
+    // login
+
+})
+
+Cypress.Commands.add(
+    <span class="sql-string">'logout'</span>,
+    () =&gt; {
+
+    // logout
+
+})
+
+Cypress.Commands.add(
+    <span class="sql-string">'getByTestId'</span>,
+    (id) =&gt; {
+
+    return cy.get(
+        <span class="sql-string">`[data-testid="${id}"]`</span>
+    )
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Em projetos maiores, também é possível dividir
+                    comandos por responsabilidade e importar os
+                    arquivos necessários.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         EXEMPLO COMPLETO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Exemplo completo
+            </h2>
+
+            <p>
+                Vamos criar um Custom Command de login utilizando
+                dados recebidos como argumentos.
+            </p>
+
+            <p>
+                No arquivo <strong>commands.js</strong>:
+            </p>
+
+            <pre><code>Cypress.Commands.add(
+    <span class="sql-string">'login'</span>,
+    (email, senha) =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+        .type(email)
+
+    cy.get(<span class="sql-string">'[data-testid="senha"]'</span>)
+        .type(senha)
+
+    cy.get(<span class="sql-string">'[data-testid="login"]'</span>)
+        .click()
+
+})</code></pre>
+
+            <p>
+                Na spec:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve realizar login com sucesso'</span>, () =&gt; {
+
+        cy.login(
+            <span class="sql-string">'usuario@teste.com'</span>,
+            <span class="sql-string">'123456'</span>
+        )
+
+        cy.url()
+            .should(<span class="sql-string">'include'</span>, <span class="sql-string">'dashboard'</span>)
+
+    })
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A spec agora descreve o comportamento esperado
+                    sem precisar repetir todos os detalhes da
+                    implementação do login.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         COMANDO COM OPÇÕES
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Utilizando objetos como argumentos
+            </h2>
+
+            <p>
+                Quando um comando possui vários parâmetros,
+                podemos utilizar um objeto para deixar sua chamada
+                mais clara.
+            </p>
+
+            <pre><code>Cypress.Commands.add(
+    <span class="sql-string">'login'</span>,
+    ({ email, senha }) =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .type(email)
+
+    cy.get(<span class="sql-string">'#senha'</span>)
+        .type(senha)
+
+    cy.get(<span class="sql-string">'#login'</span>)
+        .click()
+
+})</code></pre>
+
+            <p>
+                A chamada pode ser feita desta maneira:
+            </p>
+
+            <pre><code>cy.login({
+
+    email: <span class="sql-string">'usuario@teste.com'</span>,
+
+    senha: <span class="sql-string">'123456'</span>
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Objetos podem tornar comandos com muitos
+                    parâmetros mais fáceis de ler e evoluir.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         BOAS PRÁTICAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas com Custom Commands
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Tenha um propósito claro
+                    </h3>
+
+                    <p>
+                        Crie comandos para comportamentos que realmente
+                        sejam reutilizados no projeto.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏷️
+                    </div>
+
+                    <h3>
+                        Use nomes claros
+                    </h3>
+
+                    <p>
+                        O nome do comando deve indicar claramente
+                        o comportamento executado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Evite duplicação
+                    </h3>
+
+                    <p>
+                        Centralize comportamentos repetitivos quando
+                        isso realmente melhorar a manutenção.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧹
+                    </div>
+
+                    <h3>
+                        Evite abstrações excessivas
+                    </h3>
+
+                    <p>
+                        Nem toda linha de código precisa ser escondida
+                        dentro de um Custom Command.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ERROS COMUNS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns com Custom Commands
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Nome pouco claro
+                    </h3>
+
+                    <p>
+                        Criar comandos com nomes que não deixam claro
+                        qual comportamento será executado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Comandos gigantes
+                    </h3>
+
+                    <p>
+                        Criar comandos que realizam muitas
+                        responsabilidades diferentes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Abstração desnecessária
+                    </h3>
+
+                    <p>
+                        Criar um Custom Command para uma ação simples
+                        que já é clara na própria spec.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Dependências ocultas
+                    </h3>
+
+                    <p>
+                        Criar comandos que dependem de estados ou
+                        informações que não ficam evidentes para quem
+                        utiliza o comando.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         QUANDO UTILIZAR
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Quando utilizar Custom Commands?
+            </h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Situação</th>
+                            <th>Custom Command?</th>
+                            <th>Motivo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                Login repetido
+                            </td>
+
+                            <td>
+                                Sim
+                            </td>
+
+                            <td>
+                                Comportamento reutilizado em vários testes.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Ação muito simples
+                            </td>
+
+                            <td>
+                                Nem sempre
+                            </td>
+
+                            <td>
+                                Pode adicionar abstração desnecessária.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Seleção padronizada por testid
+                            </td>
+
+                            <td>
+                                Pode ser útil
+                            </td>
+
+                            <td>
+                                Centraliza uma estratégia de localização.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Fluxo complexo e repetitivo
+                            </td>
+
+                            <td>
+                                Sim
+                            </td>
+
+                            <td>
+                                Reduz duplicação entre os testes.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Lógica exclusiva de um teste
+                            </td>
+
+                            <td>
+                                Geralmente não
+                            </td>
+
+                            <td>
+                                Não existe reutilização suficiente.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CHECKLIST
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o que são Custom Commands.
+                </p>
+
+                <p>
+                    ☐ Conheço o arquivo cypress/support/commands.js.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar Cypress.Commands.add().
+                </p>
+
+                <p>
+                    ☐ Sei criar comandos personalizados.
+                </p>
+
+                <p>
+                    ☐ Sei passar argumentos para um comando.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar Custom Commands com fixtures.
+                </p>
+
+                <p>
+                    ☐ Entendi como criar comandos encadeáveis.
+                </p>
+
+                <p>
+                    ☐ Sei quando utilizar Custom Commands.
+                </p>
+
+                <p>
+                    ☐ Entendi a diferença entre comando e função.
+                </p>
+
+                <p>
+                    ☐ Conheço boas práticas para organizar comandos.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         RESUMO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🧩 <strong>Custom Command</strong>
+                    → comportamento personalizado reutilizável.
+                </p>
+
+                <p>
+                    ⚙️ <strong>Cypress.Commands.add()</strong>
+                    → cria um novo comando no Cypress.
+                </p>
+
+                <p>
+                    📁 <strong>commands.js</strong>
+                    → arquivo normalmente utilizado para definir
+                    comandos personalizados.
+                </p>
+
+                <p>
+                    📦 <strong>Argumentos</strong>
+                    → permitem tornar os comandos flexíveis.
+                </p>
+
+                <p>
+                    🔗 <strong>Encadeamento</strong>
+                    → comandos podem retornar elementos da cadeia
+                    do Cypress.
+                </p>
+
+                <p>
+                    ♻️ <strong>Reutilização</strong>
+                    → reduz comportamentos repetidos nas specs.
+                </p>
+
+                <p>
+                    🎯 <strong>Boa prática</strong>
+                    → criar comandos com propósito claro e evitar
+                    abstrações desnecessárias.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você sabe como criar Custom Commands e utilizá-los
+                para encapsular comportamentos reutilizáveis nos seus
+                testes Cypress.
+            </p>
+
+            <p>
+                Na próxima aula vamos aprender sobre
+                <strong>Hooks</strong>, entendendo como utilizar
+                before, beforeEach, after e afterEach para preparar
+                e finalizar diferentes cenários de teste.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         QUIZ
+    ====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 36
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 36 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe como criar Custom Commands,
+                utilizar argumentos, combinar comandos com fixtures
+                e reutilizar comportamentos nas suas specs.
+            </p>
+
+            <a href="../aulas/aula-37.html" class="cta-button">
+                Aula 37 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+     FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 36 • Custom Commands
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+     JAVASCRIPT
+    ====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-36.js"></script>
+
+</body>
+
+</html>

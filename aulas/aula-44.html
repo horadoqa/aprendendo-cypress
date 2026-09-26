@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 44 — Evidências e Relatórios</title>
+
+</head>
+
+<body>
+
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 44 • EVIDÊNCIAS E RELATÓRIOS
+            </span>
+
+            <h1>
+                Evidências e Relatórios
+            </h1>
+
+            <p>
+                Aprenda a trabalhar com screenshots, vídeos, resultados
+                de execução e relatórios para analisar e documentar
+                os testes realizados com Cypress.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+         OBJETIVOS DA AULA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Nas aulas anteriores, aprendemos como executar o
+                Cypress em ambientes de CI/CD e como utilizar
+                pipelines para automatizar a execução dos testes.
+            </p>
+
+            <p>
+                Agora vamos aprender como coletar evidências das
+                execuções e utilizar relatórios para facilitar a
+                análise dos resultados.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📸
+                    </div>
+
+                    <h3>
+                        Screenshots
+                    </h3>
+
+                    <p>
+                        Entender como capturar imagens das telas
+                        durante a execução dos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎥
+                    </div>
+
+                    <h3>
+                        Vídeos
+                    </h3>
+
+                    <p>
+                        Conhecer a gravação de vídeos das execuções
+                        dos testes Cypress.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        Relatórios
+                    </h3>
+
+                    <p>
+                        Entender como gerar e interpretar relatórios
+                        de execução.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Analisar falhas
+                    </h3>
+
+                    <p>
+                        Utilizar evidências para investigar problemas
+                        encontrados durante os testes.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         O QUE SÃO EVIDÊNCIAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que são evidências de teste?
+            </h2>
+
+            <p>
+                Evidências são informações coletadas durante a execução
+                de um teste que ajudam a demonstrar o que aconteceu
+                durante o cenário automatizado.
+            </p>
+
+            <p>
+                Em uma execução bem-sucedida, as evidências podem
+                ajudar a documentar o comportamento esperado.
+                Em uma execução com falha, elas são especialmente
+                úteis para investigar o problema.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    📸 <strong>Screenshot</strong>
+                    → registra visualmente o estado da aplicação.
+                </p>
+
+                <p>
+                    🎥 <strong>Vídeo</strong>
+                    → registra a sequência de ações executadas.
+                </p>
+
+                <p>
+                    📋 <strong>Logs</strong>
+                    → fornecem informações sobre a execução.
+                </p>
+
+                <p>
+                    📊 <strong>Relatório</strong>
+                    → apresenta um resumo dos resultados dos testes.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         SCREENSHOTS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Screenshots
+            </h2>
+
+            <p>
+                Screenshots são imagens capturadas durante ou após
+                uma execução de teste.
+            </p>
+
+            <p>
+                Elas são particularmente úteis quando um teste falha
+                e precisamos verificar visualmente o estado da página.
+            </p>
+
+            <p>
+                O Cypress possui o comando:
+            </p>
+
+            <pre><code>cy.screenshot()</code></pre>
+
+            <p>
+                Podemos utilizá-lo em um teste:
+            </p>
+
+            <pre><code>it(<span class="sql-string">'deve exibir o dashboard'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/dashboard'</span>)
+
+    cy.screenshot(<span class="sql-string">'dashboard'</span>)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O nome informado no comando ajuda a identificar
+                    a evidência posteriormente.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         SCREENSHOT EM FALHA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Screenshots em testes com falha
+            </h2>
+
+            <p>
+                Em execuções automatizadas, screenshots podem ser
+                utilizadas como evidência quando um cenário apresenta
+                um erro.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>it(<span class="sql-string">'deve realizar login'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .type(<span class="sql-string">'usuario@teste.com'</span>)
+
+    cy.get(<span class="sql-string">'#senha'</span>)
+        .type(<span class="sql-string">'123456'</span>)
+
+    cy.get(<span class="sql-string">'#login'</span>)
+        .click()
+
+    cy.screenshot(<span class="sql-string">'resultado-login'</span>)
+
+})</code></pre>
+
+            <p>
+                Quando o cenário é executado em um ambiente de
+                integração contínua, essas evidências podem ser
+                armazenadas como artefatos do pipeline.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔴
+                    </div>
+
+                    <h3>
+                        Falha
+                    </h3>
+
+                    <p>
+                        O teste apresenta um resultado diferente
+                        do esperado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📸
+                    </div>
+
+                    <h3>
+                        Evidência
+                    </h3>
+
+                    <p>
+                        Uma imagem pode registrar o estado da
+                        aplicação no momento da análise.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Investigação
+                    </h3>
+
+                    <p>
+                        A equipe pode utilizar a evidência para
+                        investigar o comportamento observado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         VIDEO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Gravação de vídeos
+            </h2>
+
+            <p>
+                O Cypress pode gravar vídeos das execuções quando
+                os testes são executados em modo apropriado para
+                gravação.
+            </p>
+
+            <p>
+                Os vídeos são especialmente úteis em ambientes de
+                CI, onde não existe uma interface gráfica disponível
+                para acompanhar a execução em tempo real.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🎥 O vídeo permite visualizar a sequência de
+                    ações realizada pelo teste e o estado da aplicação
+                    durante a execução.
+                </p>
+
+            </div>
+
+            <p>
+                Um cenário de execução pode produzir uma estrutura
+                semelhante a:
+            </p>
+
+            <pre><code>cypress/
+
+└── videos/
+
+    ├── login.cy.js.mp4
+    ├── cadastro.cy.js.mp4
+    └── checkout.cy.js.mp4</code></pre>
+
+        </section>
+
+
+        <!-- =====================================================
+         SCREENSHOTS E VIDEOS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Screenshots x vídeos
+            </h2>
+
+            <p>
+                Screenshots e vídeos possuem finalidades diferentes
+                e podem ser utilizados em conjunto.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Evidência</th>
+                            <th>Característica</th>
+                            <th>Utilização</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>Screenshot</strong>
+                            </td>
+
+                            <td>
+                                Imagem estática.
+                            </td>
+
+                            <td>
+                                Registrar o estado da aplicação em
+                                determinado momento.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>Vídeo</strong>
+                            </td>
+
+                            <td>
+                                Gravação da execução.
+                            </td>
+
+                            <td>
+                                Analisar a sequência de ações e
+                                comportamento do teste.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>Log</strong>
+                            </td>
+
+                            <td>
+                                Informações textuais.
+                            </td>
+
+                            <td>
+                                Investigar comandos, erros e resultados.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         PASTAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Onde ficam as evidências?
+            </h2>
+
+            <p>
+                Durante a execução, o Cypress utiliza diretórios
+                específicos para armazenar diferentes tipos de
+                arquivos gerados pelos testes.
+            </p>
+
+            <pre><code>cypress/
+
+├── screenshots/
+│
+├── videos/
+│
+├── e2e/
+│
+├── fixtures/
+│
+└── support/</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A localização e o comportamento desses arquivos
+                    podem ser configurados de acordo com as necessidades
+                    do projeto e da versão utilizada do Cypress.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         RELATORIOS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                6. O que são relatórios de testes?
+            </h2>
+
+            <p>
+                Relatórios apresentam informações consolidadas sobre
+                a execução dos testes.
+            </p>
+
+            <p>
+                Um relatório pode apresentar informações como:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Testes aprovados
+                    </h3>
+
+                    <p>
+                        Quantidade e identificação dos cenários
+                        executados com sucesso.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Testes com falha
+                    </h3>
+
+                    <p>
+                        Cenários que apresentaram resultados
+                        diferentes do esperado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⏱️
+                    </div>
+
+                    <h3>
+                        Duração
+                    </h3>
+
+                    <p>
+                        Informações relacionadas ao tempo de execução.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        Detalhes
+                    </h3>
+
+                    <p>
+                        Informações sobre suites, testes e resultados.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         REPORTER
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Reporters
+            </h2>
+
+            <p>
+                O Cypress utiliza reporters para apresentar os
+                resultados das execuções dos testes.
+            </p>
+
+            <p>
+                Um dos reporters disponíveis no ecossistema é o
+                <strong>Mocha</strong>, utilizado pelo Cypress para
+                apresentar os resultados dos testes.
+            </p>
+
+            <p>
+                Um resultado no terminal pode apresentar informações
+                semelhantes a:
+            </p>
+
+            <pre><code>  Login
+
+    ✓ deve realizar login com sucesso
+    ✓ deve exibir mensagem de erro
+
+  Cadastro
+
+    ✓ deve cadastrar usuário
+
+  3 passing</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O formato apresentado depende do reporter e da
+                    configuração utilizada pelo projeto.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         JUNIT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Relatórios em formato JUnit
+            </h2>
+
+            <p>
+                Em ambientes de CI/CD, é comum utilizar formatos
+                de relatório que possam ser interpretados por
+                ferramentas de integração.
+            </p>
+
+            <p>
+                O formato <strong>JUnit XML</strong> é um exemplo
+                bastante utilizado para representar resultados
+                de testes automatizados.
+            </p>
+
+            <pre><code>&lt;testsuite name=<span class="sql-string">"Login"</span>
+    tests=<span class="sql-string">"2"</span>
+    failures=<span class="sql-string">"1"</span>&gt;
+
+    &lt;testcase name=<span class="sql-string">"login com sucesso"</span> /&gt;
+
+    &lt;testcase name=<span class="sql-string">"login inválido"</span>&gt;
+
+        &lt;failure&gt;
+            Login inválido
+        &lt;/failure&gt;
+
+    &lt;/testcase&gt;
+
+&lt;/testsuite&gt;</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Formatos estruturados facilitam a integração
+                    dos resultados com ferramentas de CI/CD.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         RELATORIOS HTML
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Relatórios HTML
+            </h2>
+
+            <p>
+                Relatórios HTML podem apresentar os resultados
+                de maneira visual, facilitando a leitura por
+                desenvolvedores, QAs e outros integrantes da equipe.
+            </p>
+
+            <p>
+                Um relatório pode organizar informações como:
+            </p>
+
+            <pre><code>Suite: Login
+
+✔ Login com credenciais válidas
+✔ Login com senha inválida
+✖ Login com usuário inexistente
+
+Total: 3
+Passou: 2
+Falhou: 1</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Relatórios visuais podem ser especialmente úteis
+                    quando os resultados precisam ser compartilhados
+                    com diferentes pessoas da equipe.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         ANALISE DE FALHAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Analisando uma falha
+            </h2>
+
+            <p>
+                Quando um teste falha, podemos utilizar diferentes
+                fontes de informação para investigar o problema.
+            </p>
+
+            <pre><code>Teste
+  ↓
+Falha
+  ↓
+Mensagem de erro
+  ↓
+Screenshot
+  ↓
+Vídeo
+  ↓
+Logs
+  ↓
+Investigação</code></pre>
+
+            <p>
+                Por exemplo, imagine que o teste esperava encontrar
+                um botão:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-testid="login"]'</span>)
+    .should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                Se o elemento não for encontrado, podemos analisar
+                a mensagem de erro, a screenshot e o vídeo para
+                verificar o estado da aplicação.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+         ARTEFATOS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Artefatos do pipeline
+            </h2>
+
+            <p>
+                Em uma pipeline de CI/CD, screenshots, vídeos e
+                relatórios podem ser armazenados como artefatos
+                da execução.
+            </p>
+
+            <p>
+                Uma estrutura conceitual pode ser:
+            </p>
+
+            <pre><code>Pipeline
+
+├── Testes
+│
+├── Screenshots
+│
+├── Vídeos
+│
+├── Relatórios
+│
+└── Logs</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Execução
+                    </h3>
+
+                    <p>
+                        Os testes são executados automaticamente
+                        pelo pipeline.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Artefatos
+                    </h3>
+
+                    <p>
+                        Evidências e relatórios podem ser armazenados
+                        ao final da execução.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Análise
+                    </h3>
+
+                    <p>
+                        A equipe pode consultar os artefatos para
+                        investigar os resultados.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         GITHUB ACTIONS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Evidências no GitHub Actions
+            </h2>
+
+            <p>
+                Em uma pipeline do GitHub Actions, os arquivos
+                gerados pelos testes podem ser disponibilizados
+                como artefatos da execução.
+            </p>
+
+            <p>
+                Um exemplo conceitual seria:
+            </p>
+
+            <pre><code>- name: Executar Cypress
+  run: npx cypress run
+
+- name: Salvar evidências
+  uses: actions/upload-artifact@v4
+  if: always()
+  with:
+    name: cypress-evidencias
+    path: |
+      cypress/screenshots
+      cypress/videos</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O uso de <strong>if: always()</strong> pode ser
+                    importante quando queremos preservar os artefatos
+                    mesmo após uma etapa anterior apresentar falha.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         CONFIGURACAO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Configurando screenshots
+            </h2>
+
+            <p>
+                Algumas opções relacionadas aos screenshots podem
+                ser configuradas no arquivo de configuração do
+                Cypress.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>const { defineConfig } = require(<span class="sql-string">'cypress'</span>)
+
+module.exports = defineConfig({
+
+    screenshotsFolder: <span class="sql-string">'cypress/screenshots'</span>
+
+})</code></pre>
+
+            <p>
+                A configuração disponível pode variar conforme a
+                versão do Cypress utilizada no projeto.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    Sempre consulte a documentação da versão do
+                    Cypress utilizada antes de aplicar uma configuração
+                    específica.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         BOAS PRATICAS EVIDENCIAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Boas práticas para evidências
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Capture informações úteis
+                    </h3>
+
+                    <p>
+                        Registre evidências que realmente contribuam
+                        para entender o resultado do teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏷️
+                    </div>
+
+                    <h3>
+                        Utilize nomes claros
+                    </h3>
+
+                    <p>
+                        Identifique screenshots e arquivos com nomes
+                        relacionados ao cenário executado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Organize os artefatos
+                    </h3>
+
+                    <p>
+                        Mantenha screenshots, vídeos e relatórios
+                        organizados dentro do pipeline.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Evite dados sensíveis
+                    </h3>
+
+                    <p>
+                        Não disponibilize tokens, senhas ou informações
+                        confidenciais nas evidências.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         QUANDO UTILIZAR
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Quando utilizar cada evidência?
+            </h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Situação</th>
+                            <th>Evidência útil</th>
+                            <th>Objetivo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                Falha visual
+                            </td>
+
+                            <td>
+                                Screenshot
+                            </td>
+
+                            <td>
+                                Verificar o estado da interface.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Falha durante uma sequência
+                            </td>
+
+                            <td>
+                                Vídeo
+                            </td>
+
+                            <td>
+                                Observar as ações executadas.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Erro de execução
+                            </td>
+
+                            <td>
+                                Logs
+                            </td>
+
+                            <td>
+                                Identificar informações técnicas
+                                sobre o erro.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Resultado da suíte
+                            </td>
+
+                            <td>
+                                Relatório
+                            </td>
+
+                            <td>
+                                Consolidar os resultados dos testes.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         EXEMPLO COMPLETO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                16. Exemplo completo
+            </h2>
+
+            <p>
+                Podemos combinar screenshots com uma execução
+                automatizada:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve realizar login com sucesso'</span>, () =&gt; {
+
+        cy.visit(<span class="sql-string">'/login'</span>)
+
+        cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+            .type(<span class="sql-string">'usuario@teste.com'</span>)
+
+        cy.get(<span class="sql-string">'[data-testid="senha"]'</span>)
+            .type(<span class="sql-string">'123456'</span>)
+
+        cy.get(<span class="sql-string">'[data-testid="login"]'</span>)
+            .click()
+
+        cy.url()
+            .should(<span class="sql-string">'include'</span>, <span class="sql-string">'dashboard'</span>)
+
+        cy.screenshot(<span class="sql-string">'login-sucesso'</span>)
+
+    })
+
+})</code></pre>
+
+            <p>
+                Durante uma execução em CI, podemos então obter:
+            </p>
+
+            <pre><code>Execução
+    ↓
+Teste Cypress
+    ↓
+Resultado
+    ↓
+Screenshot / Vídeo / Logs
+    ↓
+Artefatos
+    ↓
+Relatório</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A combinação desses recursos facilita a
+                    rastreabilidade e a investigação dos resultados
+                    da automação.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         ERROS COMUNS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns ao trabalhar com evidências
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Não armazenar evidências
+                    </h3>
+
+                    <p>
+                        Executar testes no CI sem preservar informações
+                        importantes quando ocorre uma falha.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Gerar arquivos em excesso
+                    </h3>
+
+                    <p>
+                        Produzir grandes quantidades de evidências
+                        sem uma estratégia de armazenamento.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Ignorar os logs
+                    </h3>
+
+                    <p>
+                        Analisar somente a imagem e deixar de verificar
+                        as informações técnicas da execução.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Expor informações sensíveis
+                    </h3>
+
+                    <p>
+                        Armazenar screenshots ou vídeos contendo
+                        credenciais, tokens ou informações privadas.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         BOAS PRATICAS RELATORIOS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas para relatórios
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        Seja objetivo
+                    </h3>
+
+                    <p>
+                        Apresente informações relevantes para entender
+                        rapidamente o resultado da execução.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🕐
+                    </div>
+
+                    <h3>
+                        Registre a execução
+                    </h3>
+
+                    <p>
+                        Mantenha informações que permitam identificar
+                        quando e onde o teste foi executado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔗
+                    </div>
+
+                    <h3>
+                        Relacione evidências
+                    </h3>
+
+                    <p>
+                        Sempre que possível, associe falhas aos
+                        screenshots, vídeos e logs correspondentes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Automatize
+                    </h3>
+
+                    <p>
+                        Faça a geração e armazenamento dos relatórios
+                        parte do processo de CI/CD.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         CHECKLIST
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o que são evidências de teste.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar cy.screenshot().
+                </p>
+
+                <p>
+                    ☐ Entendi a utilização de screenshots em falhas.
+                </p>
+
+                <p>
+                    ☐ Entendi a finalidade dos vídeos.
+                </p>
+
+                <p>
+                    ☐ Conheço a função dos logs.
+                </p>
+
+                <p>
+                    ☐ Entendi o conceito de relatórios de testes.
+                </p>
+
+                <p>
+                    ☐ Conheço o conceito de reporters.
+                </p>
+
+                <p>
+                    ☐ Entendi o formato JUnit XML.
+                </p>
+
+                <p>
+                    ☐ Entendi o conceito de artefatos no CI/CD.
+                </p>
+
+                <p>
+                    ☐ Sei como evidências podem ajudar na investigação
+                    de falhas.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         RESUMO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    📸 <strong>Screenshot</strong>
+                    → registra visualmente o estado da aplicação.
+                </p>
+
+                <p>
+                    🎥 <strong>Vídeo</strong>
+                    → registra a sequência da execução.
+                </p>
+
+                <p>
+                    📋 <strong>Logs</strong>
+                    → fornecem informações técnicas sobre os testes.
+                </p>
+
+                <p>
+                    📊 <strong>Relatórios</strong>
+                    → consolidam os resultados das execuções.
+                </p>
+
+                <p>
+                    📦 <strong>Artefatos</strong>
+                    → permitem armazenar evidências produzidas
+                    pelo pipeline.
+                </p>
+
+                <p>
+                    🔎 <strong>Análise de falhas</strong>
+                    → utiliza diferentes evidências para investigar
+                    problemas.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você sabe como trabalhar com screenshots,
+                vídeos, logs e relatórios para acompanhar e
+                investigar a execução dos seus testes Cypress.
+            </p>
+
+            <p>
+                Na próxima aula vamos colocar em prática os
+                conhecimentos adquiridos durante toda a trilha
+                construindo uma suíte completa de testes E2E.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+         QUIZ
+    ====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 44
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 44 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe como trabalhar com screenshots,
+                vídeos, logs, relatórios e artefatos para analisar
+                as execuções dos seus testes Cypress.
+            </p>
+
+            <a href="../aulas/aula-45.html" class="cta-button">
+                Aula 45 →
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+     FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 44 • Evidências e Relatórios
+        </p>
+
+    </footer>
+
+
+    <!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-44.js"></script>
+
+</body>
+
+</html>

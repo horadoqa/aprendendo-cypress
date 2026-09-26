@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 41 — Cypress em Headless</title>
+
+</head>
+
+<body>
+
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 41 • CYPRESS EM HEADLESS
+            </span>
+
+            <h1>
+                Cypress em Headless
+            </h1>
+
+            <p>
+                Aprenda a executar testes Cypress sem abrir
+                visualmente o navegador e prepare sua suíte
+                para execução automatizada em ambientes de CI/CD.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+         OBJETIVOS DA AULA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Nas aulas anteriores, aprendemos a organizar nossos
+                testes e construir uma suíte automatizada utilizando
+                Cypress.
+            </p>
+
+            <p>
+                Agora vamos aprender como executar esses testes
+                utilizando o modo <strong>headless</strong>, uma
+                abordagem muito utilizada em servidores e pipelines
+                de integração contínua.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🖥️
+                    </div>
+
+                    <h3>
+                        Entender Headless
+                    </h3>
+
+                    <p>
+                        Compreender o que significa executar um navegador
+                        em modo headless.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚙️
+                    </div>
+
+                    <h3>
+                        Executar pelo terminal
+                    </h3>
+
+                    <p>
+                        Executar testes Cypress utilizando comandos
+                        diretamente pelo terminal.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🚀
+                    </div>
+
+                    <h3>
+                        Automatizar execuções
+                    </h3>
+
+                    <p>
+                        Preparar os testes para ambientes automatizados
+                        e pipelines.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        Gerar evidências
+                    </h3>
+
+                    <p>
+                        Entender como screenshots, vídeos e resultados
+                        podem ser utilizados em execuções headless.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         O QUE É HEADLESS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é execução Headless?
+            </h2>
+
+            <p>
+                O termo <strong>headless</strong> significa executar
+                uma aplicação ou navegador sem apresentar sua interface
+                gráfica para o usuário.
+            </p>
+
+            <p>
+                No Cypress, isso permite executar os testes sem abrir
+                visualmente a janela do navegador.
+            </p>
+
+            <pre><code>npx cypress run</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🖥️ <strong>Modo interativo</strong>
+                    → normalmente utilizado durante o desenvolvimento
+                    dos testes.
+                </p>
+
+                <p>
+                    ⚙️ <strong>Modo headless</strong>
+                    → executa os testes pelo terminal sem apresentar
+                    a interface gráfica do navegador.
+                </p>
+
+                <p>
+                    🚀 <strong>CI/CD</strong>
+                    → o modo headless é especialmente útil em
+                    servidores e pipelines automatizados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         OPEN X RUN
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Cypress Open x Cypress Run
+            </h2>
+
+            <p>
+                O Cypress possui diferentes formas de iniciar
+                a execução dos testes.
+            </p>
+
+            <p>
+                Durante o desenvolvimento, podemos utilizar:
+            </p>
+
+            <pre><code>npx cypress open</code></pre>
+
+            <p>
+                Esse comando abre a interface do Cypress, permitindo
+                selecionar e acompanhar os testes visualmente.
+            </p>
+
+            <p>
+                Para uma execução automatizada, utilizamos:
+            </p>
+
+            <pre><code>npx cypress run</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🪟
+                    </div>
+
+                    <h3>
+                        cypress open
+                    </h3>
+
+                    <p>
+                        Abre a interface gráfica do Cypress para
+                        desenvolvimento e depuração.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚙️
+                    </div>
+
+                    <h3>
+                        cypress run
+                    </h3>
+
+                    <p>
+                        Executa os testes pelo terminal, sendo adequado
+                        para automação.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         PRIMEIRA EXECUÇÃO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Executando o primeiro teste em Headless
+            </h2>
+
+            <p>
+                Para executar a suíte de testes pelo terminal,
+                utilize:
+            </p>
+
+            <pre><code>npx cypress run</code></pre>
+
+            <p>
+                O Cypress iniciará a execução dos testes encontrados
+                na estrutura configurada do projeto.
+            </p>
+
+            <p>
+                Ao final, o terminal apresentará informações sobre
+                os testes executados.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    O comando <strong>cypress run</strong> é uma das
+                    principais formas de executar testes Cypress em
+                    ambientes automatizados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         BROWSER
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Escolhendo o navegador
+            </h2>
+
+            <p>
+                Podemos informar qual navegador será utilizado
+                durante a execução.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>npx cypress run --browser chrome</code></pre>
+
+            <p>
+                Também podemos utilizar outros navegadores
+                compatíveis com o ambiente de execução.
+            </p>
+
+            <pre><code>npx cypress run --browser electron</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A disponibilidade dos navegadores depende do
+                    ambiente onde o Cypress está sendo executado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         SPEC
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Executando uma Spec específica
+            </h2>
+
+            <p>
+                Nem sempre precisamos executar toda a suíte.
+                Podemos selecionar uma spec específica.
+            </p>
+
+            <pre><code>npx cypress run --spec "cypress/e2e/login.cy.js"</code></pre>
+
+            <p>
+                Isso pode ser útil durante o desenvolvimento,
+                principalmente quando queremos validar rapidamente
+                um conjunto específico de testes.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Execução específica
+                    </h3>
+
+                    <p>
+                        Executa somente o arquivo de teste informado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚡
+                    </div>
+
+                    <h3>
+                        Feedback rápido
+                    </h3>
+
+                    <p>
+                        Evita executar testes que não fazem parte
+                        da validação atual.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Depuração
+                    </h3>
+
+                    <p>
+                        Facilita a investigação de problemas em
+                        uma spec específica.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         TAGS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Executando diferentes arquivos de teste
+            </h2>
+
+            <p>
+                Também podemos informar padrões para selecionar
+                diferentes arquivos de teste.
+            </p>
+
+            <pre><code>npx cypress run --spec "cypress/e2e/**/*.cy.js"</code></pre>
+
+            <p>
+                O padrão utilizado depende da organização do projeto
+                e dos arquivos que desejamos executar.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Organize suas specs de forma consistente para
+                    facilitar a seleção dos testes durante execuções
+                    locais e automatizadas.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         HEADLESS E CI
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Headless em ambientes de CI
+            </h2>
+
+            <p>
+                Em um ambiente de integração contínua, normalmente
+                não existe uma área de trabalho gráfica disponível
+                para abrir manualmente o navegador.
+            </p>
+
+            <p>
+                Por isso, a execução pelo terminal é fundamental
+                para automatizar os testes.
+            </p>
+
+            <pre><code>npx cypress run</code></pre>
+
+            <p>
+                Um pipeline pode instalar as dependências, iniciar
+                a aplicação e executar a suíte automaticamente.
+            </p>
+
+            <pre><code>npm ci
+
+npm run build
+
+npm start
+
+npx cypress run</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O fluxo exato depende da tecnologia utilizada
+                    pela aplicação e da configuração do pipeline.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         BASEURL
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Utilizando baseUrl
+            </h2>
+
+            <p>
+                Quando a aplicação possui uma URL conhecida, podemos
+                configurar o <strong>baseUrl</strong> no Cypress.
+            </p>
+
+            <pre><code>const { defineConfig } = require(<span class="sql-string">'cypress'</span>)
+
+module.exports = defineConfig({
+
+    e2e: {
+
+        baseUrl: <span class="sql-string">'http://localhost:3000'</span>
+
+    }
+
+})</code></pre>
+
+            <p>
+                Assim, os testes podem utilizar:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/login'</span>)</code></pre>
+
+            <p>
+                Em vez de repetir a URL completa:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'http://localhost:3000/login'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Uma configuração adequada do
+                    <strong>baseUrl</strong> facilita a execução dos
+                    testes em diferentes ambientes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         VARIÁVEIS DE AMBIENTE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Configurando diferentes ambientes
+            </h2>
+
+            <p>
+                Em projetos reais, os testes podem ser executados
+                contra diferentes ambientes, como desenvolvimento,
+                homologação e produção controlada.
+            </p>
+
+            <p>
+                O Cypress permite trabalhar com configurações e
+                variáveis de ambiente para adaptar a execução.
+            </p>
+
+            <pre><code>npx cypress run --env ambiente=homologacao</code></pre>
+
+            <p>
+                Dentro do teste, podemos acessar informações de
+                ambiente através das APIs de configuração do Cypress.
+            </p>
+
+            <pre><code>const ambiente = Cypress.env(<span class="sql-string">'ambiente'</span>)
+
+cy.log(ambiente)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Evite colocar credenciais ou informações
+                    sensíveis diretamente nos arquivos versionados
+                    do projeto.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         EVIDÊNCIAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Screenshots e evidências
+            </h2>
+
+            <p>
+                Durante a execução automatizada, evidências podem
+                ajudar na análise de falhas.
+            </p>
+
+            <p>
+                Podemos solicitar uma screenshot durante o teste:
+            </p>
+
+            <pre><code>cy.screenshot(<span class="sql-string">'tela-login'</span>)</code></pre>
+
+            <p>
+                As evidências podem ser armazenadas pelo processo
+                de execução e posteriormente utilizadas para
+                investigação.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📸
+                    </div>
+
+                    <h3>
+                        Screenshots
+                    </h3>
+
+                    <p>
+                        Capturam o estado visual da aplicação em
+                        determinado momento.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎥
+                    </div>
+
+                    <h3>
+                        Vídeos
+                    </h3>
+
+                    <p>
+                        Podem ajudar a analisar a sequência de ações
+                        realizada durante uma execução.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        Logs
+                    </h3>
+
+                    <p>
+                        Fornecem informações importantes sobre
+                        comandos e resultados da execução.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         STATUS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Entendendo o resultado da execução
+            </h2>
+
+            <p>
+                Quando os testes são executados pelo terminal,
+                o Cypress apresenta um resumo da execução.
+            </p>
+
+            <pre><code>Running:  login.cy.js
+
+  Login
+    ✓ deve realizar login
+    ✓ deve bloquear senha inválida
+
+  2 passing</code></pre>
+
+            <p>
+                Quando um teste falha, o processo também fornece
+                informações para ajudar na investigação.
+            </p>
+
+            <pre><code>1 failing
+
+  Login
+    1) deve realizar login
+
+       AssertionError:
+       expected URL to include "dashboard"</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Em pipelines, o resultado da execução pode ser
+                    utilizado para determinar se a etapa de testes
+                    foi concluída com sucesso.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         EXIT CODE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                11. O resultado do comando e o pipeline
+            </h2>
+
+            <p>
+                Em uma execução automatizada, o processo que executa
+                o Cypress precisa saber se os testes foram aprovados
+                ou se houve falhas.
+            </p>
+
+            <p>
+                O comando de execução retorna um resultado que pode
+                ser utilizado pelo sistema de automação para decidir
+                o próximo passo do pipeline.
+            </p>
+
+            <pre><code>npx cypress run</code></pre>
+
+            <p>
+                Por isso, uma falha nos testes pode interromper
+                etapas posteriores de um pipeline, dependendo da
+                configuração utilizada.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🧪 Testes aprovados → o pipeline pode continuar.
+                </p>
+
+                <p>
+                    ❌ Testes com falha → o pipeline pode interromper
+                    a execução ou executar etapas específicas de
+                    tratamento.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         COMANDOS ÚTEIS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Comandos úteis
+            </h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Comando</th>
+                            <th>Objetivo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>npx cypress open</strong>
+                            </td>
+
+                            <td>
+                                Abre a interface do Cypress.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>npx cypress run</strong>
+                            </td>
+
+                            <td>
+                                Executa os testes pelo terminal.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>npx cypress run --browser chrome</strong>
+                            </td>
+
+                            <td>
+                                Executa os testes utilizando o
+                                navegador especificado.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>npx cypress run --spec ...</strong>
+                            </td>
+
+                            <td>
+                                Executa uma spec específica.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>npx cypress verify</strong>
+                            </td>
+
+                            <td>
+                                Verifica a instalação do Cypress.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         DIFERENÇAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Modo interativo x Headless
+            </h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Característica</th>
+                            <th>Modo interativo</th>
+                            <th>Headless</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                Interface visual
+                            </td>
+
+                            <td>
+                                Sim
+                            </td>
+
+                            <td>
+                                Não
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Execução pelo terminal
+                            </td>
+
+                            <td>
+                                Não é o foco
+                            </td>
+
+                            <td>
+                                Sim
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Desenvolvimento
+                            </td>
+
+                            <td>
+                                Muito utilizado
+                            </td>
+
+                            <td>
+                                Também pode ser utilizado
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                CI/CD
+                            </td>
+
+                            <td>
+                                Menos adequado
+                            </td>
+
+                            <td>
+                                Muito utilizado
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Depuração visual
+                            </td>
+
+                            <td>
+                                Facilitada
+                            </td>
+
+                            <td>
+                                Depende dos logs e evidências
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         EXEMPLO COMPLETO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Exemplo completo
+            </h2>
+
+            <p>
+                Considere uma spec de login:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve realizar login com sucesso'</span>, () =&gt; {
+
+        cy.visit(<span class="sql-string">'/login'</span>)
+
+        cy.get(<span class="sql-string">'#email'</span>)
+            .type(<span class="sql-string">'usuario@teste.com'</span>)
+
+        cy.get(<span class="sql-string">'#senha'</span>)
+            .type(<span class="sql-string">'123456'</span>)
+
+        cy.get(<span class="sql-string">'#login'</span>)
+            .click()
+
+        cy.url()
+            .should(<span class="sql-string">'include'</span>, <span class="sql-string">'dashboard'</span>)
+
+    })
+
+})</code></pre>
+
+            <p>
+                Podemos executar essa spec em headless:
+            </p>
+
+            <pre><code>npx cypress run \
+    --spec "cypress/e2e/login.cy.js" \
+    --browser chrome</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Nesse cenário, o teste pode ser executado sem
+                    abrir visualmente a interface do navegador.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         BOAS PRÁTICAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas para execução Headless
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚙️
+                    </div>
+
+                    <h3>
+                        Padronize os comandos
+                    </h3>
+
+                    <p>
+                        Utilize scripts npm para facilitar a execução
+                        dos testes pela equipe.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Separe ambientes
+                    </h3>
+
+                    <p>
+                        Mantenha configurações adequadas para cada
+                        ambiente de execução.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📸
+                    </div>
+
+                    <h3>
+                        Mantenha evidências
+                    </h3>
+
+                    <p>
+                        Utilize screenshots, vídeos e logs para
+                        facilitar a investigação de falhas.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Proteja credenciais
+                    </h3>
+
+                    <p>
+                        Evite armazenar senhas, tokens e informações
+                        sensíveis diretamente no código.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ERROS COMUNS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Navegador indisponível
+                    </h3>
+
+                    <p>
+                        O ambiente pode não possuir o navegador
+                        configurado ou disponível para execução.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Aplicação não iniciada
+                    </h3>
+
+                    <p>
+                        O teste pode tentar acessar uma aplicação
+                        que ainda não está disponível.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        BaseUrl incorreta
+                    </h3>
+
+                    <p>
+                        Uma URL base configurada incorretamente pode
+                        fazer os testes acessarem o endereço errado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Falta de evidências
+                    </h3>
+
+                    <p>
+                        Sem logs e evidências, investigar falhas em
+                        ambientes remotos pode ser mais difícil.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CHECKLIST
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o conceito de execução headless.
+                </p>
+
+                <p>
+                    ☐ Sei a diferença entre cypress open e
+                    cypress run.
+                </p>
+
+                <p>
+                    ☐ Sei executar testes pelo terminal.
+                </p>
+
+                <p>
+                    ☐ Sei escolher um navegador para execução.
+                </p>
+
+                <p>
+                    ☐ Sei executar uma spec específica.
+                </p>
+
+                <p>
+                    ☐ Entendi a importância do headless em CI/CD.
+                </p>
+
+                <p>
+                    ☐ Entendi como utilizar baseUrl.
+                </p>
+
+                <p>
+                    ☐ Conheço o uso de variáveis de ambiente.
+                </p>
+
+                <p>
+                    ☐ Entendi a importância de screenshots e logs.
+                </p>
+
+                <p>
+                    ☐ Sei interpretar o resultado da execução.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         RESUMO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🖥️ <strong>Headless</strong>
+                    → execução sem apresentar visualmente a interface
+                    do navegador.
+                </p>
+
+                <p>
+                    ▶️ <strong>cypress open</strong>
+                    → abre a interface gráfica para desenvolvimento.
+                </p>
+
+                <p>
+                    ⚙️ <strong>cypress run</strong>
+                    → executa os testes pelo terminal.
+                </p>
+
+                <p>
+                    🎯 <strong>--spec</strong>
+                    → permite selecionar uma spec específica.
+                </p>
+
+                <p>
+                    🌐 <strong>--browser</strong>
+                    → permite especificar o navegador da execução.
+                </p>
+
+                <p>
+                    📸 <strong>Screenshots</strong>
+                    → ajudam a registrar evidências da execução.
+                </p>
+
+                <p>
+                    🚀 <strong>CI/CD</strong>
+                    → utiliza a execução automatizada para validar
+                    continuamente a aplicação.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você sabe como executar testes Cypress em modo
+                headless e como essa abordagem pode ser utilizada
+                em ambientes automatizados.
+            </p>
+
+            <p>
+                Na próxima aula vamos aprender como preparar o
+                <strong>Cypress no CI</strong>, configurando a execução
+                dos testes em pipelines de integração contínua.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         QUIZ
+    ====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 41
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 41 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe como executar testes Cypress em
+                modo headless e entende por que esse formato é
+                importante para automação e CI/CD.
+            </p>
+
+            <a href="../aulas/aula-42.html" class="cta-button">
+                Aula 42 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+     FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 41 • Cypress em Headless
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-41.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,1823 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <title>Aula 31 — cy.request()</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 31 • CY.REQUEST()
+            </span>
+
+            <h1>
+                cy.request()
+            </h1>
+
+            <p>
+                Aprenda a enviar requisições HTTP diretamente pelo
+                Cypress e utilizar as respostas das APIs durante
+                seus testes automatizados.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS DA AULA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Na aula anterior, aprendemos os conceitos fundamentais
+                de testes de API e entendemos como uma API funciona.
+            </p>
+
+            <p>
+                Agora vamos utilizar o Cypress para enviar requisições
+                HTTP diretamente para uma API utilizando o comando
+                <strong>cy.request()</strong>.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        Entender cy.request()
+                    </h3>
+
+                    <p>
+                        Conhecer o comando utilizado para realizar
+                        requisições HTTP diretamente pelo Cypress.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📤
+                    </div>
+
+                    <h3>
+                        Enviar requisições
+                    </h3>
+
+                    <p>
+                        Trabalhar com métodos GET, POST, PUT e DELETE.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📥
+                    </div>
+
+                    <h3>
+                        Trabalhar com responses
+                    </h3>
+
+                    <p>
+                        Acessar status, headers e body das respostas
+                        recebidas da API.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Criar testes de API
+                    </h3>
+
+                    <p>
+                        Construir cenários automatizados utilizando
+                        requisições HTTP.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE É CY.REQUEST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é cy.request()?
+            </h2>
+
+            <p>
+                O <strong>cy.request()</strong> é um comando do Cypress
+                utilizado para realizar requisições HTTP diretamente
+                contra uma API.
+            </p>
+
+            <p>
+                Diferentemente de comandos como
+                <strong>cy.get()</strong>, que interagem com elementos
+                da interface, o <strong>cy.request()</strong> trabalha
+                diretamente com o servidor.
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>API</strong>
+                    → recebe a requisição enviada pelo teste.
+                </p>
+
+                <p>
+                    📤 <strong>Request</strong>
+                    → contém método, URL, headers e, quando necessário,
+                    dados enviados.
+                </p>
+
+                <p>
+                    📥 <strong>Response</strong>
+                    → contém status, headers e body retornados pela API.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     SINTAXE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Sintaxe básica
+            </h2>
+
+            <p>
+                A forma mais simples de utilizar o
+                <strong>cy.request()</strong> é informar a URL
+                que queremos acessar.
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'/usuarios'</span>)</code></pre>
+
+            <p>
+                Quando nenhum método é informado, o Cypress utiliza
+                uma requisição <strong>GET</strong>.
+            </p>
+
+            <p>
+                Também podemos informar explicitamente o método:
+            </p>
+
+            <pre><code>cy.request(
+<span class="sql-string">'GET'</span>,
+<span class="sql-string">'/usuarios'</span>
+
+)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    O método HTTP define qual operação será realizada
+                    pelo servidor.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     GET
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Realizando uma requisição GET
+            </h2>
+
+            <p>
+                O método <strong>GET</strong> normalmente é utilizado
+                para consultar informações.
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios'</span>)</code></pre>
+
+            <p>
+                Podemos acessar a resposta utilizando
+                <strong>.then()</strong>.
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios'</span>)
+.then((response) =&gt; {
+
+    cy.log(response.status)
+
+    cy.log(response.body)
+
+})</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Consulta
+                    </h3>
+
+                    <p>
+                        Utilizado para buscar informações disponíveis
+                        na API.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        Response
+                    </h3>
+
+                    <p>
+                        A resposta pode conter dados e informações
+                        sobre a requisição.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Validação
+                    </h3>
+
+                    <p>
+                        Podemos utilizar a resposta para criar
+                        assertions.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     STATUS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Acessando o status da resposta
+            </h2>
+
+            <p>
+                Uma das informações mais importantes de uma resposta
+                HTTP é o <strong>status code</strong>.
+            </p>
+
+            <p>
+                Podemos acessar essa informação através de
+                <strong>response.status</strong>.
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios'</span>)
+.then((response) =&gt; {
+
+    cy.log(response.status)
+
+})</code></pre>
+
+            <p>
+                Também podemos validar diretamente o status:
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios'</span>)
+.its(<span class="sql-string">'status'</span>)
+.should(<span class="sql-string">'eq'</span>, 200)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Um status <strong>200</strong> normalmente indica
+                    que uma requisição foi processada com sucesso.
+                </p>
+
+                <p>
+                    O significado exato depende do endpoint e da
+                    operação realizada.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BODY
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Acessando o body
+            </h2>
+
+            <p>
+                O <strong>body</strong> contém os dados retornados
+                pela API.
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios/1'</span>)
+.then((response) =&gt; {
+
+    cy.log(response.body)
+
+})</code></pre>
+
+            <p>
+                Se a API retornar um objeto semelhante a:
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"id"</span>: 1,
+<span class="sql-string">"nome"</span>: <span class="sql-string">"Maria"</span>,
+<span class="sql-string">"email"</span>: <span class="sql-string">"maria@teste.com"</span>
+
+}</code></pre>
+
+            <p>
+                Podemos acessar suas propriedades:
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios/1'</span>)
+.then((response) =&gt; {
+
+    cy.log(response.body.nome)
+
+    cy.log(response.body.email)
+
+})</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+     ASSERTIONS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Validando uma resposta
+            </h2>
+
+            <p>
+                O <strong>cy.request()</strong> pode ser utilizado
+                junto com assertions para verificar se a API retornou
+                o resultado esperado.
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios/1'</span>)
+.then((response) =&gt; {
+
+    expect(response.status).to.eq(200)
+
+    expect(response.body.nome)
+        .to.eq(<span class="sql-string">'Maria'</span>)
+
+})</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔢
+                    </div>
+
+                    <h3>
+                        Status
+                    </h3>
+
+                    <p>
+                        Verificamos o código HTTP retornado pela API.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Body
+                    </h3>
+
+                    <p>
+                        Validamos os dados presentes no corpo
+                        da resposta.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏷️
+                    </div>
+
+                    <h3>
+                        Headers
+                    </h3>
+
+                    <p>
+                        Também podemos validar informações presentes
+                        nos headers.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     POST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Enviando uma requisição POST
+            </h2>
+
+            <p>
+                O método <strong>POST</strong> é utilizado em APIs
+                para enviar dados ao servidor, frequentemente para
+                criar um novo recurso.
+            </p>
+
+            <p>
+                Podemos enviar um objeto utilizando a propriedade
+                <strong>body</strong>.
+            </p>
+
+            <pre><code>cy.request({
+method: <span class="sql-string">'POST'</span>,
+url: <span class="sql-string">'/usuarios'</span>,
+body: {
+    nome: <span class="sql-string">'Maria'</span>,
+    email: <span class="sql-string">'maria@teste.com'</span>
+}
+
+})</code></pre>
+
+            <p>
+                Depois podemos verificar a resposta:
+            </p>
+
+            <pre><code>cy.request({
+method: <span class="sql-string">'POST'</span>,
+url: <span class="sql-string">'/usuarios'</span>,
+body: {
+    nome: <span class="sql-string">'Maria'</span>,
+    email: <span class="sql-string">'maria@teste.com'</span>
+}
+
+}).then((response) => {
+
+expect(response.status).to.eq(201)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O status <strong>201</strong> é frequentemente
+                    utilizado quando um novo recurso foi criado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PUT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Enviando uma requisição PUT
+            </h2>
+
+            <p>
+                O método <strong>PUT</strong> pode ser utilizado
+                para atualizar um recurso.
+            </p>
+
+            <pre><code>cy.request({
+method: <span class="sql-string">'PUT'</span>,
+url: <span class="sql-string">'/usuarios/1'</span>,
+body: {
+    nome: <span class="sql-string">'Maria Silva'</span>,
+    email: <span class="sql-string">'maria.silva@teste.com'</span>
+}
+
+})</code></pre>
+
+            <p>
+                Podemos validar o resultado da operação:
+            </p>
+
+            <pre><code>cy.request({
+method: <span class="sql-string">'PUT'</span>,
+url: <span class="sql-string">'/usuarios/1'</span>,
+body: {
+    nome: <span class="sql-string">'Maria Silva'</span>
+}
+
+}).then((response) => {
+
+expect(response.status).to.be.oneOf([200, 204])
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <strong>Observação:</strong>
+
+                <p>
+                    O status retornado depende do contrato da API.
+                    O exemplo acima considera respostas comuns para
+                    uma atualização.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PATCH
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Enviando uma requisição PATCH
+            </h2>
+
+            <p>
+                O método <strong>PATCH</strong> normalmente é utilizado
+                para realizar uma atualização parcial em um recurso.
+            </p>
+
+            <pre><code>cy.request({
+method: <span class="sql-string">'PATCH'</span>,
+url: <span class="sql-string">'/usuarios/1'</span>,
+body: {
+    nome: <span class="sql-string">'Maria Silva'</span>
+}
+
+})</code></pre>
+
+            <p>
+                Podemos validar a resposta:
+            </p>
+
+            <pre><code>cy.request({
+method: <span class="sql-string">'PATCH'</span>,
+url: <span class="sql-string">'/usuarios/1'</span>,
+body: {
+    nome: <span class="sql-string">'Maria Silva'</span>
+}
+
+}).then((response) => {
+
+expect(response.status).to.be.oneOf([200, 204])
+
+})</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+     DELETE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Enviando uma requisição DELETE
+            </h2>
+
+            <p>
+                O método <strong>DELETE</strong> normalmente é utilizado
+                para remover um recurso.
+            </p>
+
+            <pre><code>cy.request({
+method: <span class="sql-string">'DELETE'</span>,
+url: <span class="sql-string">'/usuarios/1'</span>
+
+})</code></pre>
+
+            <p>
+                Podemos validar o status retornado:
+            </p>
+
+            <pre><code>cy.request({
+method: <span class="sql-string">'DELETE'</span>,
+url: <span class="sql-string">'/usuarios/1'</span>
+
+}).then((response) => {
+
+expect(response.status).to.be.oneOf([200, 204])
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Assim como nos demais métodos, o status esperado
+                    deve ser definido de acordo com o contrato da API.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     REQUEST OBJECT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Utilizando o objeto de configuração
+            </h2>
+
+            <p>
+                Para requisições mais completas, podemos utilizar
+                um objeto contendo as configurações da chamada.
+            </p>
+
+            <pre><code>cy.request({
+
+method: <span class="sql-string">'GET'</span>,
+
+url: <span class="sql-string">'/usuarios'</span>
+
+})</code></pre>
+
+            <p>
+                Essa estrutura facilita a utilização de propriedades
+                como método, URL, headers, body e parâmetros.
+            </p>
+
+            <pre><code>cy.request({
+
+method: <span class="sql-string">'POST'</span>,
+
+url: <span class="sql-string">'/usuarios'</span>,
+
+body: {
+
+    nome: <span class="sql-string">'Maria'</span>,
+
+    email: <span class="sql-string">'maria@teste.com'</span>
+
+}
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A sintaxe com objeto é especialmente útil quando
+                    a requisição possui várias configurações.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     HEADERS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Enviando headers
+            </h2>
+
+            <p>
+                Algumas APIs exigem headers específicos para
+                processar uma requisição.
+            </p>
+
+            <pre><code>cy.request({
+
+method: <span class="sql-string">'GET'</span>,
+
+url: <span class="sql-string">'/usuarios'</span>,
+
+headers: {
+
+    Authorization: <span class="sql-string">'Bearer token-de-teste'</span>
+
+}
+
+})</code></pre>
+
+            <p>
+                Também podemos trabalhar com headers relacionados
+                ao formato do conteúdo enviado.
+            </p>
+
+            <pre><code>cy.request({
+
+method: <span class="sql-string">'POST'</span>,
+
+url: <span class="sql-string">'/usuarios'</span>,
+
+headers: {
+
+    <span class="sql-string">'Content-Type'</span>: <span class="sql-string">'application/json'</span>
+
+},
+
+body: {
+
+    nome: <span class="sql-string">'Maria'</span>,
+
+    email: <span class="sql-string">'maria@teste.com'</span>
+
+}
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <strong>Atenção:</strong>
+
+                <p>
+                    Evite colocar tokens reais diretamente no código
+                    do teste. Para credenciais e segredos, prefira
+                    mecanismos apropriados de configuração e secrets.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     QUERY PARAMS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Enviando query parameters
+            </h2>
+
+            <p>
+                Algumas APIs utilizam parâmetros na URL para filtrar
+                ou modificar uma consulta.
+            </p>
+
+            <p>
+                Podemos utilizar a propriedade
+                <strong>qs</strong>.
+            </p>
+
+            <pre><code>cy.request({
+
+method: <span class="sql-string">'GET'</span>,
+
+url: <span class="sql-string">'/usuarios'</span>,
+
+qs: {
+
+    pagina: 1,
+
+    limite: 10
+
+}
+
+})</code></pre>
+
+            <p>
+                O Cypress monta os parâmetros na URL da requisição.
+            </p>
+
+            <pre><code>/usuarios?pagina=1&amp;limite=10</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A propriedade <strong>qs</strong> ajuda a manter
+                    os parâmetros separados da URL principal.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BODY
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Trabalhando com diferentes tipos de body
+            </h2>
+
+            <p>
+                O conteúdo enviado no body depende do contrato
+                estabelecido pela API.
+            </p>
+
+            <p>
+                Um exemplo utilizando JSON:
+            </p>
+
+            <pre><code>cy.request({
+
+method: <span class="sql-string">'POST'</span>,
+
+url: <span class="sql-string">'/produtos'</span>,
+
+body: {
+
+    nome: <span class="sql-string">'Notebook'</span>,
+
+    preco: 3500
+
+}
+
+})</code></pre>
+
+            <p>
+                O body também pode utilizar dados armazenados
+                em variáveis:
+            </p>
+
+            <pre><code>const produto = {
+
+nome: <span class="sql-string">'Notebook'</span>,
+
+preco: 3500
+
+}
+
+cy.request({
+
+method: <span class="sql-string">'POST'</span>,
+
+url: <span class="sql-string">'/produtos'</span>,
+
+body: produto
+
+})</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+     RESPONSE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Conhecendo o objeto response
+            </h2>
+
+            <p>
+                Quando o Cypress executa uma requisição, podemos
+                trabalhar com o objeto de resposta retornado.
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios/1'</span>)
+.then((response) =&gt; {
+
+    cy.log(response.status)
+
+    cy.log(response.headers)
+
+    cy.log(response.body)
+
+})</code></pre>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Propriedade</th>
+                            <th>Descrição</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>status</strong>
+                            </td>
+
+                            <td>
+                                Código HTTP retornado pela API.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>headers</strong>
+                            </td>
+
+                            <td>
+                                Cabeçalhos retornados na resposta.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>body</strong>
+                            </td>
+
+                            <td>
+                                Dados retornados pela API.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>duration</strong>
+                            </td>
+
+                            <td>
+                                Tempo da requisição, quando disponível.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EXPECT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Validando dados do response
+            </h2>
+
+            <p>
+                Podemos combinar <strong>cy.request()</strong> com
+                várias assertions.
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios/1'</span>)
+.then((response) =&gt; {
+
+    expect(response.status)
+        .to.eq(200)
+
+    expect(response.body)
+        .to.have.property(<span class="sql-string">'nome'</span>)
+
+    expect(response.body.nome)
+        .to.eq(<span class="sql-string">'Maria'</span>)
+
+})</code></pre>
+
+            <p>
+                Dessa forma, podemos validar tanto a estrutura
+                quanto os valores retornados.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔢
+                    </div>
+
+                    <h3>
+                        Status
+                    </h3>
+
+                    <p>
+                        Verifica o resultado HTTP da operação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Propriedade
+                    </h3>
+
+                    <p>
+                        Verifica se determinado campo existe
+                        no objeto retornado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Valor
+                    </h3>
+
+                    <p>
+                        Confirma se o conteúdo retornado corresponde
+                        ao esperado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ENCADEAMENTO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                16. Encadeando requisições
+            </h2>
+
+            <p>
+                Uma requisição pode utilizar informações retornadas
+                por outra requisição.
+            </p>
+
+            <p>
+                Por exemplo, podemos criar um usuário e depois
+                consultar o recurso criado.
+            </p>
+
+            <pre><code>cy.request({
+
+method: <span class="sql-string">'POST'</span>,
+
+url: <span class="sql-string">'/usuarios'</span>,
+
+body: {
+
+    nome: <span class="sql-string">'Maria'</span>,
+
+    email: <span class="sql-string">'maria@teste.com'</span>
+
+}
+
+}).then((response) => {
+
+const id = response.body.id
+
+cy.request(<span class="sql-string">'GET'</span>, `/usuarios/${id}`)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Esse tipo de fluxo permite construir cenários
+                    de API nos quais uma operação depende do resultado
+                    de outra.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     AUTENTICAÇÃO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                17. Utilizando cy.request() em autenticação
+            </h2>
+
+            <p>
+                O <strong>cy.request()</strong> também pode ser
+                utilizado para realizar operações de autenticação
+                diretamente pela API.
+            </p>
+
+            <pre><code>cy.request({
+
+method: <span class="sql-string">'POST'</span>,
+
+url: <span class="sql-string">'/login'</span>,
+
+body: {
+
+    email: <span class="sql-string">'usuario@teste.com'</span>,
+
+    senha: <span class="sql-string">'123456'</span>
+
+}
+
+}).then((response) => {
+
+expect(response.status)
+    .to.eq(200)
+
+})</code></pre>
+
+            <p>
+                A resposta pode conter informações utilizadas
+                posteriormente pelo teste, como um identificador
+                de sessão ou token.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Em projetos reais, evite colocar credenciais
+                    sensíveis diretamente no código-fonte.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BASEURL
+====================================================== -->
+
+        <section>
+
+            <h2>
+                18. Utilizando baseUrl
+            </h2>
+
+            <p>
+                Quando o projeto possui uma <strong>baseUrl</strong>
+                configurada, podemos utilizar caminhos relativos
+                nas requisições.
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios'</span>)</code></pre>
+
+            <p>
+                Por exemplo, se a configuração possuir:
+            </p>
+
+            <pre><code>baseUrl: <span class="sql-string">'https://api.exemplo.com'</span></code></pre>
+
+            <p>
+                A requisição será direcionada para:
+            </p>
+
+            <pre><code>https://api.exemplo.com/usuarios</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Utilizar <strong>baseUrl</strong> evita repetir
+                    o endereço completo da API em todos os testes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     IGNORE ON ERROR
+====================================================== -->
+
+        <section>
+
+            <h2>
+                19. Trabalhando com respostas de erro
+            </h2>
+
+            <p>
+                Por padrão, o Cypress pode considerar determinados
+                status HTTP como falha da requisição.
+            </p>
+
+            <p>
+                Quando queremos testar explicitamente uma resposta
+                de erro, podemos utilizar a opção
+                <strong>failOnStatusCode</strong>.
+            </p>
+
+            <pre><code>cy.request({
+
+method: <span class="sql-string">'GET'</span>,
+
+url: <span class="sql-string">'/usuarios/9999'</span>,
+
+failOnStatusCode: false
+
+}).then((response) => {
+
+expect(response.status)
+    .to.eq(404)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Essa abordagem é especialmente útil para testar
+                    cenários negativos, como recursos inexistentes,
+                    requisições inválidas ou acessos não autorizados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EXEMPLO COMPLETO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                20. Exemplo completo
+            </h2>
+
+            <p>
+                Vamos combinar os conceitos estudados em um cenário
+                simples de criação e consulta de usuário.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'API de usuários'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve criar e consultar um usuário'</span>, () =&gt; {
+
+    cy.request({
+
+        method: <span class="sql-string">'POST'</span>,
+
+        url: <span class="sql-string">'/usuarios'</span>,
+
+        body: {
+
+            nome: <span class="sql-string">'Maria'</span>,
+
+            email: <span class="sql-string">'maria@teste.com'</span>
+
+        }
+
+    }).then((response) =&gt; {
+
+        expect(response.status)
+            .to.eq(201)
+
+        const id = response.body.id
+
+        cy.request(
+            <span class="sql-string">'GET'</span>,
+            `/usuarios/${id}`
+        )
+
+    }).then((response) =&gt; {
+
+        expect(response.status)
+            .to.eq(200)
+
+        expect(response.body.nome)
+            .to.eq(<span class="sql-string">'Maria'</span>)
+
+        expect(response.body.email)
+            .to.eq(<span class="sql-string">'maria@teste.com'</span>)
+
+    })
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Nesse cenário, o primeiro request cria o usuário.
+                    O ID retornado é utilizado para realizar uma
+                    segunda requisição e consultar o recurso criado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ERROS COMUNS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns ao utilizar cy.request()
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        URL incorreta
+                    </h3>
+
+                    <p>
+                        Informar um endpoint incorreto ou inexistente.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Método incorreto
+                    </h3>
+
+                    <p>
+                        Utilizar um método HTTP diferente do esperado
+                        pelo endpoint.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Body incorreto
+                    </h3>
+
+                    <p>
+                        Enviar campos ausentes, inválidos ou com
+                        formato diferente do contrato da API.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Ignorar o response
+                    </h3>
+
+                    <p>
+                        Executar a requisição sem validar se o
+                        resultado corresponde ao esperado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRÁTICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas com cy.request()
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Valide a resposta
+                    </h3>
+
+                    <p>
+                        Não limite o teste ao envio da requisição.
+                        Valide o resultado retornado pela API.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        Respeite o contrato
+                    </h3>
+
+                    <p>
+                        Utilize os métodos, parâmetros e estruturas
+                        definidos pela API.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Proteja credenciais
+                    </h3>
+
+                    <p>
+                        Não mantenha tokens, senhas ou secrets reais
+                        diretamente no código dos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Reutilize dados
+                    </h3>
+
+                    <p>
+                        Combine cy.request() com fixtures, variáveis
+                        e aliases quando fizer sentido.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o que é cy.request().
+                </p>
+
+                <p>
+                    ☐ Sei realizar requisições GET.
+                </p>
+
+                <p>
+                    ☐ Sei realizar requisições POST.
+                </p>
+
+                <p>
+                    ☐ Sei realizar requisições PUT.
+                </p>
+
+                <p>
+                    ☐ Sei realizar requisições PATCH.
+                </p>
+
+                <p>
+                    ☐ Sei realizar requisições DELETE.
+                </p>
+
+                <p>
+                    ☐ Sei enviar um body.
+                </p>
+
+                <p>
+                    ☐ Sei enviar headers.
+                </p>
+
+                <p>
+                    ☐ Sei enviar query parameters.
+                </p>
+
+                <p>
+                    ☐ Sei acessar status, headers e body.
+                </p>
+
+                <p>
+                    ☐ Sei validar respostas com assertions.
+                </p>
+
+                <p>
+                    ☐ Entendi como encadear requisições.
+                </p>
+
+                <p>
+                    ☐ Entendi como testar respostas de erro.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>cy.request()</strong>
+                    → realiza requisições HTTP diretamente pelo Cypress.
+                </p>
+
+                <p>
+                    🔎 <strong>GET</strong>
+                    → utilizado normalmente para consultar recursos.
+                </p>
+
+                <p>
+                    📤 <strong>POST</strong>
+                    → utilizado frequentemente para criar recursos.
+                </p>
+
+                <p>
+                    ✏️ <strong>PUT/PATCH</strong>
+                    → utilizados para atualizar recursos.
+                </p>
+
+                <p>
+                    🗑️ <strong>DELETE</strong>
+                    → utilizado normalmente para remover recursos.
+                </p>
+
+                <p>
+                    📦 <strong>body</strong>
+                    → permite enviar dados para a API.
+                </p>
+
+                <p>
+                    🏷️ <strong>headers</strong>
+                    → permitem enviar informações adicionais na requisição.
+                </p>
+
+                <p>
+                    🔎 <strong>qs</strong>
+                    → permite trabalhar com query parameters.
+                </p>
+
+                <p>
+                    📥 <strong>response</strong>
+                    → contém informações retornadas pela API.
+                </p>
+
+                <p>
+                    🧪 <strong>assertions</strong>
+                    → permitem validar o comportamento da API.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você sabe utilizar o
+                <strong>cy.request()</strong> para realizar requisições
+                HTTP e validar respostas diretamente nos seus testes
+                Cypress.
+            </p>
+
+            <p>
+                Na próxima aula vamos aprender como validar
+                <strong>responses</strong>, trabalhando de forma mais
+                detalhada com status codes, headers e body das
+                respostas das APIs.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     QUIZ
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 31
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 31 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe como utilizar cy.request()
+                para enviar requisições HTTP e trabalhar com
+                respostas de APIs nos seus testes.
+            </p>
+
+            <a href="../aulas/aula-32.html" class="cta-button">
+                Aula 32 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+ FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 31 • cy.request()
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+ JAVASCRIPT
+===================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-31.js"></script>
+
+</body>
+
+</html>

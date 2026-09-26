@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <title>Aula 42 — Cypress no CI</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 42 • CYPRESS NO CI
+            </span>
+
+            <h1>
+                Cypress no CI
+            </h1>
+
+            <p>
+                Aprenda a preparar e executar testes Cypress em
+                ambientes de integração contínua utilizando
+                pipelines automatizados.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS DA AULA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Na aula anterior, aprendemos como executar o Cypress
+                em modo headless, uma abordagem muito utilizada em
+                ambientes automatizados.
+            </p>
+
+            <p>
+                Agora vamos entender como integrar essa execução
+                aos processos de <strong>Continuous Integration</strong>,
+                permitindo que os testes sejam executados
+                automaticamente durante o desenvolvimento.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔄
+                    </div>
+
+                    <h3>
+                        Entender CI
+                    </h3>
+
+                    <p>
+                        Compreender o conceito de integração contínua
+                        e seu relacionamento com testes automatizados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚙️
+                    </div>
+
+                    <h3>
+                        Preparar o projeto
+                    </h3>
+
+                    <p>
+                        Configurar scripts e dependências para executar
+                        o Cypress em ambientes de CI.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Executar testes
+                    </h3>
+
+                    <p>
+                        Executar uma suíte Cypress automaticamente
+                        dentro de um pipeline.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        Analisar resultados
+                    </h3>
+
+                    <p>
+                        Entender como identificar sucesso, falhas
+                        e resultados da execução.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE É CI
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é CI?
+            </h2>
+
+            <p>
+                CI significa <strong>Continuous Integration</strong>,
+                ou <strong>Integração Contínua</strong>.
+            </p>
+
+            <p>
+                A ideia é automatizar processos que acontecem
+                quando alterações são enviadas para um repositório
+                de código.
+            </p>
+
+            <p>
+                Entre esses processos podem estar:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Instalação
+                    </h3>
+
+                    <p>
+                        Instalação das dependências necessárias
+                        para executar o projeto.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Testes
+                    </h3>
+
+                    <p>
+                        Execução automatizada da suíte de testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔍
+                    </div>
+
+                    <h3>
+                        Validação
+                    </h3>
+
+                    <p>
+                        Verificação automática dos resultados
+                        da aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🚦
+                    </div>
+
+                    <h3>
+                        Feedback
+                    </h3>
+
+                    <p>
+                        Retorno rápido indicando se o processo
+                        foi concluído com sucesso ou falhou.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     FLUXO CI
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Como funciona um pipeline de CI?
+            </h2>
+
+            <p>
+                Um pipeline pode ser configurado para executar
+                uma sequência de etapas automaticamente.
+            </p>
+
+            <pre><code>Desenvolvedor
+  ↓
+
+git push
+↓
+Repositório
+↓
+Pipeline CI
+↓
+Instalação das dependências
+↓
+Build da aplicação
+↓
+Execução dos testes
+↓
+Resultado</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O objetivo é transformar etapas manuais em
+                    processos automatizados e repetíveis.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     POR QUE CYPRESS NO CI
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Por que executar Cypress no CI?
+            </h2>
+
+            <p>
+                Os testes automatizados podem ser executados
+                sempre que novas alterações forem enviadas
+                para o projeto.
+            </p>
+
+            <p>
+                Isso permite identificar problemas antes que
+                uma alteração seja disponibilizada para outros
+                ambientes.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚡
+                    </div>
+
+                    <h3>
+                        Feedback rápido
+                    </h3>
+
+                    <p>
+                        Os resultados dos testes podem ser obtidos
+                        automaticamente após uma alteração.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔁
+                    </div>
+
+                    <h3>
+                        Repetibilidade
+                    </h3>
+
+                    <p>
+                        O mesmo processo pode ser executado
+                        várias vezes de maneira consistente.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🛡️
+                    </div>
+
+                    <h3>
+                        Detecção de regressões
+                    </h3>
+
+                    <p>
+                        Testes podem identificar comportamentos
+                        que foram alterados involuntariamente.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🤖
+                    </div>
+
+                    <h3>
+                        Automação
+                    </h3>
+
+                    <p>
+                        A execução não depende de uma pessoa
+                        abrir o Cypress manualmente.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PACKAGE JSON
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Preparando o package.json
+            </h2>
+
+            <p>
+                Uma forma comum de preparar um projeto para CI
+                é criar scripts no arquivo <strong>package.json</strong>.
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"scripts"</span>: {
+    <span class="sql-string">"cy:open"</span>: <span class="sql-string">"cypress open"</span>,
+    <span class="sql-string">"cy:run"</span>: <span class="sql-string">"cypress run"</span>
+}
+
+}</code></pre>
+
+            <p>
+                Dessa forma, podemos executar os testes utilizando:
+            </p>
+
+            <pre><code>npm run cy:run</code></pre>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Scripts deixam os comandos padronizados e
+                    facilitam a execução tanto localmente quanto
+                    no ambiente de CI.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     HEADLESS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Cypress em modo headless
+            </h2>
+
+            <p>
+                Em um ambiente de CI normalmente não existe uma
+                interface gráfica disponível para abrir o Cypress.
+            </p>
+
+            <p>
+                Por isso, utilizamos a execução em modo
+                <strong>headless</strong>.
+            </p>
+
+            <pre><code>npx cypress run</code></pre>
+
+            <p>
+                Também podemos utilizar o script definido
+                no package.json:
+            </p>
+
+            <pre><code>npm run cy:run</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O processo pode executar os testes sem exigir
+                    que um navegador seja aberto manualmente pelo
+                    usuário.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     AMBIENTE CI
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. O que um ambiente de CI precisa?
+            </h2>
+
+            <p>
+                Para executar uma suíte Cypress, o ambiente de CI
+                precisa possuir os recursos necessários para
+                instalar o projeto e executar os testes.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Recurso</th>
+                            <th>Função</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>Node.js</strong>
+                            </td>
+
+                            <td>
+                                Executar o projeto e os comandos
+                                do Cypress.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>npm</strong>
+                            </td>
+
+                            <td>
+                                Instalar dependências e executar
+                                scripts.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>Cypress</strong>
+                            </td>
+
+                            <td>
+                                Executar os testes automatizados.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>Navegador</strong>
+                            </td>
+
+                            <td>
+                                Executar os cenários que dependem
+                                de um browser.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>Aplicação</strong>
+                            </td>
+
+                            <td>
+                                Sistema que será validado pelos testes.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     INSTALAÇÃO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Instalando as dependências no CI
+            </h2>
+
+            <p>
+                O pipeline precisa instalar as dependências
+                antes de executar os testes.
+            </p>
+
+            <pre><code>npm ci</code></pre>
+
+            <p>
+                O comando <strong>npm ci</strong> é frequentemente
+                utilizado em ambientes automatizados quando o
+                projeto possui um package-lock.json.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    A instalação das dependências deve acontecer
+                    antes da execução dos testes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ORDEM DO PIPELINE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Organizando as etapas do pipeline
+            </h2>
+
+            <p>
+                Um pipeline simples para um projeto Cypress
+                pode seguir esta ordem:
+            </p>
+
+            <pre><code>1. Obter o código
+    ↓
+
+Instalar dependências
+↓
+
+Iniciar a aplicação
+↓
+
+Executar Cypress
+↓
+
+Armazenar resultados
+↓
+
+Finalizar pipeline</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📥
+                    </div>
+
+                    <h3>
+                        Checkout
+                    </h3>
+
+                    <p>
+                        Obtém o código do repositório utilizado
+                        pelo pipeline.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Dependências
+                    </h3>
+
+                    <p>
+                        Instala os pacotes necessários para
+                        executar o projeto.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ▶️
+                    </div>
+
+                    <h3>
+                        Execução
+                    </h3>
+
+                    <p>
+                        Inicia a aplicação e executa os testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        Resultados
+                    </h3>
+
+                    <p>
+                        Disponibiliza os resultados da execução
+                        para análise.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+  BASE URL
+
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Configurando a baseUrl
+            </h2>
+
+            <p>
+                Quando os testes acessam uma aplicação web,
+                podemos configurar a <strong>baseUrl</strong>
+                para evitar repetir o endereço completo.
+            </p>
+
+            <pre><code>const { defineConfig } = require(<span class="sql-string">'cypress'</span>)
+
+module.exports = defineConfig({
+
+e2e: {
+
+    baseUrl: <span class="sql-string">'http://localhost:3000'</span>
+
+}
+
+})</code></pre>
+
+            <p>
+                Dessa forma, o teste pode utilizar:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/login'</span>)</code></pre>
+
+            <p>
+                Em vez de:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'http://localhost:3000/login'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A configuração da URL base facilita a execução
+                    em diferentes ambientes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     VARIÁVEIS DE AMBIENTE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Variáveis de ambiente
+            </h2>
+
+            <p>
+                Ambientes de desenvolvimento, homologação e CI
+                podem utilizar diferentes configurações.
+            </p>
+
+            <p>
+                Para valores que variam entre ambientes, podemos
+                utilizar variáveis de ambiente e configurações
+                apropriadas ao pipeline.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>TEST_USER_EMAIL
+
+TEST_USER_PASSWORD
+API_URL</code></pre>
+
+            <div class="highlight">
+
+                <strong>Atenção:</strong>
+
+                <p>
+                    Informações sensíveis não devem ser colocadas
+                    diretamente no código ou publicadas em arquivos
+                    versionados.
+                </p>
+
+                <p>
+                    Ambientes de CI normalmente oferecem mecanismos
+                    próprios para armazenar secrets e variáveis
+                    protegidas.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     INICIANDO A APLICAÇÃO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Iniciando a aplicação antes dos testes
+            </h2>
+
+            <p>
+                Se o Cypress precisa acessar uma aplicação local,
+                o pipeline precisa garantir que ela esteja
+                disponível antes da execução dos testes.
+            </p>
+
+            <p>
+                Um fluxo simplificado pode ser:
+            </p>
+
+            <pre><code>npm ci
+
+npm run build
+
+npm run start
+
+npm run cy:run</code></pre>
+
+            <p>
+                Em projetos reais, a forma de iniciar a aplicação
+                depende da tecnologia utilizada e da configuração
+                do pipeline.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    O ponto principal é garantir que a aplicação
+                    esteja pronta para receber as requisições
+                    antes que os testes sejam iniciados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EXEMPLO GENERICO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Exemplo de pipeline
+            </h2>
+
+            <p>
+                Podemos representar um pipeline de testes Cypress
+                de forma simplificada:
+            </p>
+
+            <pre><code>pipeline:
+
+checkout
+
+instalar dependências
+
+iniciar aplicação
+
+executar Cypress
+
+coletar resultados
+
+finalizar</code></pre>
+
+            <p>
+                Cada plataforma de CI possui sua própria sintaxe,
+                mas o conceito geral permanece semelhante.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    Primeiro entendemos o fluxo. Depois podemos
+                    adaptar esse fluxo para ferramentas específicas,
+                    como GitHub Actions.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     STATUS DO PIPELINE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. O status do teste influencia o pipeline
+            </h2>
+
+            <p>
+                Um dos pontos importantes da integração contínua
+                é o código de saída do processo de testes.
+            </p>
+
+            <p>
+                Quando os testes são executados pelo comando:
+            </p>
+
+            <pre><code>npx cypress run</code></pre>
+
+            <p>
+                o processo informa ao ambiente de execução se
+                a execução terminou com sucesso ou apresentou
+                falhas.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Testes aprovados
+                    </h3>
+
+                    <p>
+                        A execução pode prosseguir para as próximas
+                        etapas do pipeline.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Testes falhando
+                    </h3>
+
+                    <p>
+                        O pipeline pode sinalizar a falha para
+                        investigação da equipe.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EVIDÊNCIAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Evidências de uma execução
+            </h2>
+
+            <p>
+                Quando um teste falha no CI, é importante possuir
+                informações suficientes para investigar o problema.
+            </p>
+
+            <p>
+                Dependendo da configuração, podemos trabalhar
+                com recursos como:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📸
+                    </div>
+
+                    <h3>
+                        Screenshots
+                    </h3>
+
+                    <p>
+                        Capturas da interface no momento de uma
+                        falha.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎥
+                    </div>
+
+                    <h3>
+                        Vídeos
+                    </h3>
+
+                    <p>
+                        Gravações da execução dos testes quando
+                        configuradas para esse objetivo.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        Logs
+                    </h3>
+
+                    <p>
+                        Informações da execução que ajudam na
+                        investigação do problema.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        Relatórios
+                    </h3>
+
+                    <p>
+                        Resultados consolidados da execução da suíte.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     FLUXO REAL
+====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Exemplo de fluxo completo
+            </h2>
+
+            <p>
+                Imagine um projeto com a seguinte configuração:
+            </p>
+
+            <pre><code>curso-cypress/
+
+├── cypress/
+│
+├── e2e/
+│ ├── login.cy.js
+│ └── cadastro.cy.js
+│
+├── fixtures/
+│ └── usuario.json
+│
+├── support/
+│
+├── cypress.config.js
+├── package.json
+└── package-lock.json</code></pre>
+
+            <p>
+                O pipeline pode executar:
+            </p>
+
+            <pre><code>npm ci
+
+npm run cy:run</code></pre>
+
+            <p>
+                O Cypress então executará as specs configuradas
+                e o ambiente de CI poderá utilizar o resultado
+                para determinar o status daquela etapa.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    O mesmo comando que funciona localmente pode
+                    fazer parte de um pipeline automatizado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     LOCAL X CI
+====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Executando localmente e no CI
+            </h2>
+
+            <p>
+                É importante que a execução local e a execução
+                no CI sejam previsíveis e próximas sempre que
+                possível.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Local</th>
+                            <th>CI</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                Desenvolvedor executa o comando.
+                            </td>
+
+                            <td>
+                                Pipeline executa o comando.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Ambiente de desenvolvimento.
+                            </td>
+
+                            <td>
+                                Ambiente automatizado.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Resultado visualizado localmente.
+                            </td>
+
+                            <td>
+                                Resultado disponibilizado pelo pipeline.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Investigação imediata.
+                            </td>
+
+                            <td>
+                                Investigação baseada nos logs e evidências.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRÁTICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas para Cypress no CI
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚙️
+                    </div>
+
+                    <h3>
+                        Padronize comandos
+                    </h3>
+
+                    <p>
+                        Utilize scripts do package.json para
+                        padronizar a execução dos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Proteja secrets
+                    </h3>
+
+                    <p>
+                        Utilize mecanismos apropriados do CI
+                        para informações sensíveis.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Mantenha testes confiáveis
+                    </h3>
+
+                    <p>
+                        Evite testes instáveis que falham sem
+                        alterações reais no comportamento.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        Preserve evidências
+                    </h3>
+
+                    <p>
+                        Disponibilize logs, screenshots e outros
+                        resultados necessários para investigação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⏱️
+                    </div>
+
+                    <h3>
+                        Controle o tempo
+                    </h3>
+
+                    <p>
+                        Organize a suíte para evitar execuções
+                        desnecessariamente demoradas.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧹
+                    </div>
+
+                    <h3>
+                        Mantenha o ambiente previsível
+                    </h3>
+
+                    <p>
+                        Controle versões e dependências utilizadas
+                        durante a execução.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ERROS COMUNS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns no CI
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Aplicação não iniciou
+                    </h3>
+
+                    <p>
+                        O Cypress tenta acessar uma aplicação que
+                        ainda não está disponível.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Dependências ausentes
+                    </h3>
+
+                    <p>
+                        O pipeline tenta executar os testes sem
+                        instalar corretamente os pacotes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        URL incorreta
+                    </h3>
+
+                    <p>
+                        A configuração aponta para um endereço
+                        que não existe no ambiente de CI.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Secrets ausentes
+                    </h3>
+
+                    <p>
+                        O teste depende de uma variável que não
+                        foi configurada no ambiente.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Testes instáveis
+                    </h3>
+
+                    <p>
+                        O mesmo cenário apresenta resultados
+                        diferentes sem uma alteração esperada.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Evidências insuficientes
+                    </h3>
+
+                    <p>
+                        Uma falha acontece, mas não existem
+                        informações suficientes para investigá-la.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o conceito de Continuous Integration.
+                </p>
+
+                <p>
+                    ☐ Entendi por que executar Cypress no CI.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar o Cypress em modo headless.
+                </p>
+
+                <p>
+                    ☐ Entendi a importância do package.json.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar npm ci em ambientes automatizados.
+                </p>
+
+                <p>
+                    ☐ Entendi o papel da baseUrl.
+                </p>
+
+                <p>
+                    ☐ Entendi como variáveis de ambiente podem
+                    ser utilizadas.
+                </p>
+
+                <p>
+                    ☐ Sei que a aplicação precisa estar disponível
+                    antes dos testes.
+                </p>
+
+                <p>
+                    ☐ Entendi como o resultado dos testes influencia
+                    o pipeline.
+                </p>
+
+                <p>
+                    ☐ Entendi a importância de screenshots, logs
+                    e outras evidências.
+                </p>
+
+                <p>
+                    ☐ Conheço boas práticas para executar Cypress
+                    em CI.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🔄 <strong>CI</strong>
+                    → automatiza processos durante a integração
+                    das alterações do projeto.
+                </p>
+
+                <p>
+                    🧪 <strong>Cypress</strong>
+                    → pode executar testes automaticamente dentro
+                    de um pipeline.
+                </p>
+
+                <p>
+                    📦 <strong>npm ci</strong>
+                    → instala as dependências de forma adequada
+                    para ambientes automatizados.
+                </p>
+
+                <p>
+                    ▶️ <strong>cypress run</strong>
+                    → executa os testes sem depender da interface
+                    gráfica do Cypress.
+                </p>
+
+                <p>
+                    🌐 <strong>baseUrl</strong>
+                    → facilita a configuração do endereço da aplicação.
+                </p>
+
+                <p>
+                    🔐 <strong>Variáveis e secrets</strong>
+                    → permitem configurar valores específicos
+                    do ambiente sem expô-los diretamente no código.
+                </p>
+
+                <p>
+                    📊 <strong>Resultados</strong>
+                    → ajudam o pipeline e a equipe a identificar
+                    sucesso ou falha na execução.
+                </p>
+
+                <p>
+                    📸 <strong>Evidências</strong>
+                    → facilitam a investigação de testes que falharam.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você já entende como preparar um projeto
+                Cypress para execução em ambientes de integração
+                contínua.
+            </p>
+
+            <p>
+                Na próxima aula vamos avançar para a configuração
+                prática do <strong>GitHub Actions</strong>, criando
+                um workflow capaz de executar os testes Cypress
+                automaticamente.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     QUIZ
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 42
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 42 concluída!
+            </h2>
+
+            <p>
+                Agora você já entende os principais conceitos
+                necessários para executar testes Cypress em
+                ambientes de integração contínua.
+            </p>
+
+            <a href="../aulas/aula-43.html" class="cta-button">
+                Aula 43 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+ FOOTER
+
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 42 • Cypress no CI
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+ JAVASCRIPT
+
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-42.js"></script>
+
+</body>
+
+</html>

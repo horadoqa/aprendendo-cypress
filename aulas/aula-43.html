@@ -1,0 +1,2058 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 43 — GitHub Actions</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 43 • GITHUB ACTIONS
+            </span>
+
+            <h1>
+                GitHub Actions
+            </h1>
+
+            <p>
+                Aprenda a executar seus testes Cypress automaticamente
+                utilizando workflows de CI com GitHub Actions.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS DA AULA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Nas aulas anteriores, aprendemos como executar o Cypress
+                em modo headless e como preparar os testes para ambientes
+                de integração contínua.
+            </p>
+
+            <p>
+                Agora vamos utilizar o <strong>GitHub Actions</strong>
+                para criar um pipeline capaz de executar nossos testes
+                automaticamente.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚙️
+                    </div>
+
+                    <h3>
+                        Conhecer GitHub Actions
+                    </h3>
+
+                    <p>
+                        Entender o que são workflows, jobs, steps e
+                        runners.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📄
+                    </div>
+
+                    <h3>
+                        Criar um workflow
+                    </h3>
+
+                    <p>
+                        Criar um arquivo YAML para automatizar a
+                        execução dos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Executar Cypress
+                    </h3>
+
+                    <p>
+                        Configurar o pipeline para instalar dependências
+                        e executar os testes Cypress.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🚀
+                    </div>
+
+                    <h3>
+                        Automatizar o pipeline
+                    </h3>
+
+                    <p>
+                        Executar os testes automaticamente a partir
+                        de eventos do repositório.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE É GITHUB ACTIONS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é GitHub Actions?
+            </h2>
+
+            <p>
+                O <strong>GitHub Actions</strong> é um recurso do GitHub
+                utilizado para automatizar tarefas relacionadas ao
+                desenvolvimento de software.
+            </p>
+
+            <p>
+                Ele permite criar workflows capazes de executar comandos
+                automaticamente quando determinados eventos acontecem
+                no repositório.
+            </p>
+
+            <p>
+                Entre as tarefas que podem ser automatizadas estão:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Testes
+                    </h3>
+
+                    <p>
+                        Executar testes automatizados a cada alteração
+                        do código.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔍
+                    </div>
+
+                    <h3>
+                        Validações
+                    </h3>
+
+                    <p>
+                        Executar lint, análise estática e outras
+                        verificações.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Build
+                    </h3>
+
+                    <p>
+                        Construir aplicações e gerar artefatos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🚀
+                    </div>
+
+                    <h3>
+                        Deploy
+                    </h3>
+
+                    <p>
+                        Automatizar etapas de entrega da aplicação.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="highlight">
+
+                <p>
+                    GitHub Actions permite transformar tarefas que
+                    anteriormente eram executadas manualmente em
+                    processos automatizados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CONCEITOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Conceitos fundamentais
+            </h2>
+
+            <p>
+                Antes de criar nosso primeiro workflow, precisamos
+                entender alguns conceitos utilizados pelo GitHub Actions.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Conceito</th>
+                            <th>Descrição</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>Workflow</strong>
+                            </td>
+
+                            <td>
+                                Arquivo que define um processo automatizado.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>Event</strong>
+                            </td>
+
+                            <td>
+                                Evento responsável por iniciar o workflow.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>Job</strong>
+                            </td>
+
+                            <td>
+                                Conjunto de etapas executadas em um ambiente.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>Step</strong>
+                            </td>
+
+                            <td>
+                                Uma etapa individual dentro de um job.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>Runner</strong>
+                            </td>
+
+                            <td>
+                                Máquina responsável por executar o job.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>Action</strong>
+                            </td>
+
+                            <td>
+                                Componente reutilizável utilizado em um workflow.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     WORKFLOW
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. O que é um workflow?
+            </h2>
+
+            <p>
+                Um workflow é um arquivo que descreve as etapas que
+                devem ser executadas automaticamente pelo GitHub Actions.
+            </p>
+
+            <p>
+                Os workflows são armazenados dentro da pasta:
+            </p>
+
+            <pre><code>.github/workflows/</code></pre>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>projeto-cypress/
+
+├── .github/
+│
+│ └── workflows/
+│ └── cypress.yml
+│
+├── cypress/
+│
+├── cypress.config.js
+├── package.json
+└── package-lock.json</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Os arquivos dentro de
+                    <strong>.github/workflows/</strong>
+                    possuem extensão <strong>.yml</strong> ou
+                    <strong>.yaml</strong>.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PRIMEIRO WORKFLOW
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Criando nosso primeiro workflow
+            </h2>
+
+            <p>
+                Vamos criar o arquivo:
+            </p>
+
+            <pre><code>.github/workflows/cypress.yml</code></pre>
+
+            <p>
+                Um workflow simples pode começar desta forma:
+            </p>
+
+            <pre><code>name: Cypress Tests
+
+on:
+push:
+
+jobs:
+
+cypress:
+
+runs-on: ubuntu-latest
+
+steps:
+
+  - name: Checkout
+    uses: actions/checkout@v4
+
+  - name: Setup Node
+    uses: actions/setup-node@v4
+    with:
+      node-version: 20
+
+  - name: Install dependencies
+    run: npm ci
+
+  - name: Run Cypress
+    run: npx cypress run</code></pre>
+
+            <p>
+                Esse arquivo define um processo completo para executar
+                os testes Cypress.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     NAME
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Definindo o nome do workflow
+            </h2>
+
+            <p>
+                A propriedade <strong>name</strong> define o nome que
+                será exibido na interface do GitHub.
+            </p>
+
+            <pre><code>name: Cypress Tests</code></pre>
+
+            <p>
+                Podemos utilizar um nome mais específico:
+            </p>
+
+            <pre><code>name: Testes E2E com Cypress</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Utilize nomes claros para facilitar a identificação
+                    dos workflows no repositório.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EVENTS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Eventos que iniciam o workflow
+            </h2>
+
+            <p>
+                A propriedade <strong>on</strong> define os eventos
+                responsáveis por iniciar a execução do workflow.
+            </p>
+
+            <p>
+                Um exemplo simples:
+            </p>
+
+            <pre><code>on:
+
+push:</code></pre>
+
+            <p>
+                Nesse caso, o workflow será executado quando houver
+                um push no repositório.
+            </p>
+
+            <p>
+                Também podemos executar o workflow em pull requests:
+            </p>
+
+            <pre><code>on:
+
+pull_request:</code></pre>
+
+            <p>
+                Podemos utilizar os dois eventos:
+            </p>
+
+            <pre><code>on:
+
+push:
+pull_request:</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📤
+                    </div>
+
+                    <h3>
+                        push
+                    </h3>
+
+                    <p>
+                        Executa o workflow após um push no repositório.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔀
+                    </div>
+
+                    <h3>
+                        pull_request
+                    </h3>
+
+                    <p>
+                        Executa o workflow relacionado a uma pull request.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🖱️
+                    </div>
+
+                    <h3>
+                        workflow_dispatch
+                    </h3>
+
+                    <p>
+                        Permite iniciar o workflow manualmente pela
+                        interface do GitHub.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     JOB
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Criando um job
+            </h2>
+
+            <p>
+                Um workflow pode possuir um ou vários jobs.
+            </p>
+
+            <p>
+                Nosso job será responsável por executar os testes Cypress.
+            </p>
+
+            <pre><code>jobs:
+
+cypress:</code></pre>
+
+            <p>
+                O nome <strong>cypress</strong> é um identificador
+                utilizado para esse job.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    Um workflow pode possuir diferentes jobs para
+                    diferentes responsabilidades, como testes,
+                    build e deploy.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RUNNER
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Escolhendo o runner
+            </h2>
+
+            <p>
+                O job precisa definir em qual ambiente será executado.
+            </p>
+
+            <p>
+                Para isso utilizamos <strong>runs-on</strong>.
+            </p>
+
+            <pre><code>runs-on: ubuntu-latest</code></pre>
+
+            <p>
+                Nesse exemplo, o job utilizará um ambiente Linux
+                disponibilizado pelo GitHub.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🐧
+                    </div>
+
+                    <h3>
+                        Ubuntu
+                    </h3>
+
+                    <p>
+                        Ambiente Linux utilizado frequentemente
+                        em pipelines de CI.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🪟
+                    </div>
+
+                    <h3>
+                        Windows
+                    </h3>
+
+                    <p>
+                        Pode ser utilizado quando o projeto depende
+                        de recursos específicos do Windows.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🍎
+                    </div>
+
+                    <h3>
+                        macOS
+                    </h3>
+
+                    <p>
+                        Pode ser utilizado para cenários que exigem
+                        ambiente macOS.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKOUT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Fazendo checkout do projeto
+            </h2>
+
+            <p>
+                Antes de executar os testes, o código do repositório
+                precisa estar disponível no runner.
+            </p>
+
+            <p>
+                Utilizamos a action oficial de checkout:
+            </p>
+
+            <pre><code>- name: Checkout
+
+uses: actions/checkout@v4</code></pre>
+
+            <p>
+                Essa etapa disponibiliza os arquivos do repositório
+                no ambiente em que o job está sendo executado.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    Sem o checkout, o runner não terá automaticamente
+                    o código do projeto disponível para as etapas
+                    seguintes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     NODE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Configurando o Node.js
+            </h2>
+
+            <p>
+                Como nosso projeto Cypress utiliza Node.js, precisamos
+                preparar o ambiente.
+            </p>
+
+            <pre><code>- name: Setup Node
+
+uses: actions/setup-node@v4
+with:
+node-version: 20</code></pre>
+
+            <p>
+                Dessa forma, o workflow utiliza uma versão específica
+                do Node.js.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    Definir explicitamente a versão do Node ajuda a
+                    manter o ambiente de execução previsível.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     DEPENDENCIAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Instalando as dependências
+            </h2>
+
+            <p>
+                Depois de preparar o Node.js, precisamos instalar as
+                dependências do projeto.
+            </p>
+
+            <p>
+                Para projetos que possuem
+                <strong>package-lock.json</strong>, podemos utilizar:
+            </p>
+
+            <pre><code>npm ci</code></pre>
+
+            <p>
+                No workflow:
+            </p>
+
+            <pre><code>- name: Install dependencies
+
+run: npm ci</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O comando <strong>npm ci</strong> é especialmente
+                    apropriado para ambientes automatizados porque
+                    utiliza o lockfile para instalar as dependências
+                    definidas pelo projeto.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CYPRESS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Executando o Cypress
+            </h2>
+
+            <p>
+                Com as dependências instaladas, podemos executar
+                os testes.
+            </p>
+
+            <pre><code>- name: Run Cypress
+
+run: npx cypress run</code></pre>
+
+            <p>
+                O comando executa o Cypress em modo de execução,
+                adequado para ambientes de CI.
+            </p>
+
+            <p>
+                Podemos especificar um navegador:
+            </p>
+
+            <pre><code>npx cypress run --browser chrome</code></pre>
+
+            <p>
+                Ou executar uma determinada spec:
+            </p>
+
+            <pre><code>npx cypress run --spec "cypress/e2e/login.cy.js"</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+     WORKFLOW COMPLETO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Workflow completo
+            </h2>
+
+            <p>
+                Agora podemos combinar todas as etapas estudadas.
+            </p>
+
+            <pre><code>name: Cypress Tests
+
+on:
+push:
+pull_request:
+
+jobs:
+
+cypress:
+
+runs-on: ubuntu-latest
+
+steps:
+
+  - name: Checkout
+    uses: actions/checkout@v4
+
+  - name: Setup Node
+    uses: actions/setup-node@v4
+    with:
+      node-version: 20
+
+  - name: Install dependencies
+    run: npm ci
+
+  - name: Run Cypress
+    run: npx cypress run</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Esse workflow representa uma estrutura básica
+                    para executar testes Cypress em um pipeline
+                    de integração contínua.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CY PRESS ACTION
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Utilizando uma Action para o Cypress
+            </h2>
+
+            <p>
+                Além de executar comandos diretamente com
+                <strong>npx cypress run</strong>, também podemos
+                utilizar uma action específica para o Cypress.
+            </p>
+
+            <p>
+                Um exemplo é:
+            </p>
+
+            <pre><code>- name: Cypress run
+
+uses: cypress-io/github-action@v6</code></pre>
+
+            <p>
+                A action pode cuidar de etapas comuns relacionadas
+                à execução do Cypress.
+            </p>
+
+            <p>
+                Uma configuração simples pode ser:
+            </p>
+
+            <pre><code>name: Cypress Tests
+
+on:
+push:
+pull_request:
+
+jobs:
+
+cypress:
+
+runs-on: ubuntu-latest
+
+steps:
+
+  - name: Checkout
+    uses: actions/checkout@v4
+
+  - name: Cypress run
+    uses: cypress-io/github-action@v6</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Actions reutilizáveis podem simplificar workflows
+                    ao encapsular tarefas recorrentes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BRANCHES
+====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Executando apenas em determinadas branches
+            </h2>
+
+            <p>
+                Podemos definir em quais branches determinados eventos
+                devem iniciar o workflow.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>on:
+
+push:
+
+branches:
+  - main</code></pre>
+
+            <p>
+                Nesse caso, o workflow será iniciado para pushes
+                realizados na branch <strong>main</strong>.
+            </p>
+
+            <p>
+                Também podemos utilizar pull requests:
+            </p>
+
+            <pre><code>on:
+
+pull_request:
+
+branches:
+  - main</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Filtros de branches permitem controlar em quais
+                    mudanças o pipeline será executado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EXECUÇÃO MANUAL
+====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Executando o workflow manualmente
+            </h2>
+
+            <p>
+                Podemos permitir que o workflow seja iniciado
+                manualmente utilizando <strong>workflow_dispatch</strong>.
+            </p>
+
+            <pre><code>on:
+
+workflow_dispatch:</code></pre>
+
+            <p>
+                Podemos combinar execução manual com eventos automáticos:
+            </p>
+
+            <pre><code>on:
+
+push:
+
+pull_request:
+
+workflow_dispatch:</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A execução manual pode ser útil para repetir
+                    um processo sem necessariamente realizar um
+                    novo commit.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     VARIAVEIS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                16. Utilizando variáveis de ambiente
+            </h2>
+
+            <p>
+                Pipelines frequentemente precisam trabalhar com
+                configurações diferentes dependendo do ambiente.
+            </p>
+
+            <p>
+                Podemos definir variáveis utilizando
+                <strong>env</strong>.
+            </p>
+
+            <pre><code>jobs:
+
+cypress:
+
+runs-on: ubuntu-latest
+
+env:
+  CYPRESS_baseUrl: https://exemplo.com</code></pre>
+
+            <p>
+                Os testes Cypress podem utilizar essa configuração
+                durante a execução.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    Variáveis de ambiente ajudam a separar configurações
+                    da lógica dos testes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     SECRETS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                17. Trabalhando com Secrets
+            </h2>
+
+            <p>
+                Informações sensíveis não devem ser armazenadas
+                diretamente no arquivo YAML.
+            </p>
+
+            <p>
+                O GitHub permite armazenar informações protegidas
+                utilizando <strong>Secrets</strong>.
+            </p>
+
+            <p>
+                Um secret pode ser acessado no workflow utilizando:
+            </p>
+
+            <pre><code>${{ secrets.NOME_DO_SECRET }}</code></pre>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>env:
+
+API_TOKEN: ${{ secrets.API_TOKEN }}</code></pre>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Evite colocar senhas, tokens, chaves privadas
+                    ou credenciais diretamente no código do workflow.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ARTIFACTS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                18. Armazenando resultados dos testes
+            </h2>
+
+            <p>
+                Em uma execução de CI, pode ser importante preservar
+                arquivos gerados pelos testes.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <ul>
+
+                <li>
+                    Screenshots.
+                </li>
+
+                <li>
+                    Vídeos.
+                </li>
+
+                <li>
+                    Relatórios.
+                </li>
+
+                <li>
+                    Logs.
+                </li>
+
+            </ul>
+
+            <p>
+                O GitHub Actions permite armazenar esses arquivos
+                como artifacts.
+            </p>
+
+            <pre><code>- name: Upload screenshots
+
+if: failure()
+
+uses: actions/upload-artifact@v4
+
+with:
+name: cypress-screenshots
+path: cypress/screenshots</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Utilizar artifacts permite analisar evidências
+                    mesmo depois que a execução do job terminou.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     IF FAILURE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                19. Capturando evidências quando o teste falha
+            </h2>
+
+            <p>
+                Uma estratégia comum é enviar screenshots somente
+                quando os testes apresentarem falha.
+            </p>
+
+            <pre><code>- name: Upload screenshots
+
+if: failure()
+
+uses: actions/upload-artifact@v4
+
+with:
+name: screenshots
+path: cypress/screenshots</code></pre>
+
+            <p>
+                O <strong>if: failure()</strong> permite executar
+                essa etapa quando uma etapa anterior do job falhar.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    Essa estratégia ajuda a preservar evidências
+                    importantes sem necessariamente armazenar
+                    arquivos a cada execução.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     STATUS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                20. Entendendo o resultado do pipeline
+            </h2>
+
+            <p>
+                Depois que o workflow é executado, o GitHub apresenta
+                o status de cada job e etapa.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        Sucesso
+                    </h3>
+
+                    <p>
+                        Todas as etapas concluíram sem falhas.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Falha
+                    </h3>
+
+                    <p>
+                        Uma ou mais etapas do workflow falharam.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⏳
+                    </div>
+
+                    <h3>
+                        Em execução
+                    </h3>
+
+                    <p>
+                        O workflow ainda está processando as etapas.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⏸️
+                    </div>
+
+                    <h3>
+                        Cancelado
+                    </h3>
+
+                    <p>
+                        A execução foi interrompida antes da conclusão.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     FLUXO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                21. Fluxo completo do pipeline
+            </h2>
+
+            <p>
+                Podemos visualizar nosso pipeline da seguinte maneira:
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    📤 <strong>Push ou Pull Request</strong>
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    ⚙️ <strong>GitHub Actions inicia o workflow</strong>
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    📥 <strong>Checkout do projeto</strong>
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    🟢 <strong>Configuração do Node.js</strong>
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    📦 <strong>Instalação das dependências</strong>
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    🧪 <strong>Execução do Cypress</strong>
+                </p>
+
+                <p>
+                    ↓
+                </p>
+
+                <p>
+                    📊 <strong>Resultado do pipeline</strong>
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PROJETO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                22. Estrutura recomendada do projeto
+            </h2>
+
+            <p>
+                Ao utilizar Cypress com GitHub Actions, podemos ter
+                uma estrutura semelhante a esta:
+            </p>
+
+            <pre><code>curso-cypress/
+
+├── .github/
+│
+│ └── workflows/
+│ └── cypress.yml
+│
+├── cypress/
+│
+│ ├── e2e/
+│ │ ├── login.cy.js
+│ │ └── cadastro.cy.js
+│ │
+│ ├── fixtures/
+│ │ └── usuario.json
+│ │
+│ └── support/
+│
+├── cypress.config.js
+├── package.json
+├── package-lock.json
+└── README.md</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O diretório <strong>.github/workflows</strong>
+                    concentra os arquivos responsáveis pela automação
+                    dos pipelines.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRATICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas com GitHub Actions
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📌
+                    </div>
+
+                    <h3>
+                        Fixe versões quando necessário
+                    </h3>
+
+                    <p>
+                        Evite depender de alterações inesperadas
+                        no ambiente de execução.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Proteja secrets
+                    </h3>
+
+                    <p>
+                        Não coloque credenciais ou tokens diretamente
+                        no arquivo do workflow.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Execute testes relevantes
+                    </h3>
+
+                    <p>
+                        Estruture o pipeline para validar aquilo
+                        que realmente precisa ser verificado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        Preserve evidências
+                    </h3>
+
+                    <p>
+                        Utilize artifacts para armazenar screenshots,
+                        vídeos e relatórios quando necessário.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧹
+                    </div>
+
+                    <h3>
+                        Mantenha o workflow simples
+                    </h3>
+
+                    <p>
+                        Evite adicionar etapas desnecessárias
+                        ao pipeline.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        Use nomes claros
+                    </h3>
+
+                    <p>
+                        Nomeie jobs e steps de forma que o pipeline
+                        seja fácil de entender.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ERROS COMUNS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        YAML inválido
+                    </h3>
+
+                    <p>
+                        Indentação incorreta ou estrutura inválida
+                        no arquivo do workflow.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Dependências não instaladas
+                    </h3>
+
+                    <p>
+                        Executar os testes antes de instalar as
+                        dependências do projeto.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Node incompatível
+                    </h3>
+
+                    <p>
+                        Utilizar uma versão do Node incompatível
+                        com o projeto.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Secret ausente
+                    </h3>
+
+                    <p>
+                        O workflow espera uma variável protegida
+                        que não foi configurada no repositório.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Caminho incorreto
+                    </h3>
+
+                    <p>
+                        O workflow referencia arquivos ou diretórios
+                        que não existem no projeto.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EXEMPLO COMPLETO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Exemplo completo com evidências
+            </h2>
+
+            <p>
+                Podemos combinar a execução do Cypress com o envio
+                de screenshots em caso de falha:
+            </p>
+
+            <pre><code>name: Cypress Tests
+
+on:
+
+push:
+
+pull_request:
+
+workflow_dispatch:
+
+jobs:
+
+cypress:
+
+runs-on: ubuntu-latest
+
+steps:
+
+  - name: Checkout
+    uses: actions/checkout@v4
+
+  - name: Setup Node
+    uses: actions/setup-node@v4
+    with:
+      node-version: 20
+
+  - name: Install dependencies
+    run: npm ci
+
+  - name: Run Cypress
+    run: npx cypress run
+
+  - name: Upload screenshots
+    if: failure()
+    uses: actions/upload-artifact@v4
+    with:
+      name: cypress-screenshots
+      path: cypress/screenshots</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Esse exemplo reúne os principais conceitos
+                    apresentados nesta aula: eventos, job, runner,
+                    checkout, Node.js, dependências, execução do
+                    Cypress e armazenamento de evidências.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o que é GitHub Actions.
+                </p>
+
+                <p>
+                    ☐ Entendi o que é um workflow.
+                </p>
+
+                <p>
+                    ☐ Conheço a pasta .github/workflows.
+                </p>
+
+                <p>
+                    ☐ Entendi o conceito de job.
+                </p>
+
+                <p>
+                    ☐ Entendi o conceito de step.
+                </p>
+
+                <p>
+                    ☐ Entendi o conceito de runner.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar actions/checkout.
+                </p>
+
+                <p>
+                    ☐ Sei configurar o Node.js no workflow.
+                </p>
+
+                <p>
+                    ☐ Sei instalar dependências com npm ci.
+                </p>
+
+                <p>
+                    ☐ Sei executar Cypress no pipeline.
+                </p>
+
+                <p>
+                    ☐ Sei configurar eventos como push e pull_request.
+                </p>
+
+                <p>
+                    ☐ Entendi como utilizar workflow_dispatch.
+                </p>
+
+                <p>
+                    ☐ Entendi como utilizar variáveis de ambiente.
+                </p>
+
+                <p>
+                    ☐ Entendi o conceito de Secrets.
+                </p>
+
+                <p>
+                    ☐ Sei armazenar screenshots como artifacts.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ⚙️ <strong>GitHub Actions</strong>
+                    → automatiza processos dentro do GitHub.
+                </p>
+
+                <p>
+                    📄 <strong>Workflow</strong>
+                    → arquivo YAML que define o processo automatizado.
+                </p>
+
+                <p>
+                    🚦 <strong>Events</strong>
+                    → determinam quando o workflow será executado.
+                </p>
+
+                <p>
+                    🧩 <strong>Jobs</strong>
+                    → agrupam etapas relacionadas.
+                </p>
+
+                <p>
+                    🪜 <strong>Steps</strong>
+                    → representam as etapas individuais do processo.
+                </p>
+
+                <p>
+                    💻 <strong>Runner</strong>
+                    → ambiente responsável pela execução do job.
+                </p>
+
+                <p>
+                    📥 <strong>Checkout</strong>
+                    → disponibiliza o código do repositório.
+                </p>
+
+                <p>
+                    🟢 <strong>Node.js</strong>
+                    → ambiente necessário para executar o projeto Cypress.
+                </p>
+
+                <p>
+                    📦 <strong>npm ci</strong>
+                    → instala as dependências utilizando o lockfile.
+                </p>
+
+                <p>
+                    🧪 <strong>Cypress</strong>
+                    → executa os testes automatizados no pipeline.
+                </p>
+
+                <p>
+                    🔐 <strong>Secrets</strong>
+                    → armazenam informações sensíveis utilizadas
+                    pelo workflow.
+                </p>
+
+                <p>
+                    📊 <strong>Artifacts</strong>
+                    → permitem preservar arquivos gerados durante
+                    a execução.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você sabe como configurar um workflow do
+                GitHub Actions para executar testes Cypress
+                automaticamente.
+            </p>
+
+            <p>
+                Na próxima aula vamos aprender sobre
+                <strong>evidências e relatórios</strong>, incluindo
+                screenshots, vídeos e resultados produzidos pelos
+                testes automatizados.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     QUIZ
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 43
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 43 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe como criar workflows no GitHub
+                Actions e executar seus testes Cypress automaticamente
+                em um pipeline de CI.
+            </p>
+
+            <a href="../aulas/aula-44.html" class="cta-button">
+                Aula 44 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+ FOOTER
+
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 43 • GitHub Actions
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+ JAVASCRIPT
+
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-43.js"></script>
+
+</body>
+
+</html>

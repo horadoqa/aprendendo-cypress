@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 40 — Testes Reutilizáveis</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 40 • TESTES REUTILIZÁVEIS
+            </span>
+
+            <h1>
+                Testes Reutilizáveis
+            </h1>
+
+            <p>
+                Aprenda a reduzir duplicação, reutilizar comportamentos
+                e organizar testes Cypress de forma mais simples,
+                consistente e fácil de manter.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS DA AULA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Em uma suíte de testes maior, é comum encontrarmos
+                os mesmos comandos, dados e comportamentos repetidos
+                em diferentes arquivos.
+            </p>
+
+            <p>
+                Nesta aula vamos aprender estratégias para transformar
+                esses comportamentos em estruturas reutilizáveis.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Evitar duplicação
+                    </h3>
+
+                    <p>
+                        Identificar trechos de código que aparecem
+                        repetidamente nos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Criar reutilização
+                    </h3>
+
+                    <p>
+                        Transformar comportamentos comuns em estruturas
+                        que podem ser utilizadas novamente.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Melhorar os testes
+                    </h3>
+
+                    <p>
+                        Tornar os cenários mais objetivos e fáceis
+                        de compreender.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🛠️
+                    </div>
+
+                    <h3>
+                        Facilitar manutenção
+                    </h3>
+
+                    <p>
+                        Reduzir o impacto de alterações na aplicação
+                        sobre a suíte de testes.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE SÃO TESTES REUTILIZÁVEIS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que são testes reutilizáveis?
+            </h2>
+
+            <p>
+                Testes reutilizáveis são testes ou partes de testes
+                estruturados de forma que determinados comportamentos
+                possam ser utilizados em diferentes cenários.
+            </p>
+
+            <p>
+                A ideia não é simplesmente copiar e colar um teste.
+                O objetivo é identificar comportamentos que possuem
+                uma responsabilidade bem definida e que podem ser
+                reaproveitados.
+            </p>
+
+            <pre><code>login()
+
+criarUsuario()
+
+adicionarProduto()
+
+finalizarCompra()</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    ♻️ <strong>Reutilização</strong>
+                    → evita repetir a mesma implementação em vários testes.
+                </p>
+
+                <p>
+                    🎯 <strong>Responsabilidade</strong>
+                    → cada estrutura deve possuir uma finalidade clara.
+                </p>
+
+                <p>
+                    🛠️ <strong>Manutenção</strong>
+                    → alterações podem ser concentradas em um único lugar.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PROBLEMA DUPLICAÇÃO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. O problema da duplicação
+            </h2>
+
+            <p>
+                Imagine que vários testes precisem realizar o mesmo
+                processo de login.
+            </p>
+
+            <p>
+                Uma abordagem pouco reutilizável seria repetir
+                todo o código em cada cenário:
+            </p>
+
+            <pre><code>it(<span class="sql-string">'deve acessar o perfil'</span>, () =&gt; {
+
+cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.get(<span class="sql-string">'#email'</span>)
+.type(<span class="sql-string">'usuario@teste.com'</span>)
+
+cy.get(<span class="sql-string">'#senha'</span>)
+.type(<span class="sql-string">'123456'</span>)
+
+cy.get(<span class="sql-string">'#login'</span>)
+.click()
+
+cy.get(<span class="sql-string">'#perfil'</span>)
+.click()
+
+})</code></pre>
+
+            <p>
+                Outro teste poderia repetir exatamente o mesmo
+                processo:
+            </p>
+
+            <pre><code>it(<span class="sql-string">'deve acessar pedidos'</span>, () =&gt; {
+
+cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.get(<span class="sql-string">'#email'</span>)
+.type(<span class="sql-string">'usuario@teste.com'</span>)
+
+cy.get(<span class="sql-string">'#senha'</span>)
+.type(<span class="sql-string">'123456'</span>)
+
+cy.get(<span class="sql-string">'#login'</span>)
+.click()
+
+cy.get(<span class="sql-string">'#pedidos'</span>)
+.click()
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Quanto maior a suíte, maior pode ser o custo de
+                    manter trechos duplicados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     FUNÇÃO JAVASCRIPT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Reutilizando lógica com funções
+            </h2>
+
+            <p>
+                Uma das formas de reutilizar comportamento em JavaScript
+                é criar uma função.
+            </p>
+
+            <pre><code>function login() {
+
+cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.get(<span class="sql-string">'#email'</span>)
+.type(<span class="sql-string">'usuario@teste.com'</span>)
+
+cy.get(<span class="sql-string">'#senha'</span>)
+.type(<span class="sql-string">'123456'</span>)
+
+cy.get(<span class="sql-string">'#login'</span>)
+.click()
+
+}</code></pre>
+
+            <p>
+                Depois podemos chamar essa função em diferentes
+                testes:
+            </p>
+
+            <pre><code>login()
+
+cy.get(<span class="sql-string">'#perfil'</span>)
+.click()</code></pre>
+
+            <p>
+                Outro cenário pode utilizar o mesmo comportamento:
+            </p>
+
+            <pre><code>login()
+
+cy.get(<span class="sql-string">'#pedidos'</span>)
+.click()</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Funções podem ser úteis quando queremos encapsular
+                    uma lógica específica e reaproveitá-la em diferentes
+                    pontos.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PARAMETROS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Reutilização com parâmetros
+            </h2>
+
+            <p>
+                Uma função pode receber parâmetros para tornar seu
+                comportamento mais flexível.
+            </p>
+
+            <pre><code>function login(email, senha) {
+
+cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.get(<span class="sql-string">'#email'</span>)
+.type(email)
+
+cy.get(<span class="sql-string">'#senha'</span>)
+.type(senha)
+
+cy.get(<span class="sql-string">'#login'</span>)
+.click()
+
+}</code></pre>
+
+            <p>
+                Agora podemos utilizar diferentes usuários:
+            </p>
+
+            <pre><code>login(
+<span class="sql-string">'usuario@teste.com'</span>,
+<span class="sql-string">'123456'</span>
+
+)</code></pre>
+
+            <p>
+                Ou:
+            </p>
+
+            <pre><code>login(
+<span class="sql-string">'administrador@teste.com'</span>,
+<span class="sql-string">'admin123'</span>
+
+)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Vantagem:</strong>
+
+                <p>
+                    O comportamento continua sendo o mesmo, mas os
+                    dados podem variar de acordo com o cenário.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CUSTOM COMMANDS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Reutilizando comportamentos com Custom Commands
+            </h2>
+
+            <p>
+                Em projetos Cypress, comportamentos recorrentes também
+                podem ser transformados em Custom Commands.
+            </p>
+
+            <p>
+                Por exemplo, podemos criar um comando de login:
+            </p>
+
+            <pre><code>Cypress.Commands.add(
+<span class="sql-string">'login'</span>,
+(email, senha) =&gt; {
+
+cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.get(<span class="sql-string">'#email'</span>)
+    .type(email)
+
+cy.get(<span class="sql-string">'#senha'</span>)
+    .type(senha)
+
+cy.get(<span class="sql-string">'#login'</span>)
+    .click()
+
+})</code></pre>
+
+            <p>
+                O teste pode então utilizar o comando:
+            </p>
+
+            <pre><code>cy.login(
+<span class="sql-string">'usuario@teste.com'</span>,
+<span class="sql-string">'123456'</span>
+
+)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Custom Commands são especialmente úteis para
+                    comportamentos recorrentes que fazem sentido
+                    como comandos da aplicação de teste.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PAGE OBJECT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Reutilização com Page Objects
+            </h2>
+
+            <p>
+                Outra estratégia é encapsular elementos e ações
+                de uma página em uma classe ou objeto.
+            </p>
+
+            <pre><code>class LoginPage {
+
+visitar() {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+}
+
+preencherEmail(email) {
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .type(email)
+
+}
+
+preencherSenha(senha) {
+
+    cy.get(<span class="sql-string">'#senha'</span>)
+        .type(senha)
+
+}
+
+clicarLogin() {
+
+    cy.get(<span class="sql-string">'#login'</span>)
+        .click()
+
+}
+
+}</code></pre>
+
+            <p>
+                O teste pode utilizar esses comportamentos:
+            </p>
+
+            <pre><code>const loginPage = new LoginPage()
+
+loginPage.visitar()
+
+loginPage.preencherEmail(
+<span class="sql-string">'usuario@teste.com'</span>
+)
+
+loginPage.preencherSenha(
+<span class="sql-string">'123456'</span>
+)
+
+loginPage.clicarLogin()</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O objetivo é separar detalhes de interação da
+                    lógica principal dos cenários.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     FIXTURES
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Reutilizando dados com fixtures
+            </h2>
+
+            <p>
+                Além de reutilizar comportamentos, também podemos
+                reutilizar dados de teste.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>{
+
+<span class="sql-string">"email"</span>: <span class="sql-string">"usuario@teste.com"</span>,
+<span class="sql-string">"senha"</span>: <span class="sql-string">"123456"</span>
+
+}</code></pre>
+
+            <p>
+                O teste pode carregar esses dados:
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuario.json'</span>)
+.then((usuario) =&gt; {
+
+cy.login(
+    usuario.email,
+    usuario.senha
+)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Dessa maneira, os dados e a lógica do teste
+                    permanecem separados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     HOOKS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Reutilizando preparação com hooks
+            </h2>
+
+            <p>
+                Hooks como <strong>beforeEach()</strong> podem ser
+                utilizados para preparar o estado necessário antes
+                de diferentes testes.
+            </p>
+
+            <pre><code>beforeEach(() =&gt; {
+
+cy.login(
+<span class="sql-string">'usuario@teste.com'</span>,
+<span class="sql-string">'123456'</span>
+)
+
+})</code></pre>
+
+            <p>
+                Os testes podem então começar diretamente pelo
+                comportamento que desejam validar:
+            </p>
+
+            <pre><code>it(<span class="sql-string">'deve acessar o perfil'</span>, () =&gt; {
+
+cy.get(<span class="sql-string">'#perfil'</span>)
+.click()
+
+})</code></pre>
+
+            <pre><code>it(<span class="sql-string">'deve acessar os pedidos'</span>, () =&gt; {
+
+cy.get(<span class="sql-string">'#pedidos'</span>)
+.click()
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Hooks podem reduzir repetição quando existe uma
+                    preparação realmente compartilhada entre cenários.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     TESTE PARAMETRIZADO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Reutilizando cenários com dados diferentes
+            </h2>
+
+            <p>
+                Podemos utilizar arrays de objetos para executar
+                uma mesma estrutura de teste com diferentes dados.
+            </p>
+
+            <pre><code>const usuarios = [
+
+{
+    email: <span class="sql-string">'usuario1@teste.com'</span>,
+    senha: <span class="sql-string">'123456'</span>
+},
+
+{
+    email: <span class="sql-string">'usuario2@teste.com'</span>,
+    senha: <span class="sql-string">'654321'</span>
+}
+
+]</code></pre>
+
+            <p>
+                Depois podemos percorrer os dados:
+            </p>
+
+            <pre><code>usuarios.forEach((usuario) =&gt; {
+
+it(<span class="sql-string">`deve realizar login com ${usuario.email}`</span>, () =&gt; {
+
+    cy.login(
+        usuario.email,
+        usuario.senha
+    )
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A estrutura do cenário é reutilizada enquanto
+                    os dados variam entre as execuções.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ANTES E DEPOIS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Antes e depois da reutilização
+            </h2>
+
+            <p>
+                Considere três testes que precisam realizar login.
+            </p>
+
+            <p>
+                Sem reutilização:
+            </p>
+
+            <pre><code>cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.get(<span class="sql-string">'#email'</span>).type(<span class="sql-string">'usuario@teste.com'</span>)
+cy.get(<span class="sql-string">'#senha'</span>).type(<span class="sql-string">'123456'</span>)
+cy.get(<span class="sql-string">'#login'</span>).click()
+
+cy.visit(<span class="sql-string">'/login'</span>)
+cy.get(<span class="sql-string">'#email'</span>).type(<span class="sql-string">'usuario@teste.com'</span>)
+cy.get(<span class="sql-string">'#senha'</span>).type(<span class="sql-string">'123456'</span>)
+cy.get(<span class="sql-string">'#login'</span>).click()</code></pre>
+
+            <p>
+                Com reutilização:
+            </p>
+
+            <pre><code>cy.login(
+<span class="sql-string">'usuario@teste.com'</span>,
+<span class="sql-string">'123456'</span>
+
+)</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📉
+                    </div>
+
+                    <h3>
+                        Menos código
+                    </h3>
+
+                    <p>
+                        O teste possui menos detalhes repetidos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Mais foco
+                    </h3>
+
+                    <p>
+                        O cenário destaca o comportamento que
+                        realmente está sendo validado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🛠️
+                    </div>
+
+                    <h3>
+                        Manutenção
+                    </h3>
+
+                    <p>
+                        Uma alteração pode ser concentrada na
+                        implementação reutilizada.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     QUANDO REUTILIZAR
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Quando criar uma estrutura reutilizável?
+            </h2>
+
+            <p>
+                Nem todo trecho de código precisa ser transformado
+                em uma função, comando ou abstração.
+            </p>
+
+            <p>
+                Antes de criar uma estrutura reutilizável, observe
+                se o comportamento realmente aparece em diferentes
+                cenários.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔁
+                    </div>
+
+                    <h3>
+                        Repetição real
+                    </h3>
+
+                    <p>
+                        O comportamento aparece em vários testes
+                        e possui a mesma finalidade.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Responsabilidade clara
+                    </h3>
+
+                    <p>
+                        O trecho pode ser descrito por uma ação
+                        ou responsabilidade específica.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Interface estável
+                    </h3>
+
+                    <p>
+                        O comportamento possui uma forma consistente
+                        de ser utilizado pelos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚠️
+                    </div>
+
+                    <h3>
+                        Evite abstração excessiva
+                    </h3>
+
+                    <p>
+                        Não transforme pequenos trechos únicos em
+                        abstrações difíceis de entender.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EXCESSO DE ABSTRAÇÃO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Cuidado com abstrações excessivas
+            </h2>
+
+            <p>
+                Reutilização deve facilitar a manutenção, não esconder
+                completamente o comportamento do teste.
+            </p>
+
+            <p>
+                Uma função extremamente genérica pode acabar tornando
+                o teste mais difícil de compreender.
+            </p>
+
+            <pre><code>executarAcao(
+<span class="sql-string">'login'</span>,
+<span class="sql-string">'usuario'</span>,
+<span class="sql-string">'modo-rapido'</span>,
+<span class="sql-string">'validar'</span>,
+<span class="sql-string">'dashboard'</span>
+
+)</code></pre>
+
+            <p>
+                Muitas opções dentro de uma única abstração podem
+                esconder o que realmente está acontecendo.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Princípio importante:</strong>
+
+                <p>
+                    Prefira abstrações simples, claras e específicas
+                    para comportamentos que realmente precisam ser
+                    reutilizados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ORGANIZAÇÃO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Uma possível organização do projeto
+            </h2>
+
+            <p>
+                Um projeto Cypress pode separar diferentes tipos
+                de responsabilidades:
+            </p>
+
+            <pre><code>cypress/
+
+├── e2e/
+│ ├── login.cy.js
+│ ├── perfil.cy.js
+│ └── pedidos.cy.js
+│
+├── fixtures/
+│ ├── usuario.json
+│ └── produtos.json
+│
+└── support/
+├── commands.js
+└── e2e.js
+
+pages/
+
+├── LoginPage.js
+├── PerfilPage.js
+└── PedidosPage.js</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A estrutura exata pode variar conforme o projeto.
+                    O importante é manter responsabilidades relacionadas
+                    organizadas e fáceis de localizar.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EXEMPLO COMPLETO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Exemplo completo
+            </h2>
+
+            <p>
+                Vamos combinar Custom Command, fixture e um teste
+                reutilizável.
+            </p>
+
+            <p>
+                Fixture:
+            </p>
+
+            <pre><code>{
+
+<span class="sql-string">"email"</span>: <span class="sql-string">"usuario@teste.com"</span>,
+<span class="sql-string">"senha"</span>: <span class="sql-string">"123456"</span>
+}</code></pre>
+
+            <p>
+                Custom Command:
+            </p>
+
+            <pre><code>Cypress.Commands.add(
+<span class="sql-string">'login'</span>,
+(email, senha) =&gt; {
+
+cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.get(<span class="sql-string">'#email'</span>)
+    .type(email)
+
+cy.get(<span class="sql-string">'#senha'</span>)
+    .type(senha)
+
+cy.get(<span class="sql-string">'#login'</span>)
+    .click()
+
+})</code></pre>
+
+            <p>
+                Teste:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Área autenticada'</span>, () =&gt; {
+
+beforeEach(() => {
+
+cy.fixture(<span class="sql-string">'usuario.json'</span>)
+    .as(<span class="sql-string">'usuario'</span>)
+
+})
+
+it(<span class="sql-string">'deve acessar o perfil'</span>, () => {
+
+cy.get(<span class="sql-string">'@usuario'</span>)
+    .then((usuario) =&gt; {
+
+        cy.login(
+            usuario.email,
+            usuario.senha
+        )
+
+    })
+
+cy.get(<span class="sql-string">'#perfil'</span>)
+    .click()
+
+})
+
+it(<span class="sql-string">'deve acessar os pedidos'</span>, () => {
+
+cy.get(<span class="sql-string">'@usuario'</span>)
+    .then((usuario) =&gt; {
+
+        cy.login(
+            usuario.email,
+            usuario.senha
+        )
+
+    })
+
+cy.get(<span class="sql-string">'#pedidos'</span>)
+    .click()
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Observe como cada responsabilidade foi separada:
+                </p>
+
+                <p>
+                    📄 <strong>Fixture</strong>
+                    → armazena os dados.
+                </p>
+
+                <p>
+                    🧩 <strong>Custom Command</strong>
+                    → encapsula o comportamento de login.
+                </p>
+
+                <p>
+                    🧪 <strong>Spec</strong>
+                    → descreve os cenários que queremos validar.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BENEFÍCIOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Benefícios dos testes reutilizáveis
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Reutilização
+                    </h3>
+
+                    <p>
+                        O mesmo comportamento pode ser utilizado
+                        em diferentes cenários.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧹
+                    </div>
+
+                    <h3>
+                        Menos duplicação
+                    </h3>
+
+                    <p>
+                        Reduzimos trechos repetidos dentro das specs.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔧
+                    </div>
+
+                    <h3>
+                        Manutenção centralizada
+                    </h3>
+
+                    <p>
+                        Alterações em comportamentos compartilhados
+                        podem ser feitas em um único lugar.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📖
+                    </div>
+
+                    <h3>
+                        Legibilidade
+                    </h3>
+
+                    <p>
+                        Os testes podem ficar mais focados no
+                        comportamento que está sendo validado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ERROS COMUNS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Copiar e colar
+                    </h3>
+
+                    <p>
+                        Repetir o mesmo comportamento em muitos
+                        arquivos sem avaliar a possibilidade
+                        de reutilização.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Funções gigantes
+                    </h3>
+
+                    <p>
+                        Criar uma função que executa várias
+                        responsabilidades diferentes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Abstração excessiva
+                    </h3>
+
+                    <p>
+                        Esconder tantos detalhes que o teste
+                        se torna difícil de compreender.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Dados misturados
+                    </h3>
+
+                    <p>
+                        Misturar dados de teste com comportamentos
+                        reutilizáveis sem uma separação clara.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRÁTICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Tenha uma responsabilidade
+                    </h3>
+
+                    <p>
+                        Cada função, comando ou estrutura reutilizável
+                        deve possuir uma finalidade clara.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Use parâmetros
+                    </h3>
+
+                    <p>
+                        Permita que comportamentos reutilizáveis
+                        recebam dados quando necessário.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📝
+                    </div>
+
+                    <h3>
+                        Mantenha nomes claros
+                    </h3>
+
+                    <p>
+                        Os nomes devem explicar facilmente o
+                        comportamento executado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚖️
+                    </div>
+
+                    <h3>
+                        Busque equilíbrio
+                    </h3>
+
+                    <p>
+                        Reutilize quando fizer sentido sem transformar
+                        o projeto em uma camada excessiva de abstrações.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o conceito de testes reutilizáveis.
+                </p>
+
+                <p>
+                    ☐ Entendi o problema causado pela duplicação.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar funções para reutilizar comportamentos.
+                </p>
+
+                <p>
+                    ☐ Entendi como utilizar parâmetros.
+                </p>
+
+                <p>
+                    ☐ Sei reutilizar comportamentos com Custom Commands.
+                </p>
+
+                <p>
+                    ☐ Entendi como Page Objects podem organizar ações.
+                </p>
+
+                <p>
+                    ☐ Sei reutilizar dados utilizando fixtures.
+                </p>
+
+                <p>
+                    ☐ Entendi como hooks podem reduzir preparação repetida.
+                </p>
+
+                <p>
+                    ☐ Entendi o conceito de testes com diferentes dados.
+                </p>
+
+                <p>
+                    ☐ Sei identificar quando uma abstração pode ser útil.
+                </p>
+
+                <p>
+                    ☐ Entendi os riscos de abstrações excessivas.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ♻️ <strong>Reutilização</strong>
+                    → permite aproveitar comportamentos em diferentes
+                    cenários.
+                </p>
+
+                <p>
+                    🧹 <strong>Menos duplicação</strong>
+                    → reduz código repetido dentro da suíte.
+                </p>
+
+                <p>
+                    🧩 <strong>Custom Commands</strong>
+                    → encapsulam comportamentos recorrentes do Cypress.
+                </p>
+
+                <p>
+                    📄 <strong>Fixtures</strong>
+                    → permitem separar dados da lógica dos testes.
+                </p>
+
+                <p>
+                    🏗️ <strong>Page Objects</strong>
+                    → podem organizar elementos e ações relacionados
+                    a uma página.
+                </p>
+
+                <p>
+                    🔁 <strong>Parâmetros</strong>
+                    → permitem utilizar o mesmo comportamento com
+                    diferentes dados.
+                </p>
+
+                <p>
+                    ⚖️ <strong>Equilíbrio</strong>
+                    → reutilização deve facilitar, e não dificultar,
+                    a compreensão dos testes.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você possui uma visão mais completa sobre como
+                construir testes Cypress reutilizáveis, reduzindo
+                duplicação e mantendo responsabilidades organizadas.
+            </p>
+
+            <p>
+                Com isso, encerramos o módulo de
+                <strong>Organização e Boas Práticas</strong>.
+                Na próxima aula começaremos o módulo de
+                <strong>Cypress e CI/CD</strong>, aprendendo a executar
+                testes Cypress em modo headless.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     QUIZ
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 40
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 40 concluída!
+            </h2>
+
+            <p>
+                Agora você sabe como reduzir duplicação, reutilizar
+                comportamentos e organizar uma suíte de testes
+                Cypress mais fácil de manter.
+            </p>
+
+            <a href="../aulas/aula-41.html" class="cta-button">
+                Aula 41 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+ FOOTER
+
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 40 • Testes Reutilizáveis
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+ JAVASCRIPT
+
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-40.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,1787 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 39 — Data-Test e Seletores</title>
+
+</head>
+
+<body>
+
+    <header>
+
+        <img
+            class="header-logo"
+            src="../assets/images/logo.png"
+            alt="Hora do QA"
+        >
+
+        <button
+            class="theme-toggle"
+            id="themeToggle"
+            type="button"
+            aria-label="Alternar tema"
+        >
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 39 • DATA-TEST E SELETORES
+            </span>
+
+            <h1>
+                Data-Test e Seletores
+            </h1>
+
+            <p>
+                Aprenda a criar uma estratégia de seletores confiável
+                utilizando atributos dedicados à automação com Cypress.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+         OBJETIVOS DA AULA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Nas aulas anteriores, aprendemos diferentes formas de
+                organizar e reutilizar nossos testes automatizados.
+            </p>
+
+            <p>
+                Agora vamos estudar como criar uma estratégia de
+                seletores mais estável utilizando atributos como
+                <strong>data-testid</strong> e <strong>data-cy</strong>.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Entender seletores
+                    </h3>
+
+                    <p>
+                        Compreender por que a escolha dos seletores
+                        influencia a estabilidade dos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Conhecer data-test
+                    </h3>
+
+                    <p>
+                        Aprender como utilizar atributos específicos
+                        para localizar elementos nos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🛡️
+                    </div>
+
+                    <h3>
+                        Criar seletores estáveis
+                    </h3>
+
+                    <p>
+                        Reduzir a dependência de classes, textos e
+                        estruturas visuais da aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Definir uma estratégia
+                    </h3>
+
+                    <p>
+                        Criar padrões consistentes para os elementos
+                        utilizados pelos testes automatizados.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         O QUE SÃO SELETORES
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que são seletores?
+            </h2>
+
+            <p>
+                Um seletor é uma forma de identificar um elemento
+                dentro da página HTML.
+            </p>
+
+            <p>
+                No Cypress, utilizamos seletores principalmente
+                através do comando <strong>cy.get()</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#login'</span>)</code></pre>
+
+            <p>
+                Nesse exemplo, o Cypress procura um elemento que
+                possua o atributo <strong>id="login"</strong>.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🎯 <strong>Seletor</strong>
+                    → identifica um elemento da página.
+                </p>
+
+                <p>
+                    🔎 <strong>cy.get()</strong>
+                    → localiza o elemento utilizando um seletor.
+                </p>
+
+                <p>
+                    🧪 <strong>Teste</strong>
+                    → utiliza o elemento encontrado para realizar
+                    uma ação ou validação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         PROBLEMA DOS SELETORES
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                1. O problema dos seletores frágeis
+            </h2>
+
+            <p>
+                Nem todo seletor é igualmente confiável.
+            </p>
+
+            <p>
+                Seletores baseados em detalhes visuais ou na estrutura
+                interna da página podem quebrar quando a interface
+                sofre alterações.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.btn-primary'</span>)
+
+cy.get(<span class="sql-string">'.container &gt; div:nth-child(2)'</span>)
+
+cy.get(<span class="sql-string">'button'</span>)</code></pre>
+
+            <p>
+                Esses seletores podem depender de classes, posições
+                ou estruturas que podem ser alteradas durante o
+                desenvolvimento da aplicação.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Problema:</strong>
+
+                <p>
+                    Uma alteração visual que não muda o comportamento
+                    da aplicação pode fazer o teste deixar de encontrar
+                    o elemento.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         TIPOS DE SELETORES
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Principais tipos de seletores
+            </h2>
+
+            <p>
+                Existem diversas formas de localizar elementos
+                utilizando CSS.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Exemplo</th>
+                            <th>Característica</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>ID</strong>
+                            </td>
+
+                            <td>
+                                #login
+                            </td>
+
+                            <td>
+                                Identifica um elemento pelo atributo id.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>Classe</strong>
+                            </td>
+
+                            <td>
+                                .btn-primary
+                            </td>
+
+                            <td>
+                                Utiliza uma classe CSS.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>Tag</strong>
+                            </td>
+
+                            <td>
+                                button
+                            </td>
+
+                            <td>
+                                Localiza elementos pelo nome da tag.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>Atributo</strong>
+                            </td>
+
+                            <td>
+                                [type="email"]
+                            </td>
+
+                            <td>
+                                Utiliza atributos HTML.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>Data attribute</strong>
+                            </td>
+
+                            <td>
+                                [data-testid="login"]
+                            </td>
+
+                            <td>
+                                Atributo criado para identificar
+                                elementos de forma explícita.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         DATA ATTRIBUTES
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                3. O que são data attributes?
+            </h2>
+
+            <p>
+                HTML permite a criação de atributos personalizados
+                utilizando o prefixo <strong>data-</strong>.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>&lt;button
+    data-testid=<span class="sql-string">"login"</span>
+&gt;
+    Entrar
+&lt;/button&gt;</code></pre>
+
+            <p>
+                O atributo <strong>data-testid</strong> não representa
+                uma característica visual do botão.
+            </p>
+
+            <p>
+                Ele pode ser utilizado como uma identificação
+                específica para testes.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    A principal vantagem é separar a identificação
+                    utilizada pela automação das classes utilizadas
+                    para estilização.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         DATA TESTID
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Utilizando data-testid
+            </h2>
+
+            <p>
+                Podemos criar um elemento com um identificador
+                específico para o teste:
+            </p>
+
+            <pre><code>&lt;input
+    type=<span class="sql-string">"email"</span>
+    data-testid=<span class="sql-string">"email"</span>
+&gt;</code></pre>
+
+            <p>
+                No Cypress:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-testid="email"]'</span>)</code></pre>
+
+            <p>
+                Podemos então realizar ações sobre o elemento:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+    .type(<span class="sql-string">'usuario@teste.com'</span>)</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏷️
+                    </div>
+
+                    <h3>
+                        Identificação
+                    </h3>
+
+                    <p>
+                        O elemento recebe um identificador específico
+                        para automação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Localização
+                    </h3>
+
+                    <p>
+                        O Cypress utiliza o atributo para encontrar
+                        o elemento.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Automação
+                    </h3>
+
+                    <p>
+                        O teste pode interagir com o elemento
+                        utilizando um seletor dedicado.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         DATA-CY
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Utilizando data-cy
+            </h2>
+
+            <p>
+                Outra convenção comum em projetos Cypress é utilizar
+                o atributo <strong>data-cy</strong>.
+            </p>
+
+            <pre><code>&lt;button
+    data-cy=<span class="sql-string">"login"</span>
+&gt;
+    Entrar
+&lt;/button&gt;</code></pre>
+
+            <p>
+                No teste:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-cy="login"]'</span>)
+    .click()</code></pre>
+
+            <p>
+                O nome do atributo utilizado é uma decisão de
+                arquitetura do projeto. O mais importante é definir
+                uma convenção e utilizá-la de forma consistente.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Exemplo de convenção:</strong>
+
+                <p>
+                    Elementos utilizados pela automação podem receber
+                    atributos <strong>data-cy</strong> seguindo um
+                    padrão definido pela equipe.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         DATA-TEST
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                6. data-test, data-testid e data-cy
+            </h2>
+
+            <p>
+                Existem diferentes convenções para atributos
+                destinados aos testes.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Atributo</th>
+                            <th>Exemplo</th>
+                            <th>Uso</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>data-test</strong>
+                            </td>
+
+                            <td>
+                                [data-test="login"]
+                            </td>
+
+                            <td>
+                                Identificação dedicada à automação.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>data-testid</strong>
+                            </td>
+
+                            <td>
+                                [data-testid="login"]
+                            </td>
+
+                            <td>
+                                Identificação específica para testes.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>data-cy</strong>
+                            </td>
+
+                            <td>
+                                [data-cy="login"]
+                            </td>
+
+                            <td>
+                                Convenção frequentemente utilizada
+                                em projetos Cypress.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="highlight">
+
+                <p>
+                    O importante é evitar misturar diferentes padrões
+                    sem uma justificativa. Uma convenção consistente
+                    facilita a manutenção dos testes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         LOGIN
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Criando um formulário preparado para testes
+            </h2>
+
+            <p>
+                Imagine um formulário de login:
+            </p>
+
+            <pre><code>&lt;form&gt;
+
+    &lt;input
+        type=<span class="sql-string">"email"</span>
+        data-testid=<span class="sql-string">"email"</span>
+    &gt;
+
+    &lt;input
+        type=<span class="sql-string">"password"</span>
+        data-testid=<span class="sql-string">"senha"</span>
+    &gt;
+
+    &lt;button
+        data-testid=<span class="sql-string">"login"</span>
+    &gt;
+        Entrar
+    &lt;/button&gt;
+
+&lt;/form&gt;</code></pre>
+
+            <p>
+                Podemos escrever o teste:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+    .type(<span class="sql-string">'usuario@teste.com'</span>)
+
+cy.get(<span class="sql-string">'[data-testid="senha"]'</span>)
+    .type(<span class="sql-string">'123456'</span>)
+
+cy.get(<span class="sql-string">'[data-testid="login"]'</span>)
+    .click()</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O teste não depende da classe CSS utilizada para
+                    estilizar o formulário.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CLASSE VS DATA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Classe CSS versus data attribute
+            </h2>
+
+            <p>
+                Considere o seguinte botão:
+            </p>
+
+            <pre><code>&lt;button
+    class=<span class="sql-string">"btn btn-primary"</span>
+    data-testid=<span class="sql-string">"login"</span>
+&gt;
+    Entrar
+&lt;/button&gt;</code></pre>
+
+            <p>
+                Poderíamos localizar o elemento pela classe:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.btn-primary'</span>)</code></pre>
+
+            <p>
+                Ou pelo atributo dedicado:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-testid="login"]'</span>)</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎨
+                    </div>
+
+                    <h3>
+                        Classe CSS
+                    </h3>
+
+                    <p>
+                        Normalmente está relacionada à apresentação
+                        visual do elemento.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Data attribute
+                    </h3>
+
+                    <p>
+                        Pode ser utilizado especificamente para
+                        identificação durante a automação.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         TEXTO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Selecionar pelo texto
+            </h2>
+
+            <p>
+                O Cypress também permite localizar elementos pelo
+                texto utilizando comandos como <strong>contains()</strong>.
+            </p>
+
+            <pre><code>cy.contains(<span class="sql-string">'Entrar'</span>)</code></pre>
+
+            <p>
+                Essa abordagem pode ser útil quando o texto representa
+                exatamente o comportamento que queremos validar.
+            </p>
+
+            <p>
+                Porém, se o texto mudar por motivos de tradução,
+                conteúdo ou alteração de interface, o teste pode
+                precisar ser atualizado.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Importante:</strong>
+
+                <p>
+                    A escolha do seletor deve considerar a finalidade
+                    do teste e a estabilidade esperada do elemento.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ESTRUTURA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Evitando seletores dependentes da estrutura
+            </h2>
+
+            <p>
+                Um seletor como este depende diretamente da estrutura
+                HTML:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'.container &gt; div:nth-child(2) &gt; button'</span>)</code></pre>
+
+            <p>
+                Se um novo elemento for inserido na estrutura,
+                o seletor pode deixar de apontar para o elemento
+                esperado.
+            </p>
+
+            <p>
+                Uma alternativa é utilizar um atributo específico:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-testid="salvar"]'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Quanto mais um seletor depender de detalhes
+                    internos da estrutura da página, maior pode ser
+                    o impacto de alterações estruturais no teste.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         NOMENCLATURA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Criando uma boa nomenclatura
+            </h2>
+
+            <p>
+                Os valores dos atributos também precisam seguir
+                uma convenção.
+            </p>
+
+            <p>
+                Exemplos:
+            </p>
+
+            <pre><code>data-testid=<span class="sql-string">"login"</span>
+
+data-testid=<span class="sql-string">"email"</span>
+
+data-testid=<span class="sql-string">"senha"</span>
+
+data-testid=<span class="sql-string">"botao-salvar"</span>
+
+data-testid=<span class="sql-string">"mensagem-sucesso"</span></code></pre>
+
+            <p>
+                Evite nomes pouco claros:
+            </p>
+
+            <pre><code>data-testid=<span class="sql-string">"elemento1"</span>
+
+data-testid=<span class="sql-string">"teste"</span>
+
+data-testid=<span class="sql-string">"botao"</span></code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O nome deve ajudar a identificar a finalidade
+                    do elemento sem depender da aparência visual
+                    da interface.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         PADRÃO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Definindo um padrão para o projeto
+            </h2>
+
+            <p>
+                Uma equipe pode definir uma convenção para todos
+                os elementos utilizados pela automação.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>data-testid=<span class="sql-string">"login-email"</span>
+
+data-testid=<span class="sql-string">"login-senha"</span>
+
+data-testid=<span class="sql-string">"login-submit"</span>
+
+data-testid=<span class="sql-string">"login-error"</span></code></pre>
+
+            <p>
+                O prefixo <strong>login</strong> identifica o contexto
+                e a segunda parte identifica a finalidade do elemento.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Contexto
+                    </h3>
+
+                    <p>
+                        Identifique a funcionalidade ou componente
+                        ao qual o elemento pertence.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏷️
+                    </div>
+
+                    <h3>
+                        Finalidade
+                    </h3>
+
+                    <p>
+                        Descreva o papel do elemento dentro daquela
+                        funcionalidade.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📐
+                    </div>
+
+                    <h3>
+                        Consistência
+                    </h3>
+
+                    <p>
+                        Utilize o mesmo padrão em diferentes telas
+                        e funcionalidades.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         COMPONENTES
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Seletores em componentes reutilizáveis
+            </h2>
+
+            <p>
+                Componentes reutilizáveis também podem possuir
+                atributos destinados aos testes.
+            </p>
+
+            <p>
+                Por exemplo, um componente de botão:
+            </p>
+
+            <pre><code>&lt;button
+    data-testid=<span class="sql-string">"salvar"</span>
+&gt;
+    Salvar
+&lt;/button&gt;</code></pre>
+
+            <p>
+                Em diferentes páginas, o teste pode utilizar
+                o mesmo padrão:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-testid="salvar"]'</span>)
+    .click()</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Componentes bem identificados facilitam a
+                    automação e reduzem a necessidade de criar
+                    seletores complexos.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         PAGE OBJECT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Seletores e Page Objects
+            </h2>
+
+            <p>
+                Os seletores também podem ser centralizados em
+                Page Objects.
+            </p>
+
+            <pre><code>class LoginPage {
+
+    email() {
+
+        return cy.get(<span class="sql-string">'[data-testid="email"]'</span>)
+
+    }
+
+    senha() {
+
+        return cy.get(<span class="sql-string">'[data-testid="senha"]'</span>)
+
+    }
+
+    login() {
+
+        return cy.get(<span class="sql-string">'[data-testid="login"]'</span>)
+
+    }
+
+}</code></pre>
+
+            <p>
+                O teste pode então utilizar os métodos:
+            </p>
+
+            <pre><code>loginPage.email()
+    .type(<span class="sql-string">'usuario@teste.com'</span>)
+
+loginPage.senha()
+    .type(<span class="sql-string">'123456'</span>)
+
+loginPage.login()
+    .click()</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Dessa forma, alterações nos seletores podem ser
+                    centralizadas em um único local, dependendo da
+                    arquitetura adotada pelo projeto.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         SELETORES EM TABELAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Seletores em tabelas e listas
+            </h2>
+
+            <p>
+                Atributos de teste também podem ajudar a identificar
+                registros específicos em tabelas e listas.
+            </p>
+
+            <pre><code>&lt;tr data-testid=<span class="sql-string">"usuario-123"</span>&gt;
+
+    &lt;td&gt;
+        Maria
+    &lt;/td&gt;
+
+    &lt;td&gt;
+        maria@teste.com
+    &lt;/td&gt;
+
+&lt;/tr&gt;</code></pre>
+
+            <p>
+                O teste pode localizar o registro:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-testid="usuario-123"]'</span>)</code></pre>
+
+            <p>
+                Também podemos combinar atributos e outros seletores
+                quando necessário:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'[data-testid="usuario-123"]'</span>)
+    .should(<span class="sql-string">'contain'</span>, <span class="sql-string">'Maria'</span>)</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+         SELETORES DINÂMICOS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                16. Cuidado com valores dinâmicos
+            </h2>
+
+            <p>
+                Em aplicações que geram identificadores dinamicamente,
+                é importante avaliar se o valor utilizado no seletor
+                será previsível durante o teste.
+            </p>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>data-testid=<span class="sql-string">"usuario-987654"</span></code></pre>
+
+            <p>
+                Se o número mudar a cada execução, o teste não poderá
+                depender diretamente desse valor.
+            </p>
+
+            <p>
+                Uma alternativa pode ser utilizar uma identificação
+                estável:
+            </p>
+
+            <pre><code>data-testid=<span class="sql-string">"usuario"</span></code></pre>
+
+            <div class="highlight">
+
+                <strong>Regra prática:</strong>
+
+                <p>
+                    Evite construir testes dependentes de valores
+                    dinâmicos quando existir uma identificação estável
+                    para o mesmo elemento.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         BOAS PRÁTICAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas para seletores
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Prefira estabilidade
+                    </h3>
+
+                    <p>
+                        Escolha identificadores que não dependam
+                        de detalhes visuais da aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏷️
+                    </div>
+
+                    <h3>
+                        Use data attributes
+                    </h3>
+
+                    <p>
+                        Considere atributos dedicados para os
+                        elementos importantes da automação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📐
+                    </div>
+
+                    <h3>
+                        Defina convenções
+                    </h3>
+
+                    <p>
+                        Utilize uma nomenclatura consistente
+                        em todo o projeto.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🚫
+                    </div>
+
+                    <h3>
+                        Evite seletores frágeis
+                    </h3>
+
+                    <p>
+                        Evite depender excessivamente de classes,
+                        posições e estruturas internas.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         EXEMPLO COMPLETO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Exemplo completo
+            </h2>
+
+            <p>
+                Vamos preparar uma tela de login utilizando
+                atributos dedicados à automação.
+            </p>
+
+            <p>
+                HTML:
+            </p>
+
+            <pre><code>&lt;form data-testid=<span class="sql-string">"login-form"</span>&gt;
+
+    &lt;input
+        type=<span class="sql-string">"email"</span>
+        data-testid=<span class="sql-string">"login-email"</span>
+    &gt;
+
+    &lt;input
+        type=<span class="sql-string">"password"</span>
+        data-testid=<span class="sql-string">"login-senha"</span>
+    &gt;
+
+    &lt;button
+        type=<span class="sql-string">"submit"</span>
+        data-testid=<span class="sql-string">"login-submit"</span>
+    &gt;
+        Entrar
+    &lt;/button&gt;
+
+&lt;/form&gt;</code></pre>
+
+            <p>
+                Teste Cypress:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve realizar login'</span>, () =&gt; {
+
+        cy.visit(<span class="sql-string">'/login'</span>)
+
+        cy.get(<span class="sql-string">'[data-testid="login-email"]'</span>)
+            .type(<span class="sql-string">'usuario@teste.com'</span>)
+
+        cy.get(<span class="sql-string">'[data-testid="login-senha"]'</span>)
+            .type(<span class="sql-string">'123456'</span>)
+
+        cy.get(<span class="sql-string">'[data-testid="login-submit"]'</span>)
+            .click()
+
+    })
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O teste utiliza identificadores específicos
+                    para localizar cada elemento da tela.
+                </p>
+
+                <p>
+                    Dessa forma, a automação fica menos dependente
+                    das classes e da estrutura visual da página.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         COMPARAÇÃO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Comparando estratégias
+            </h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Estratégia</th>
+                            <th>Exemplo</th>
+                            <th>Dependência</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                Classe
+                            </td>
+
+                            <td>
+                                .btn-primary
+                            </td>
+
+                            <td>
+                                Estilização CSS.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Texto
+                            </td>
+
+                            <td>
+                                cy.contains('Entrar')
+                            </td>
+
+                            <td>
+                                Conteúdo apresentado ao usuário.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Estrutura
+                            </td>
+
+                            <td>
+                                div &gt; div &gt; button
+                            </td>
+
+                            <td>
+                                Estrutura HTML.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Data attribute
+                            </td>
+
+                            <td>
+                                [data-testid="login"]
+                            </td>
+
+                            <td>
+                                Identificação dedicada ao elemento.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="highlight">
+
+                <p>
+                    Não existe um único seletor que seja adequado
+                    para todos os cenários. A estratégia deve considerar
+                    a finalidade do teste, a aplicação e as convenções
+                    utilizadas pelo projeto.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ERROS COMUNS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns com seletores
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Depender de classes visuais
+                    </h3>
+
+                    <p>
+                        Utilizar classes exclusivamente criadas
+                        para estilização como principal seletor.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Usar posições
+                    </h3>
+
+                    <p>
+                        Depender de nth-child ou posições fixas
+                        dentro da estrutura HTML.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Nomes inconsistentes
+                    </h3>
+
+                    <p>
+                        Utilizar diferentes padrões de nomenclatura
+                        sem uma convenção definida.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Identificadores dinâmicos
+                    </h3>
+
+                    <p>
+                        Criar testes dependentes de valores que
+                        mudam entre execuções.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CHECKLIST
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o que são seletores.
+                </p>
+
+                <p>
+                    ☐ Entendi o problema dos seletores frágeis.
+                </p>
+
+                <p>
+                    ☐ Conheço os principais tipos de seletores CSS.
+                </p>
+
+                <p>
+                    ☐ Entendi o conceito de data attributes.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar data-testid.
+                </p>
+
+                <p>
+                    ☐ Conheço a convenção data-cy.
+                </p>
+
+                <p>
+                    ☐ Entendi a diferença entre classes e atributos
+                    destinados à automação.
+                </p>
+
+                <p>
+                    ☐ Sei criar uma nomenclatura consistente.
+                </p>
+
+                <p>
+                    ☐ Entendi os riscos de seletores dinâmicos.
+                </p>
+
+                <p>
+                    ☐ Sei aplicar seletores em Page Objects.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         RESUMO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🎯 <strong>Seletor</strong>
+                    → identifica um elemento dentro da página.
+                </p>
+
+                <p>
+                    🏷️ <strong>data-testid</strong>
+                    → atributo que pode ser utilizado para identificar
+                    elementos durante a automação.
+                </p>
+
+                <p>
+                    🧪 <strong>data-cy</strong>
+                    → convenção utilizada em muitos projetos para
+                    identificar elementos destinados aos testes.
+                </p>
+
+                <p>
+                    🛡️ <strong>Seletor estável</strong>
+                    → reduz a dependência de detalhes visuais ou
+                    estruturais da aplicação.
+                </p>
+
+                <p>
+                    📐 <strong>Convenção</strong>
+                    → estabelece um padrão de nomenclatura para
+                    os elementos automatizados.
+                </p>
+
+                <p>
+                    ♻️ <strong>Manutenção</strong>
+                    → seletores bem definidos facilitam a evolução
+                    da suíte de testes.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você sabe como criar uma estratégia de seletores
+                utilizando atributos dedicados à automação e como
+                evitar dependências desnecessárias da estrutura visual
+                da aplicação.
+            </p>
+
+            <p>
+                Na próxima aula vamos colocar esses conceitos em
+                prática criando <strong>testes reutilizáveis</strong>,
+                reduzindo duplicação e melhorando a manutenção da
+                nossa suíte Cypress.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         QUIZ
+    ====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 39
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 39 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe como criar seletores mais
+                consistentes utilizando data attributes e como
+                estruturar uma estratégia de identificação para
+                seus testes Cypress.
+            </p>
+
+            <a href="../aulas/aula-40.html" class="cta-button">
+                Aula 40 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+     FOOTER
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 39 • Data-Test e Seletores
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-39.js"></script>
+
+</body>
+
+</html>

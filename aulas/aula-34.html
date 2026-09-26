@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+
+    <title>Aula 34 — Mock de APIs</title>
+
+</head>
+
+<body>
+
+    <header>
+
+        <img
+            class="header-logo"
+            src="../assets/images/logo.png"
+            alt="Hora do QA"
+        >
+
+        <button
+            class="theme-toggle"
+            id="themeToggle"
+            type="button"
+            aria-label="Alternar tema"
+        >
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 34 • MOCK DE APIS
+            </span>
+
+            <h1>
+                Mock de APIs
+            </h1>
+
+            <p>
+                Aprenda a simular respostas de APIs utilizando
+                o Cypress para criar testes mais previsíveis,
+                rápidos e independentes de serviços externos.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+         OBJETIVOS DA AULA
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Na aula anterior, aprendemos a utilizar o
+                <strong>cy.intercept()</strong> para interceptar
+                requisições HTTP.
+            </p>
+
+            <p>
+                Agora vamos utilizar esse conhecimento para criar
+                mocks de APIs e controlar as respostas recebidas
+                pela aplicação durante os testes.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎭
+                    </div>
+
+                    <h3>
+                        Entender mocks
+                    </h3>
+
+                    <p>
+                        Compreender o conceito de mock e sua
+                        aplicação em testes automatizados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔀
+                    </div>
+
+                    <h3>
+                        Interceptar APIs
+                    </h3>
+
+                    <p>
+                        Interceptar requisições realizadas pela
+                        aplicação durante os testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Simular respostas
+                    </h3>
+
+                    <p>
+                        Criar respostas personalizadas para
+                        diferentes cenários.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Testar cenários
+                    </h3>
+
+                    <p>
+                        Validar comportamentos de sucesso,
+                        erro e diferentes estados da API.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         O QUE É MOCK
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é Mock?
+            </h2>
+
+            <p>
+                Um <strong>mock</strong> é uma simulação de um
+                componente real utilizado durante a execução
+                de um teste.
+            </p>
+
+            <p>
+                No contexto de APIs, podemos substituir
+                temporariamente a resposta real de um servidor
+                por uma resposta controlada pelo teste.
+            </p>
+
+            <pre><code>Aplicação
+
+        ↓
+
+    Requisição
+
+        ↓
+
+      Mock
+
+        ↓
+
+Resposta simulada</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🎭 <strong>Mock</strong>
+                    → simula um comportamento real.
+                </p>
+
+                <p>
+                    🌐 <strong>API real</strong>
+                    → serviço normalmente utilizado pela aplicação.
+                </p>
+
+                <p>
+                    🧪 <strong>Teste</strong>
+                    → controla o cenário e valida o comportamento
+                    da aplicação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         POR QUE UTILIZAR
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Por que utilizar mocks?
+            </h2>
+
+            <p>
+                Durante os testes E2E, a aplicação pode depender
+                de diferentes APIs e serviços externos.
+            </p>
+
+            <p>
+                Se esses serviços estiverem indisponíveis ou
+                retornarem dados diferentes, o resultado do teste
+                pode ser afetado.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚡
+                    </div>
+
+                    <h3>
+                        Mais velocidade
+                    </h3>
+
+                    <p>
+                        Evita algumas dependências de serviços
+                        externos durante determinados cenários.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Previsibilidade
+                    </h3>
+
+                    <p>
+                        O teste recebe exatamente a resposta
+                        definida para aquele cenário.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔧
+                    </div>
+
+                    <h3>
+                        Controle
+                    </h3>
+
+                    <p>
+                        Podemos simular diferentes respostas
+                        da API.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🚫
+                    </div>
+
+                    <h3>
+                        Menos dependências
+                    </h3>
+
+                    <p>
+                        O teste pode ser executado sem depender
+                        de determinadas respostas do backend.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         MOCK COM INTERCEPT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Criando um mock com cy.intercept()
+            </h2>
+
+            <p>
+                Podemos utilizar o <strong>cy.intercept()</strong>
+                para interceptar uma requisição e definir uma
+                resposta estática.
+            </p>
+
+            <pre><code>cy.intercept(
+    <span class="sql-string">'GET'</span>,
+    <span class="sql-string">'/api/usuarios'</span>,
+    {
+        statusCode: 200,
+        body: {
+            usuarios: []
+        }
+    }
+)</code></pre>
+
+            <p>
+                Nesse exemplo, qualquer requisição
+                <strong>GET</strong> para <strong>/api/usuarios</strong>
+                receberá a resposta definida pelo teste.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    A aplicação continua realizando a requisição,
+                    mas o Cypress controla a resposta recebida.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         MOCK COM BODY
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Criando uma resposta personalizada
+            </h2>
+
+            <p>
+                Podemos definir um objeto completo como resposta
+                da API.
+            </p>
+
+            <pre><code>cy.intercept(
+    <span class="sql-string">'GET'</span>,
+    <span class="sql-string">'/api/usuarios'</span>,
+    {
+        statusCode: 200,
+        body: {
+            usuarios: [
+                {
+                    id: 1,
+                    nome: <span class="sql-string">'Maria'</span>,
+                    email: <span class="sql-string">'maria@teste.com'</span>
+                },
+                {
+                    id: 2,
+                    nome: <span class="sql-string">'João'</span>,
+                    email: <span class="sql-string">'joao@teste.com'</span>
+                }
+            ]
+        }
+    }
+)</code></pre>
+
+            <p>
+                Dessa forma, podemos controlar exatamente
+                quais dados serão apresentados para a aplicação.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         ALIAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Utilizando alias com o mock
+            </h2>
+
+            <p>
+                Podemos atribuir um alias ao intercept para
+                acompanhar a requisição durante o teste.
+            </p>
+
+            <pre><code>cy.intercept(
+    <span class="sql-string">'GET'</span>,
+    <span class="sql-string">'/api/usuarios'</span>,
+    {
+        statusCode: 200,
+        body: {
+            usuarios: []
+        }
+    }
+).as(<span class="sql-string">'listarUsuarios'</span>)</code></pre>
+
+            <p>
+                Depois podemos aguardar a requisição:
+            </p>
+
+            <pre><code>cy.wait(<span class="sql-string">'@listarUsuarios'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O alias permite sincronizar o teste com a
+                    requisição interceptada.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         MOCK + VISIT
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Mock antes do cy.visit()
+            </h2>
+
+            <p>
+                Em muitos cenários, o intercept deve ser criado
+                antes da aplicação realizar a requisição.
+            </p>
+
+            <pre><code>cy.intercept(
+    <span class="sql-string">'GET'</span>,
+    <span class="sql-string">'/api/usuarios'</span>,
+    {
+        statusCode: 200,
+        body: {
+            usuarios: [
+                {
+                    id: 1,
+                    nome: <span class="sql-string">'Maria'</span>
+                }
+            ]
+        }
+    }
+).as(<span class="sql-string">'usuarios'</span>)
+
+cy.visit(<span class="sql-string">'/usuarios'</span>)
+
+cy.wait(<span class="sql-string">'@usuarios'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <strong>Boa prática:</strong>
+
+                <p>
+                    Quando a página realiza uma requisição
+                    automaticamente ao ser carregada, configure
+                    o intercept antes do <strong>cy.visit()</strong>.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         MOCK DE LOGIN
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Mockando uma API de login
+            </h2>
+
+            <p>
+                Podemos simular uma resposta de sucesso para
+                uma API de autenticação.
+            </p>
+
+            <pre><code>cy.intercept(
+    <span class="sql-string">'POST'</span>,
+    <span class="sql-string">'/api/login'</span>,
+    {
+        statusCode: 200,
+        body: {
+            token: <span class="sql-string">'token-teste'</span>,
+            usuario: {
+                id: 1,
+                nome: <span class="sql-string">'Maria'</span>
+            }
+        }
+    }
+).as(<span class="sql-string">'login'</span>)
+
+cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.get(<span class="sql-string">'#email'</span>)
+    .type(<span class="sql-string">'maria@teste.com'</span>)
+
+cy.get(<span class="sql-string">'#senha'</span>)
+    .type(<span class="sql-string">'123456'</span>)
+
+cy.get(<span class="sql-string">'#login'</span>)
+    .click()
+
+cy.wait(<span class="sql-string">'@login'</span>)</code></pre>
+
+            <p>
+                O teste pode validar o comportamento da interface
+                sem depender da autenticação real do backend.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         STATUS CODE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Simulando diferentes status codes
+            </h2>
+
+            <p>
+                Uma das vantagens dos mocks é poder testar como
+                a aplicação reage a diferentes respostas HTTP.
+            </p>
+
+            <pre><code>cy.intercept(
+    <span class="sql-string">'GET'</span>,
+    <span class="sql-string">'/api/usuarios'</span>,
+    {
+        statusCode: 200,
+        body: {
+            usuarios: []
+        }
+    }
+)</code></pre>
+
+            <p>
+                Podemos também simular erros:
+            </p>
+
+            <pre><code>cy.intercept(
+    <span class="sql-string">'GET'</span>,
+    <span class="sql-string">'/api/usuarios'</span>,
+    {
+        statusCode: 500,
+        body: {
+            mensagem: <span class="sql-string">'Erro interno do servidor'</span>
+        }
+    }
+)</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✅
+                    </div>
+
+                    <h3>
+                        200
+                    </h3>
+
+                    <p>
+                        Simula uma resposta de sucesso.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        401
+                    </h3>
+
+                    <p>
+                        Pode simular uma requisição não autenticada.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🚫
+                    </div>
+
+                    <h3>
+                        403
+                    </h3>
+
+                    <p>
+                        Pode simular acesso não autorizado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        💥
+                    </div>
+
+                    <h3>
+                        500
+                    </h3>
+
+                    <p>
+                        Pode simular um erro interno do servidor.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         TESTANDO ERRO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Testando mensagens de erro
+            </h2>
+
+            <p>
+                Podemos utilizar um mock para verificar se a
+                interface apresenta corretamente uma mensagem
+                quando a API falha.
+            </p>
+
+            <pre><code>cy.intercept(
+    <span class="sql-string">'GET'</span>,
+    <span class="sql-string">'/api/produtos'</span>,
+    {
+        statusCode: 500,
+        body: {
+            mensagem: <span class="sql-string">'Não foi possível carregar os produtos'</span>
+        }
+    }
+).as(<span class="sql-string">'produtos'</span>)
+
+cy.visit(<span class="sql-string">'/produtos'</span>)
+
+cy.wait(<span class="sql-string">'@produtos'</span>)
+
+cy.get(<span class="sql-string">'[data-testid="mensagem-erro"]'</span>)
+    .should(
+        <span class="sql-string">'contain'</span>,
+        <span class="sql-string">'Não foi possível carregar os produtos'</span>
+    )</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Esse tipo de cenário permite validar comportamentos
+                    de erro que podem ser difíceis de reproduzir
+                    utilizando somente a API real.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         EMPTY STATE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Simulando uma lista vazia
+            </h2>
+
+            <p>
+                Também podemos testar como a aplicação se comporta
+                quando uma API retorna uma lista sem registros.
+            </p>
+
+            <pre><code>cy.intercept(
+    <span class="sql-string">'GET'</span>,
+    <span class="sql-string">'/api/produtos'</span>,
+    {
+        statusCode: 200,
+        body: {
+            produtos: []
+        }
+    }
+).as(<span class="sql-string">'produtos'</span>)
+
+cy.visit(<span class="sql-string">'/produtos'</span>)
+
+cy.wait(<span class="sql-string">'@produtos'</span>)
+
+cy.get(<span class="sql-string">'[data-testid="lista-vazia"]'</span>)
+    .should(<span class="sql-string">'be.visible'</span>)</code></pre>
+
+            <p>
+                Esse cenário é conhecido como <strong>empty state</strong>
+                e é importante para validar o comportamento da
+                interface quando não existem dados.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         MOCK COM FIXTURE
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Utilizando fixtures como resposta do mock
+            </h2>
+
+            <p>
+                Também podemos combinar fixtures com
+                <strong>cy.intercept()</strong>.
+            </p>
+
+            <p>
+                Imagine um arquivo:
+            </p>
+
+            <pre><code>cypress/fixtures/produtos.json</code></pre>
+
+            <p>
+                Podemos utilizá-lo como resposta:
+            </p>
+
+            <pre><code>cy.intercept(
+    <span class="sql-string">'GET'</span>,
+    <span class="sql-string">'/api/produtos'</span>,
+    {
+        fixture: <span class="sql-string">'produtos.json'</span>
+    }
+).as(<span class="sql-string">'produtos'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Dessa forma, os dados do mock ficam separados
+                    da lógica do teste e podem ser reutilizados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         MOCK DINÂMICO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Alterando a resposta durante o teste
+            </h2>
+
+            <p>
+                Em alguns cenários podemos utilizar uma função
+                para trabalhar com a requisição interceptada.
+            </p>
+
+            <pre><code>cy.intercept(
+    <span class="sql-string">'GET'</span>,
+    <span class="sql-string">'/api/usuarios'</span>,
+    (request) =&gt; {
+
+        request.reply({
+            statusCode: 200,
+            body: {
+                usuarios: [
+                    {
+                        id: 1,
+                        nome: <span class="sql-string">'Maria'</span>
+                    }
+                ]
+            }
+        })
+
+    }
+)</code></pre>
+
+            <p>
+                O callback recebe informações sobre a requisição
+                e permite controlar a resposta utilizando
+                <strong>request.reply()</strong>.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    Essa abordagem é útil quando o cenário exige
+                    um controle mais específico sobre a requisição
+                    ou a resposta.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         REQUEST
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Inspecionando a requisição
+            </h2>
+
+            <p>
+                O objeto de requisição também pode ser utilizado
+                para analisar informações enviadas pela aplicação.
+            </p>
+
+            <pre><code>cy.intercept(
+    <span class="sql-string">'POST'</span>,
+    <span class="sql-string">'/api/login'</span>,
+    (request) =&gt; {
+
+        cy.log(request.body)
+
+        request.reply({
+            statusCode: 200,
+            body: {
+                sucesso: <span class="sql-string">true</span>
+            }
+        })
+
+    }
+)</code></pre>
+
+            <p>
+                O <strong>request.body</strong>, por exemplo,
+                pode representar os dados enviados no corpo
+                da requisição.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         CENÁRIOS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Criando diferentes cenários
+            </h2>
+
+            <p>
+                Uma aplicação pode apresentar comportamentos
+                diferentes dependendo da resposta da API.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Cenário</th>
+                            <th>Status</th>
+                            <th>Objetivo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                Sucesso
+                            </td>
+
+                            <td>
+                                200
+                            </td>
+
+                            <td>
+                                Validar o fluxo normal.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Sem dados
+                            </td>
+
+                            <td>
+                                200
+                            </td>
+
+                            <td>
+                                Validar lista vazia.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Não autenticado
+                            </td>
+
+                            <td>
+                                401
+                            </td>
+
+                            <td>
+                                Validar comportamento de autenticação.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Acesso negado
+                            </td>
+
+                            <td>
+                                403
+                            </td>
+
+                            <td>
+                                Validar mensagens de autorização.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Erro interno
+                            </td>
+
+                            <td>
+                                500
+                            </td>
+
+                            <td>
+                                Validar tratamento de falhas.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         MOCK X API REAL
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Mock x API real
+            </h2>
+
+            <p>
+                Mocks e testes utilizando APIs reais possuem
+                objetivos diferentes.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎭
+                    </div>
+
+                    <h3>
+                        Mock
+                    </h3>
+
+                    <p>
+                        Permite controlar a resposta e criar
+                        cenários específicos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        API real
+                    </h3>
+
+                    <p>
+                        Permite verificar a integração com
+                        o serviço real.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Estratégia
+                    </h3>
+
+                    <p>
+                        Uma suíte pode combinar diferentes tipos
+                        de testes de acordo com seus objetivos.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="highlight">
+
+                <p>
+                    Mockar uma API não significa que a integração
+                    real deixou de precisar ser testada.
+                </p>
+
+                <p>
+                    O mock é uma ferramenta para controlar cenários
+                    específicos durante os testes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         BOAS PRÁTICAS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas ao criar mocks
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Mocke apenas o necessário
+                    </h3>
+
+                    <p>
+                        Utilize mocks quando eles realmente
+                        contribuírem para o cenário de teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📁
+                    </div>
+
+                    <h3>
+                        Organize os dados
+                    </h3>
+
+                    <p>
+                        Utilize fixtures quando as respostas
+                        forem grandes ou reutilizadas.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏷️
+                    </div>
+
+                    <h3>
+                        Utilize aliases
+                    </h3>
+
+                    <p>
+                        Dê nomes claros aos intercepts para
+                        facilitar a leitura dos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚠️
+                    </div>
+
+                    <h3>
+                        Teste cenários de erro
+                    </h3>
+
+                    <p>
+                        Simule falhas para verificar como a
+                        aplicação reage.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         ERROS COMUNS
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns ao utilizar mocks
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Interceptar depois da requisição
+                    </h3>
+
+                    <p>
+                        Criar o intercept depois que a aplicação
+                        já realizou a requisição.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        URL incorreta
+                    </h3>
+
+                    <p>
+                        Utilizar uma URL diferente daquela
+                        realmente chamada pela aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Resposta incompatível
+                    </h3>
+
+                    <p>
+                        Retornar uma estrutura de dados diferente
+                        daquela esperada pelo frontend.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Testar somente o mock
+                    </h3>
+
+                    <p>
+                        Esquecer que a integração real também
+                        possui cenários que precisam ser avaliados.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         EXEMPLO COMPLETO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Exemplo completo
+            </h2>
+
+            <p>
+                Vamos criar um teste que simula uma API de produtos
+                retornando dois registros.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Produtos'</span>, () =&gt; {
+
+    it(<span class="sql-string">'deve exibir os produtos retornados pela API'</span>, () =&gt; {
+
+        cy.intercept(
+            <span class="sql-string">'GET'</span>,
+            <span class="sql-string">'/api/produtos'</span>,
+            {
+                statusCode: 200,
+                body: {
+                    produtos: [
+                        {
+                            id: 1,
+                            nome: <span class="sql-string">'Notebook'</span>,
+                            preco: 3500
+                        },
+                        {
+                            id: 2,
+                            nome: <span class="sql-string">'Mouse'</span>,
+                            preco: 150
+                        }
+                    ]
+                }
+            }
+        ).as(<span class="sql-string">'produtos'</span>)
+
+        cy.visit(<span class="sql-string">'/produtos'</span>)
+
+        cy.wait(<span class="sql-string">'@produtos'</span>)
+
+        cy.get(<span class="sql-string">'[data-testid="produto"]'</span>)
+            .should(<span class="sql-string">'have.length'</span>, 2)
+
+        cy.contains(<span class="sql-string">'Notebook'</span>)
+            .should(<span class="sql-string">'be.visible'</span>)
+
+        cy.contains(<span class="sql-string">'Mouse'</span>)
+            .should(<span class="sql-string">'be.visible'</span>)
+
+    })
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O teste controla a resposta da API e depois
+                    valida como a interface apresenta os dados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         FLUXO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Fluxo de um teste utilizando Mock
+            </h2>
+
+            <pre><code>1. Criar o intercept
+        ↓
+2. Definir a resposta
+        ↓
+3. Abrir a aplicação
+        ↓
+4. Aplicação realiza a requisição
+        ↓
+5. Cypress intercepta
+        ↓
+6. Cypress retorna o mock
+        ↓
+7. Aplicação recebe os dados
+        ↓
+8. Teste valida o comportamento</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O principal objetivo é controlar o cenário
+                    de forma previsível para validar o comportamento
+                    da aplicação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CHECKLIST
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o conceito de mock.
+                </p>
+
+                <p>
+                    ☐ Entendi como utilizar mocks de APIs.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar cy.intercept() para mockar respostas.
+                </p>
+
+                <p>
+                    ☐ Sei definir status codes.
+                </p>
+
+                <p>
+                    ☐ Sei definir um body para a resposta.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar aliases com intercepts.
+                </p>
+
+                <p>
+                    ☐ Sei testar respostas de erro.
+                </p>
+
+                <p>
+                    ☐ Sei simular listas vazias.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar fixtures como resposta de um mock.
+                </p>
+
+                <p>
+                    ☐ Entendo a diferença entre mock e API real.
+                </p>
+
+                <p>
+                    ☐ Sei criar cenários previsíveis utilizando mocks.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         RESUMO
+    ====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🎭 <strong>Mock</strong>
+                    → simula uma dependência real durante o teste.
+                </p>
+
+                <p>
+                    🔀 <strong>cy.intercept()</strong>
+                    → permite interceptar requisições e controlar
+                    suas respostas.
+                </p>
+
+                <p>
+                    📦 <strong>body</strong>
+                    → permite definir os dados retornados pela API.
+                </p>
+
+                <p>
+                    🔢 <strong>statusCode</strong>
+                    → permite simular diferentes respostas HTTP.
+                </p>
+
+                <p>
+                    🏷️ <strong>as()</strong>
+                    → cria um alias para acompanhar a requisição.
+                </p>
+
+                <p>
+                    📁 <strong>fixture</strong>
+                    → pode fornecer os dados utilizados pelo mock.
+                </p>
+
+                <p>
+                    🧪 <strong>Cenários</strong>
+                    → mocks permitem testar sucessos, erros,
+                    listas vazias e diferentes comportamentos.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você sabe como utilizar mocks de APIs no
+                Cypress para controlar respostas e criar cenários
+                de teste mais previsíveis.
+            </p>
+
+            <p>
+                Na próxima aula vamos colocar em prática os conceitos
+                de interceptação em um cenário completo utilizando
+                <strong>cy.intercept()</strong>.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+         QUIZ
+    ====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 34
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 34 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe como criar mocks de APIs,
+                controlar respostas HTTP e testar diferentes
+                cenários utilizando o Cypress.
+            </p>
+
+            <a
+                href="../aulas/aula-35.html"
+                class="cta-button"
+            >
+                Aula 35 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+     FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 34 • Mock de APIs
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+     JAVASCRIPT
+    ====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-34.js"></script>
+
+</body>
+
+</html>

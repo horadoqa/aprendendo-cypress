@@ -1,0 +1,1927 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <title>Aula 30 — Introdução a Testes de API</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 30 • TESTES DE API
+            </span>
+
+            <h1>
+                Introdução a Testes de API
+            </h1>
+
+            <p>
+                Entenda o que são APIs, como funcionam as requisições
+                HTTP e quais conceitos são importantes para começar
+                a criar testes de API com Cypress.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS DA AULA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Até aqui, trabalhamos principalmente com testes
+                automatizados de interfaces utilizando Cypress.
+            </p>
+
+            <p>
+                Agora vamos iniciar o módulo de <strong>Testes de API</strong>
+                e entender como validar serviços que ficam por trás
+                da interface da aplicação.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        Entender APIs
+                    </h3>
+
+                    <p>
+                        Compreender o que é uma API e qual é seu papel
+                        em uma aplicação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔗
+                    </div>
+
+                    <h3>
+                        Conhecer HTTP
+                    </h3>
+
+                    <p>
+                        Entender requisições, respostas, métodos HTTP
+                        e códigos de status.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Testar APIs
+                    </h3>
+
+                    <p>
+                        Identificar o que pode ser validado em uma
+                        API durante um teste automatizado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🚀
+                    </div>
+
+                    <h3>
+                        Preparar o Cypress
+                    </h3>
+
+                    <p>
+                        Conhecer os conceitos necessários para utilizar
+                        o cy.request() nas próximas aulas.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE É API
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é uma API?
+            </h2>
+
+            <p>
+                API é a sigla para <strong>Application Programming
+                    Interface</strong>, ou Interface de Programação de
+                Aplicações.
+            </p>
+
+            <p>
+                Uma API permite que diferentes sistemas ou partes
+                de um sistema se comuniquem utilizando regras e
+                formatos definidos.
+            </p>
+
+            <p>
+                Em uma aplicação web, por exemplo, o navegador pode
+                enviar uma requisição para uma API para buscar,
+                criar, alterar ou excluir informações.
+            </p>
+
+            <pre><code>Aplicação
+
+↓
+
+Requisição HTTP
+
+↓
+
+API
+
+↓
+
+Banco de dados
+
+↓
+
+Resposta HTTP</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>API</strong>
+                    → permite a comunicação entre sistemas.
+                </p>
+
+                <p>
+                    📤 <strong>Request</strong>
+                    → requisição enviada para a API.
+                </p>
+
+                <p>
+                    📥 <strong>Response</strong>
+                    → resposta devolvida pela API.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     API NA APLICAÇÃO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Onde a API aparece em uma aplicação?
+            </h2>
+
+            <p>
+                Em uma aplicação web, o usuário normalmente
+                interage com a interface através do navegador.
+            </p>
+
+            <p>
+                Por trás dessa interface, o frontend pode realizar
+                requisições para uma API.
+            </p>
+
+            <pre><code>Usuário
+
+↓
+Frontend
+↓
+API
+↓
+Banco de dados</code></pre>
+
+            <p>
+                Por exemplo, quando um usuário realiza login,
+                o frontend pode enviar uma requisição para uma
+                API responsável pela autenticação.
+            </p>
+
+            <pre><code>POST /login</code></pre>
+
+            <p>
+                A API processa os dados recebidos e retorna
+                uma resposta.
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"token"</span>: <span class="sql-string">"abc123"</span>,
+<span class="sql-string">"usuario"</span>: <span class="sql-string">"Maria"</span>
+
+}</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A interface é apenas uma das formas de consumir
+                    uma API. A API também pode ser acessada diretamente
+                    por outras aplicações e ferramentas de teste.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     REQUEST RESPONSE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Request e Response
+            </h2>
+
+            <p>
+                A comunicação HTTP normalmente envolve uma
+                <strong>requisição</strong> e uma <strong>resposta</strong>.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📤
+                    </div>
+
+                    <h3>
+                        Request
+                    </h3>
+
+                    <p>
+                        É a requisição enviada pelo cliente para
+                        um servidor ou API.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📥
+                    </div>
+
+                    <h3>
+                        Response
+                    </h3>
+
+                    <p>
+                        É a resposta enviada pelo servidor depois
+                        de processar a requisição.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📍
+                    </div>
+
+                    <h3>
+                        Endpoint
+                    </h3>
+
+                    <p>
+                        É o endereço utilizado para acessar
+                        determinado recurso da API.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Payload
+                    </h3>
+
+                    <p>
+                        São os dados enviados ou recebidos
+                        durante uma comunicação.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ENDPOINT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. O que é um endpoint?
+            </h2>
+
+            <p>
+                Um <strong>endpoint</strong> é uma URL utilizada
+                para acessar determinado recurso disponibilizado
+                por uma API.
+            </p>
+
+            <p>
+                Imagine uma API de usuários:
+            </p>
+
+            <pre><code>https://api.exemplo.com/usuarios</code></pre>
+
+            <p>
+                Esse endpoint pode representar o recurso
+                de usuários da aplicação.
+            </p>
+
+            <p>
+                Outros endpoints poderiam representar recursos
+                diferentes:
+            </p>
+
+            <pre><code>GET /usuarios
+
+GET /produtos
+
+GET /pedidos
+
+POST /usuarios</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O endpoint identifica o recurso que queremos
+                    consultar ou manipular através da API.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     MÉTODOS HTTP
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Métodos HTTP
+            </h2>
+
+            <p>
+                As APIs utilizam métodos HTTP para indicar
+                qual operação será realizada.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Método</th>
+                            <th>Objetivo</th>
+                            <th>Exemplo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>GET</strong>
+                            </td>
+
+                            <td>
+                                Consultar informações.
+                            </td>
+
+                            <td>
+                                Buscar usuários.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>POST</strong>
+                            </td>
+
+                            <td>
+                                Criar ou enviar um novo recurso.
+                            </td>
+
+                            <td>
+                                Criar usuário.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>PUT</strong>
+                            </td>
+
+                            <td>
+                                Atualizar um recurso.
+                            </td>
+
+                            <td>
+                                Atualizar usuário.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>PATCH</strong>
+                            </td>
+
+                            <td>
+                                Atualizar parcialmente um recurso.
+                            </td>
+
+                            <td>
+                                Alterar somente o e-mail.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>DELETE</strong>
+                            </td>
+
+                            <td>
+                                Remover um recurso.
+                            </td>
+
+                            <td>
+                                Excluir usuário.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="highlight">
+
+                <p>
+                    Os métodos HTTP ajudam a representar a intenção
+                    da requisição enviada para a API.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     GET
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Método GET
+            </h2>
+
+            <p>
+                O método <strong>GET</strong> é utilizado
+                principalmente para consultar informações.
+            </p>
+
+            <p>
+                Um exemplo de requisição seria:
+            </p>
+
+            <pre><code>GET /usuarios</code></pre>
+
+            <p>
+                A API poderia retornar uma lista de usuários:
+            </p>
+
+            <pre><code>[
+{
+    <span class="sql-string">"id"</span>: 1,
+    <span class="sql-string">"nome"</span>: <span class="sql-string">"Maria"</span>
+},
+{
+    <span class="sql-string">"id"</span>: 2,
+    <span class="sql-string">"nome"</span>: <span class="sql-string">"João"</span>
+}
+
+]</code></pre>
+
+            <p>
+                Em testes de API, podemos validar se a resposta
+                possui os dados esperados.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🔎 <strong>GET</strong>
+                    → utilizado para consultar recursos.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     POST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Método POST
+            </h2>
+
+            <p>
+                O método <strong>POST</strong> é utilizado para
+                enviar dados ao servidor, frequentemente para
+                criar um novo recurso.
+            </p>
+
+            <pre><code>POST /usuarios</code></pre>
+
+            <p>
+                Podemos enviar um corpo contendo os dados:
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"nome"</span>: <span class="sql-string">"Maria"</span>,
+<span class="sql-string">"email"</span>: <span class="sql-string">"maria@teste.com"</span>
+
+}</code></pre>
+
+            <p>
+                A API pode processar essas informações e retornar
+                o recurso criado:
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"id"</span>: 10,
+<span class="sql-string">"nome"</span>: <span class="sql-string">"Maria"</span>,
+<span class="sql-string">"email"</span>: <span class="sql-string">"maria@teste.com"</span>
+
+}</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    📨 <strong>POST</strong>
+                    → utilizado para enviar dados para a API,
+                    frequentemente para criação de recursos.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PUT PATCH DELETE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. PUT, PATCH e DELETE
+            </h2>
+
+            <p>
+                Além de GET e POST, APIs REST utilizam outros
+                métodos para manipular recursos.
+            </p>
+
+            <pre><code>PUT /usuarios/10
+
+PATCH /usuarios/10
+
+DELETE /usuarios/10</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔄
+                    </div>
+
+                    <h3>
+                        PUT
+                    </h3>
+
+                    <p>
+                        Normalmente utilizado para atualizar
+                        um recurso de forma mais completa.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ✏️
+                    </div>
+
+                    <h3>
+                        PATCH
+                    </h3>
+
+                    <p>
+                        Normalmente utilizado para atualização
+                        parcial de um recurso.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🗑️
+                    </div>
+
+                    <h3>
+                        DELETE
+                    </h3>
+
+                    <p>
+                        Utilizado para solicitar a remoção
+                        de um recurso.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     STATUS CODE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Códigos de status HTTP
+            </h2>
+
+            <p>
+                A resposta de uma API possui um código de status
+                que ajuda a indicar o resultado do processamento
+                da requisição.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Status</th>
+                            <th>Categoria</th>
+                            <th>Exemplo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>200</strong>
+                            </td>
+
+                            <td>
+                                Sucesso.
+                            </td>
+
+                            <td>
+                                Requisição processada com sucesso.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>201</strong>
+                            </td>
+
+                            <td>
+                                Criado.
+                            </td>
+
+                            <td>
+                                Novo recurso criado.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>204</strong>
+                            </td>
+
+                            <td>
+                                Sem conteúdo.
+                            </td>
+
+                            <td>
+                                Operação concluída sem corpo de resposta.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>400</strong>
+                            </td>
+
+                            <td>
+                                Requisição inválida.
+                            </td>
+
+                            <td>
+                                Dados enviados de forma inválida.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>401</strong>
+                            </td>
+
+                            <td>
+                                Não autenticado.
+                            </td>
+
+                            <td>
+                                Credenciais ausentes ou inválidas.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>403</strong>
+                            </td>
+
+                            <td>
+                                Acesso proibido.
+                            </td>
+
+                            <td>
+                                Usuário não possui permissão.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>404</strong>
+                            </td>
+
+                            <td>
+                                Não encontrado.
+                            </td>
+
+                            <td>
+                                Recurso ou endpoint não encontrado.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>500</strong>
+                            </td>
+
+                            <td>
+                                Erro do servidor.
+                            </td>
+
+                            <td>
+                                Falha durante o processamento no servidor.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     HEADERS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Headers HTTP
+            </h2>
+
+            <p>
+                Headers são informações adicionais enviadas junto
+                de uma requisição ou resposta HTTP.
+            </p>
+
+            <p>
+                Alguns headers comuns incluem:
+            </p>
+
+            <pre><code>Content-Type: application/json
+
+Authorization: Bearer token
+
+Accept: application/json</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📄
+                    </div>
+
+                    <h3>
+                        Content-Type
+                    </h3>
+
+                    <p>
+                        Indica o formato do conteúdo enviado
+                        ou recebido.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Authorization
+                    </h3>
+
+                    <p>
+                        Pode transportar informações utilizadas
+                        para autenticação e autorização.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📥
+                    </div>
+
+                    <h3>
+                        Accept
+                    </h3>
+
+                    <p>
+                        Indica formatos de resposta que o cliente
+                        espera receber.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BODY
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Body da requisição
+            </h2>
+
+            <p>
+                Algumas requisições HTTP possuem um corpo,
+                conhecido como <strong>request body</strong>.
+            </p>
+
+            <p>
+                Ele pode conter os dados enviados para a API.
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"nome"</span>: <span class="sql-string">"Maria"</span>,
+<span class="sql-string">"email"</span>: <span class="sql-string">"maria@teste.com"</span>
+
+}</code></pre>
+
+            <p>
+                Em uma requisição POST, por exemplo, esses dados
+                podem representar um novo usuário.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    📦 <strong>Body</strong>
+                    → contém dados enviados no corpo da requisição
+                    quando o método e a API utilizam esse recurso.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESPONSE BODY
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Body da resposta
+            </h2>
+
+            <p>
+                A resposta de uma API também pode possuir um corpo
+                contendo informações para o cliente.
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"id"</span>: 10,
+<span class="sql-string">"nome"</span>: <span class="sql-string">"Maria"</span>,
+<span class="sql-string">"email"</span>: <span class="sql-string">"maria@teste.com"</span>
+
+}</code></pre>
+
+            <p>
+                Durante um teste, podemos validar se esses dados
+                estão de acordo com o comportamento esperado.
+            </p>
+
+            <pre><code>expect(response.body.nome)
+.to.equal(<span class="sql-string">'Maria'</span>)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O corpo da resposta é uma das principais fontes
+                    de informações para validações em testes de API.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     JSON
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. JSON e APIs
+            </h2>
+
+            <p>
+                JSON é um formato muito utilizado para representar
+                dados em APIs.
+            </p>
+
+            <p>
+                Um objeto JSON pode possuir propriedades e valores:
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"id"</span>: 1,
+<span class="sql-string">"nome"</span>: <span class="sql-string">"Maria"</span>,
+<span class="sql-string">"ativo"</span>: <span class="sql-string">true</span>
+
+}</code></pre>
+
+            <p>
+                Também podemos representar listas:
+            </p>
+
+            <pre><code>[
+{
+    <span class="sql-string">"id"</span>: 1,
+    <span class="sql-string">"nome"</span>: <span class="sql-string">"Maria"</span>
+},
+{
+    <span class="sql-string">"id"</span>: 2,
+    <span class="sql-string">"nome"</span>: <span class="sql-string">"João"</span>
+}
+
+]</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    No contexto de testes de API, é importante saber
+                    interpretar objetos e arrays JSON para validar
+                    corretamente as respostas.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE TESTAR
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. O que podemos testar em uma API?
+            </h2>
+
+            <p>
+                Um teste de API pode validar diferentes aspectos
+                da comunicação entre cliente e servidor.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔢
+                    </div>
+
+                    <h3>
+                        Status code
+                    </h3>
+
+                    <p>
+                        Verificar se a API retornou o código de
+                        status esperado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Response body
+                    </h3>
+
+                    <p>
+                        Validar os dados retornados pela API.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        Headers
+                    </h3>
+
+                    <p>
+                        Verificar informações presentes nos
+                        headers da resposta.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚠️
+                    </div>
+
+                    <h3>
+                        Cenários de erro
+                    </h3>
+
+                    <p>
+                        Validar o comportamento da API diante
+                        de entradas inválidas ou não autorizadas.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     TESTE DE API X E2E
+====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Teste de API x Teste E2E
+            </h2>
+
+            <p>
+                Testes E2E normalmente simulam a utilização da
+                aplicação através da interface.
+            </p>
+
+            <p>
+                Já um teste de API pode realizar a comunicação
+                diretamente com o serviço.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Característica</th>
+                            <th>Teste E2E</th>
+                            <th>Teste de API</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                Interface
+                            </td>
+
+                            <td>
+                                Normalmente utiliza a interface.
+                            </td>
+
+                            <td>
+                                Não depende da interface para
+                                realizar a requisição.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Comunicação
+                            </td>
+
+                            <td>
+                                Pode envolver frontend e backend.
+                            </td>
+
+                            <td>
+                                Comunicação direta com a API.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Validação
+                            </td>
+
+                            <td>
+                                Comportamento da aplicação.
+                            </td>
+
+                            <td>
+                                Requisição e resposta.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Exemplo
+                            </td>
+
+                            <td>
+                                Realizar login pela tela.
+                            </td>
+
+                            <td>
+                                Enviar requisição para endpoint de login.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="highlight">
+
+                <p>
+                    Os dois tipos de teste podem fazer parte de uma
+                    estratégia de automação, cada um validando
+                    diferentes camadas da aplicação.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     VANTAGENS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Por que testar APIs?
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚡
+                    </div>
+
+                    <h3>
+                        Testes mais diretos
+                    </h3>
+
+                    <p>
+                        É possível validar serviços sem depender
+                        de toda a interação pela interface.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Validar regras
+                    </h3>
+
+                    <p>
+                        Regras de negócio podem ser verificadas
+                        diretamente através das respostas da API.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔍
+                    </div>
+
+                    <h3>
+                        Encontrar problemas
+                    </h3>
+
+                    <p>
+                        Falhas na comunicação entre sistemas podem
+                        ser identificadas através das requisições.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔄
+                    </div>
+
+                    <h3>
+                        Combinar estratégias
+                    </h3>
+
+                    <p>
+                        Testes de API podem complementar testes
+                        de interface e testes E2E.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CYPRESS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                16. Testando APIs com Cypress
+            </h2>
+
+            <p>
+                O Cypress possui recursos para realizar requisições
+                HTTP diretamente durante os testes.
+            </p>
+
+            <p>
+                Um dos principais comandos utilizados para isso é:
+            </p>
+
+            <pre><code>cy.request()</code></pre>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios'</span>)</code></pre>
+
+            <p>
+                Podemos então trabalhar com a resposta retornada
+                pelo Cypress:
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios'</span>)
+.then((response) =&gt; {
+
+    expect(response.status)
+        .to.equal(200)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Na próxima aula vamos estudar o
+                    <strong>cy.request()</strong> em detalhes e
+                    criar nossas primeiras requisições HTTP
+                    diretamente pelo Cypress.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EXEMPLO COMPLETO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                17. Exemplo completo de um teste de API
+            </h2>
+
+            <p>
+                Considere uma API que disponibiliza o endpoint:
+            </p>
+
+            <pre><code>GET /usuarios</code></pre>
+
+            <p>
+                Podemos criar um teste para verificar se a requisição
+                foi processada com sucesso:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'API de usuários'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve consultar usuários'</span>, () =&gt; {
+
+    cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios'</span>)
+        .then((response) =&gt; {
+
+            expect(response.status)
+                .to.equal(200)
+
+            expect(response.body)
+                .to.exist
+
+        })
+
+})
+
+})</code></pre>
+
+            <p>
+                Nesse exemplo, o teste verifica dois pontos:
+            </p>
+
+            <pre><code>response.status
+
+response.body</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O objetivo aqui não é testar uma interface,
+                    mas validar diretamente o comportamento do
+                    serviço exposto pela API.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRÁTICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas em testes de API
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Tenha objetivos claros
+                    </h3>
+
+                    <p>
+                        Cada teste deve possuir uma finalidade
+                        bem definida.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Valide a resposta
+                    </h3>
+
+                    <p>
+                        Não se limite a verificar se a requisição
+                        foi enviada. Valide o resultado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚠️
+                    </div>
+
+                    <h3>
+                        Teste cenários negativos
+                    </h3>
+
+                    <p>
+                        Considere também entradas inválidas,
+                        autenticação e recursos inexistentes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📁
+                    </div>
+
+                    <h3>
+                        Organize os testes
+                    </h3>
+
+                    <p>
+                        Utilize nomes claros e mantenha uma
+                        estrutura consistente para as specs.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ERROS COMUNS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns ao iniciar testes de API
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Confundir endpoint e método
+                    </h3>
+
+                    <p>
+                        O endpoint identifica o recurso, enquanto
+                        o método HTTP representa a operação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Validar somente o status
+                    </h3>
+
+                    <p>
+                        Uma resposta com status esperado não significa
+                        necessariamente que todos os dados estejam corretos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Ignorar o body
+                    </h3>
+
+                    <p>
+                        O corpo da resposta pode conter informações
+                        importantes para a validação do cenário.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Testar somente sucesso
+                    </h3>
+
+                    <p>
+                        APIs também precisam ser avaliadas em
+                        cenários de erro e entradas inválidas.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o que é uma API.
+                </p>
+
+                <p>
+                    ☐ Entendi o conceito de request e response.
+                </p>
+
+                <p>
+                    ☐ Sei o que é um endpoint.
+                </p>
+
+                <p>
+                    ☐ Conheço os principais métodos HTTP.
+                </p>
+
+                <p>
+                    ☐ Entendi o funcionamento de GET e POST.
+                </p>
+
+                <p>
+                    ☐ Conheço PUT, PATCH e DELETE.
+                </p>
+
+                <p>
+                    ☐ Entendi os principais códigos de status HTTP.
+                </p>
+
+                <p>
+                    ☐ Entendi o conceito de headers.
+                </p>
+
+                <p>
+                    ☐ Entendi o que é o body de uma requisição.
+                </p>
+
+                <p>
+                    ☐ Sei identificar informações em JSON.
+                </p>
+
+                <p>
+                    ☐ Entendi o que podemos validar em uma API.
+                </p>
+
+                <p>
+                    ☐ Entendi a diferença entre testes E2E e testes de API.
+                </p>
+
+                <p>
+                    ☐ Conheci o comando cy.request().
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🌐 <strong>API</strong>
+                    → permite a comunicação entre sistemas.
+                </p>
+
+                <p>
+                    📤 <strong>Request</strong>
+                    → requisição enviada para a API.
+                </p>
+
+                <p>
+                    📥 <strong>Response</strong>
+                    → resposta retornada pela API.
+                </p>
+
+                <p>
+                    📍 <strong>Endpoint</strong>
+                    → endereço utilizado para acessar um recurso.
+                </p>
+
+                <p>
+                    🔗 <strong>HTTP</strong>
+                    → protocolo utilizado na comunicação entre
+                    cliente e servidor.
+                </p>
+
+                <p>
+                    🔢 <strong>Status code</strong>
+                    → indica o resultado do processamento da requisição.
+                </p>
+
+                <p>
+                    📦 <strong>JSON</strong>
+                    → formato frequentemente utilizado para representar
+                    dados nas APIs.
+                </p>
+
+                <p>
+                    🧪 <strong>Teste de API</strong>
+                    → valida requisições, respostas e comportamentos
+                    dos serviços.
+                </p>
+
+                <p>
+                    🚀 <strong>cy.request()</strong>
+                    → comando do Cypress utilizado para realizar
+                    requisições HTTP.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você conhece os principais conceitos necessários
+                para começar a trabalhar com testes de API.
+            </p>
+
+            <p>
+                Na próxima aula vamos colocar esses conceitos em
+                prática utilizando o <strong>cy.request()</strong>
+                para realizar requisições HTTP diretamente pelo Cypress.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     QUIZ
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 30
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 30 concluída!
+            </h2>
+
+            <p>
+                Agora você já conhece os principais conceitos de
+                APIs, HTTP, endpoints, requests, responses e
+                validações que serão utilizados nos próximos testes.
+            </p>
+
+            <a href="../aulas/aula-31.html" class="cta-button">
+                Aula 31 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+ FOOTER
+
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 30 • Introdução a Testes de API
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+ JAVASCRIPT
+
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-30.js"></script>
+
+</body>
+
+</html>

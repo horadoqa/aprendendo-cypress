@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <title>Aula 29 — Variáveis e Aliases</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 29 • VARIÁVEIS E ALIASES
+            </span>
+
+            <h1>
+                Variáveis e Aliases
+            </h1>
+
+            <p>
+                Aprenda como utilizar variáveis, aliases e diferentes
+                formas de compartilhar informações entre comandos e
+                etapas dos testes com Cypress.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS DA AULA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Nas aulas anteriores, aprendemos como trabalhar com
+                massa de dados e como utilizar o <strong>cy.fixture()</strong>
+                para carregar informações externas.
+            </p>
+
+            <p>
+                Agora vamos entender como armazenar, acessar e
+                compartilhar informações durante a execução dos
+                testes utilizando variáveis e aliases.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Conhecer variáveis
+                    </h3>
+
+                    <p>
+                        Entender como armazenar valores em variáveis
+                        utilizando JavaScript.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏷️
+                    </div>
+
+                    <h3>
+                        Entender aliases
+                    </h3>
+
+                    <p>
+                        Aprender como criar e utilizar aliases
+                        dentro dos testes Cypress.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔗
+                    </div>
+
+                    <h3>
+                        Compartilhar dados
+                    </h3>
+
+                    <p>
+                        Utilizar informações em diferentes etapas
+                        da execução de um teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Reutilizar informações
+                    </h3>
+
+                    <p>
+                        Reduzir duplicação e melhorar a organização
+                        dos testes automatizados.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE SÃO VARIÁVEIS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que são variáveis?
+            </h2>
+
+            <p>
+                Variáveis são utilizadas para armazenar informações
+                que podem ser utilizadas posteriormente durante
+                a execução do código.
+            </p>
+
+            <p>
+                Em JavaScript, podemos criar variáveis utilizando
+                <strong>const</strong>, <strong>let</strong> ou,
+                em códigos legados, <strong>var</strong>.
+            </p>
+
+            <pre><code>const nome = <span class="sql-string">'Maria'</span>
+
+let idade = 25</code></pre>
+
+            <p>
+                Depois podemos utilizar essas variáveis em diferentes
+                operações:
+            </p>
+
+            <pre><code>const nome = <span class="sql-string">'Maria'</span>
+
+cy.log(nome)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    📦 <strong>Variável</strong>
+                    → armazena um valor que pode ser utilizado pelo código.
+                </p>
+
+                <p>
+                    🔤 <strong>Valor</strong>
+                    → informação armazenada na variável.
+                </p>
+
+                <p>
+                    🧪 <strong>Teste</strong>
+                    → utiliza essas informações durante a execução do cenário.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CONST E LET
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. const e let
+            </h2>
+
+            <p>
+                Em testes Cypress, é comum utilizar
+                <strong>const</strong> para valores que não serão
+                reatribuídos.
+            </p>
+
+            <pre><code>const email = <span class="sql-string">'usuario@teste.com'</span>
+
+cy.log(email)</code></pre>
+
+            <p>
+                Já o <strong>let</strong> pode ser utilizado quando
+                o valor precisa ser alterado posteriormente.
+            </p>
+
+            <pre><code>let status = <span class="sql-string">'pendente'</span>
+
+status = <span class="sql-string">'aprovado'</span>
+
+cy.log(status)</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔒
+                    </div>
+
+                    <h3>
+                        const
+                    </h3>
+
+                    <p>
+                        Utilize quando a variável não precisará
+                        receber outro valor.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔄
+                    </div>
+
+                    <h3>
+                        let
+                    </h3>
+
+                    <p>
+                        Utilize quando o valor poderá ser
+                        reatribuído.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚠️
+                    </div>
+
+                    <h3>
+                        var
+                    </h3>
+
+                    <p>
+                        É uma forma antiga de declaração e geralmente
+                        não é a primeira escolha em código moderno.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     VARIÁVEIS EM TESTES
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Utilizando variáveis nos testes
+            </h2>
+
+            <p>
+                Variáveis podem deixar os testes mais organizados
+                quando determinados valores precisam ser utilizados
+                mais de uma vez.
+            </p>
+
+            <pre><code>const email = <span class="sql-string">'usuario@teste.com'</span>
+
+const senha = <span class="sql-string">'123456'</span>
+
+cy.visit(<span class="sql-string">'/login'</span>)
+
+cy.get(<span class="sql-string">'#email'</span>)
+.type(email)
+
+cy.get(<span class="sql-string">'#senha'</span>)
+.type(senha)</code></pre>
+
+            <p>
+                Nesse exemplo, os dados utilizados no formulário
+                foram armazenados em variáveis.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    Isso pode facilitar a leitura do teste e evitar
+                    que o mesmo valor seja repetido diretamente
+                    em diversos comandos.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     OBJETOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Variáveis contendo objetos
+            </h2>
+
+            <p>
+                Uma variável também pode armazenar um objeto com
+                diversas informações relacionadas.
+            </p>
+
+            <pre><code>const usuario = {
+
+nome: <span class="sql-string">'Maria'</span>,
+email: <span class="sql-string">'maria@teste.com'</span>,
+senha: <span class="sql-string">'123456'</span>
+
+}</code></pre>
+
+            <p>
+                Podemos acessar cada propriedade utilizando
+                a notação de ponto:
+            </p>
+
+            <pre><code>cy.log(usuario.nome)
+
+cy.log(usuario.email)
+
+cy.log(usuario.senha)</code></pre>
+
+            <p>
+                Essas informações também podem ser utilizadas
+                diretamente nos comandos do Cypress:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+.type(usuario.email)
+
+cy.get(<span class="sql-string">'#senha'</span>)
+.type(usuario.senha)</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Objetos são úteis para agrupar informações
+                    relacionadas em uma única variável.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     VARIÁVEL E FIXTURE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Armazenando dados de um fixture em uma variável
+            </h2>
+
+            <p>
+                Na aula anterior, utilizamos o
+                <strong>cy.fixture()</strong> para carregar dados
+                externos.
+            </p>
+
+            <p>
+                Podemos receber esses dados dentro de um
+                <strong>then()</strong>:
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuario.json'</span>)
+.then((usuario) =&gt; {
+
+    cy.log(usuario.nome)
+
+})</code></pre>
+
+            <p>
+                O parâmetro <strong>usuario</strong> representa
+                os dados carregados pelo fixture dentro daquele
+                callback.
+            </p>
+
+            <p>
+                Também podemos criar outras variáveis a partir
+                dessas informações:
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuario.json'</span>)
+.then((usuario) =&gt; {
+
+    const email = usuario.email
+
+    cy.log(email)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O valor recebido pelo <strong>then()</strong>
+                    está disponível dentro do contexto daquela
+                    função.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE É ALIAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. O que é um alias?
+            </h2>
+
+            <p>
+                Um <strong>alias</strong> é um nome associado a
+                determinado valor, elemento ou resultado dentro
+                do Cypress.
+            </p>
+
+            <p>
+                Podemos criar aliases utilizando o comando
+                <strong>.as()</strong>.
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuario.json'</span>)
+.as(<span class="sql-string">'usuario'</span>)</code></pre>
+
+            <p>
+                Nesse exemplo, criamos o alias chamado
+                <strong>usuario</strong>.
+            </p>
+
+            <p>
+                Para acessar esse alias, utilizamos o símbolo
+                <strong>@</strong>:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'@usuario'</span>)
+.then((usuario) =&gt; {
+
+    cy.log(usuario.nome)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🏷️ <strong>.as()</strong>
+                    → cria um alias.
+                </p>
+
+                <p>
+                    @ <strong>nome</strong>
+                    → referencia o alias criado.
+                </p>
+
+                <p>
+                    🔗 <strong>cy.get()</strong>
+                    → pode ser utilizado para recuperar o alias.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ALIAS DE ELEMENTO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Criando alias para elementos
+            </h2>
+
+            <p>
+                Aliases também podem ser utilizados para referenciar
+                elementos encontrados na página.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+.as(<span class="sql-string">'campoEmail'</span>)</code></pre>
+
+            <p>
+                Depois podemos recuperar o elemento através
+                do alias:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'@campoEmail'</span>)
+.type(<span class="sql-string">'usuario@teste.com'</span>)</code></pre>
+
+            <p>
+                Isso pode ser útil quando o mesmo elemento precisa
+                ser referenciado em diferentes momentos do teste.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    O alias representa uma referência ao elemento
+                    ou valor que foi associado a ele.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ALIAS DE VALORES
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Criando aliases para valores
+            </h2>
+
+            <p>
+                Podemos criar aliases para valores retornados
+                por comandos do Cypress.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#email'</span>)
+.invoke(<span class="sql-string">'val'</span>)
+.as(<span class="sql-string">'email'</span>)</code></pre>
+
+            <p>
+                Depois podemos recuperar o valor:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'@email'</span>)
+.then((email) =&gt; {
+
+    cy.log(email)
+
+})</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Elementos
+                    </h3>
+
+                    <p>
+                        Um alias pode representar um elemento
+                        encontrado na página.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📄
+                    </div>
+
+                    <h3>
+                        Dados
+                    </h3>
+
+                    <p>
+                        Um alias pode representar dados carregados
+                        durante o teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Resultados
+                    </h3>
+
+                    <p>
+                        Um alias pode armazenar o resultado
+                        produzido por um comando Cypress.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     FIXTURE COM ALIAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Fixture com alias
+            </h2>
+
+            <p>
+                Uma combinação bastante comum é carregar um fixture
+                e imediatamente criar um alias para seus dados.
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuario.json'</span>)
+.as(<span class="sql-string">'usuario'</span>)</code></pre>
+
+            <p>
+                Depois podemos utilizar o alias:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'@usuario'</span>)
+.then((usuario) =&gt; {
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .type(usuario.email)
+
+    cy.get(<span class="sql-string">'#senha'</span>)
+        .type(usuario.senha)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Essa abordagem permite carregar os dados uma
+                    vez e referenciá-los pelo alias durante o cenário.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BEFORE EACH
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Aliases dentro de beforeEach()
+            </h2>
+
+            <p>
+                Quando diversos testes precisam dos mesmos dados,
+                podemos criar o alias dentro de um
+                <strong>beforeEach()</strong>.
+            </p>
+
+            <pre><code>beforeEach(() =&gt; {
+
+cy.fixture(<span class="sql-string">'usuario.json'</span>)
+    .as(<span class="sql-string">'usuario'</span>)
+
+})</code></pre>
+
+            <p>
+                Cada teste poderá recuperar os dados utilizando
+                o alias:
+            </p>
+
+            <pre><code>it(<span class="sql-string">'deve realizar login'</span>, () =&gt; {
+
+cy.get(<span class="sql-string">'@usuario'</span>)
+    .then((usuario) =&gt; {
+
+        cy.visit(<span class="sql-string">'/login'</span>)
+
+        cy.get(<span class="sql-string">'#email'</span>)
+            .type(usuario.email)
+
+        cy.get(<span class="sql-string">'#senha'</span>)
+            .type(usuario.senha)
+
+    })
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O <strong>beforeEach()</strong> é executado antes
+                    de cada teste dentro do contexto em que foi definido.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     VARIÁVEL X ALIAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Variável x Alias
+            </h2>
+
+            <p>
+                Variáveis JavaScript e aliases do Cypress possuem
+                propósitos relacionados, mas não são a mesma coisa.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Recurso</th>
+                            <th>Exemplo</th>
+                            <th>Utilização</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>Variável</strong>
+                            </td>
+
+                            <td>
+                                const usuario
+                            </td>
+
+                            <td>
+                                Armazenar valores dentro do
+                                escopo JavaScript.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>Alias</strong>
+                            </td>
+
+                            <td>
+                                .as('usuario')
+                            </td>
+
+                            <td>
+                                Criar uma referência que pode ser
+                                recuperada pela cadeia do Cypress.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>Referência</strong>
+                            </td>
+
+                            <td>
+                                @usuario
+                            </td>
+
+                            <td>
+                                Recuperar um alias criado anteriormente.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="highlight">
+
+                <p>
+                    Uma variável JavaScript segue as regras de
+                    escopo e execução do JavaScript.
+                </p>
+
+                <p>
+                    Um alias faz parte do mecanismo de aliases
+                    do Cypress e é recuperado através da cadeia
+                    de comandos.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ESCOPO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Entendendo escopo de variáveis
+            </h2>
+
+            <p>
+                O escopo determina onde uma variável pode ser
+                acessada dentro do código.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Usuário'</span>, () =&gt; {
+
+const nome = <span class="sql-string">'Maria'</span>
+
+it(<span class="sql-string">'deve exibir o usuário'</span>, () =&gt; {
+
+    cy.log(nome)
+
+})
+
+})</code></pre>
+
+            <p>
+                Nesse exemplo, a variável <strong>nome</strong>
+                foi declarada dentro do bloco do
+                <strong>describe()</strong> e pode ser acessada
+                pelos testes que estão dentro desse escopo.
+            </p>
+
+            <p>
+                Uma variável criada dentro de uma função, por outro
+                lado, normalmente ficará disponível somente dentro
+                daquele contexto.
+            </p>
+
+            <pre><code>it(<span class="sql-string">'teste'</span>, () =&gt; {
+
+const nome = <span class="sql-string">'Maria'</span>
+
+cy.log(nome)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Entender escopo é importante para evitar erros
+                    ao tentar acessar variáveis fora do contexto
+                    em que foram declaradas.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     THEN
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Trabalhando com valores dentro do then()
+            </h2>
+
+            <p>
+                Comandos Cypress são encadeados e seus resultados
+                podem ser trabalhados dentro de callbacks como
+                o <strong>then()</strong>.
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#nome'</span>)
+.invoke(<span class="sql-string">'text'</span>)
+.then((nome) =&gt; {
+
+    cy.log(nome)
+
+})</code></pre>
+
+            <p>
+                Também podemos utilizar o valor recebido para
+                realizar outras operações:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'#nome'</span>)
+.invoke(<span class="sql-string">'text'</span>)
+.then((nome) =&gt; {
+
+    expect(nome)
+        .to.contain(<span class="sql-string">'Maria'</span>)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O valor recebido pelo callback está disponível
+                    diretamente através do parâmetro definido na função.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ALIAS DE RESPONSE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Aliases com intercept()
+            </h2>
+
+            <p>
+                Aliases também são muito utilizados em conjunto
+                com o <strong>cy.intercept()</strong>.
+            </p>
+
+            <p>
+                Podemos atribuir um alias a uma interceptação:
+            </p>
+
+            <pre><code>cy.intercept(<span class="sql-string">'GET'</span>, <span class="sql-string">'/api/usuarios'</span>)
+.as(<span class="sql-string">'buscarUsuarios'</span>)</code></pre>
+
+            <p>
+                Depois podemos aguardar a requisição:
+            </p>
+
+            <pre><code>cy.wait(<span class="sql-string">'@buscarUsuarios'</span>)</code></pre>
+
+            <p>
+                Também podemos acessar informações da requisição
+                e da resposta:
+            </p>
+
+            <pre><code>cy.wait(<span class="sql-string">'@buscarUsuarios'</span>)
+.then((interceptacao) =&gt; {
+
+    expect(interceptacao.response.statusCode)
+        .to.equal(200)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Aliases são especialmente úteis para tornar
+                    testes de API e testes E2E mais fáceis de ler.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     MULTIPLOS ALIASES
+====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Trabalhando com múltiplos aliases
+            </h2>
+
+            <p>
+                Um mesmo teste pode possuir diversos aliases,
+                desde que cada um tenha um nome diferente.
+            </p>
+
+            <pre><code>cy.fixture(<span class="sql-string">'usuario.json'</span>)
+.as(<span class="sql-string">'usuario'</span>)
+
+cy.fixture(<span class="sql-string">'produto.json'</span>)
+.as(<span class="sql-string">'produto'</span>)</code></pre>
+
+            <p>
+                Podemos acessar cada informação separadamente:
+            </p>
+
+            <pre><code>cy.get(<span class="sql-string">'@usuario'</span>)
+.then((usuario) =&gt; {
+
+    cy.log(usuario.nome)
+
+})
+
+cy.get(<span class="sql-string">'@produto'</span>)
+.then((produto) => {
+
+    cy.log(produto.nome)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Utilize nomes de aliases claros e relacionados
+                    ao conteúdo que eles representam.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     COMPARAÇÃO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Exemplo comparando variável e alias
+            </h2>
+
+            <p>
+                Podemos armazenar um valor diretamente em uma
+                variável:
+            </p>
+
+            <pre><code>const email = <span class="sql-string">'usuario@teste.com'</span>
+
+cy.get(<span class="sql-string">'#email'</span>)
+.type(email)</code></pre>
+
+            <p>
+                Ou podemos utilizar um alias:
+            </p>
+
+            <pre><code>cy.wrap(<span class="sql-string">'usuario@teste.com'</span>)
+.as(<span class="sql-string">'email'</span>)
+
+cy.get(<span class="sql-string">'@email'</span>)
+.then((email) => {
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .type(email)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A escolha depende do contexto. Variáveis são
+                    recursos do JavaScript, enquanto aliases são
+                    recursos do Cypress para referenciar valores,
+                    elementos ou resultados dentro do fluxo de testes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRÁTICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas com variáveis e aliases
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🏷️
+                    </div>
+
+                    <h3>
+                        Use nomes claros
+                    </h3>
+
+                    <p>
+                        Escolha nomes que expliquem o conteúdo
+                        armazenado na variável ou alias.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Use o recurso adequado
+                    </h3>
+
+                    <p>
+                        Utilize variáveis para dados do JavaScript
+                        e aliases quando fizer sentido dentro
+                        do fluxo do Cypress.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Evite duplicação
+                    </h3>
+
+                    <p>
+                        Reutilize informações quando elas forem
+                        necessárias em diferentes etapas do teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Proteja dados sensíveis
+                    </h3>
+
+                    <p>
+                        Evite armazenar credenciais reais e
+                        informações confidenciais diretamente
+                        no código dos testes.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ERROS COMUNS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Confundir variável com alias
+                    </h3>
+
+                    <p>
+                        Variáveis JavaScript e aliases do Cypress
+                        possuem comportamentos e formas de acesso
+                        diferentes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Ignorar o escopo
+                    </h3>
+
+                    <p>
+                        Tentar utilizar uma variável fora do
+                        contexto em que ela foi declarada.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Alias inexistente
+                    </h3>
+
+                    <p>
+                        Tentar acessar um alias que ainda não foi
+                        criado ou que possui outro nome.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Nomes pouco claros
+                    </h3>
+
+                    <p>
+                        Utilizar nomes genéricos que dificultam
+                        a compreensão do teste.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EXEMPLO COMPLETO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                16. Exemplo completo
+            </h2>
+
+            <p>
+                Vamos combinar variáveis, fixture, alias e
+                beforeEach() em um cenário de login.
+            </p>
+
+            <p>
+                Fixture:
+            </p>
+
+            <pre><code>{
+
+<span class="sql-string">"email"</span>: <span class="sql-string">"usuario@teste.com"</span>,
+<span class="sql-string">"senha"</span>: <span class="sql-string">"123456"</span>
+
+}</code></pre>
+
+            <p>
+                Teste:
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+beforeEach(() =&gt; {
+
+    cy.fixture(<span class="sql-string">'usuario.json'</span>)
+        .as(<span class="sql-string">'usuario'</span>)
+
+})
+
+it(<span class="sql-string">'deve realizar login com sucesso'</span>, () =&gt; {
+
+    cy.get(<span class="sql-string">'@usuario'</span>)
+        .then((usuario) =&gt; {
+
+            const email = usuario.email
+            const senha = usuario.senha
+
+            cy.visit(<span class="sql-string">'/login'</span>)
+
+            cy.get(<span class="sql-string">'#email'</span>)
+                .type(email)
+
+            cy.get(<span class="sql-string">'#senha'</span>)
+                .type(senha)
+
+            cy.get(<span class="sql-string">'#login'</span>)
+                .click()
+
+            cy.url()
+                .should(<span class="sql-string">'include'</span>, <span class="sql-string">'dashboard'</span>)
+
+        })
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Observe a separação das responsabilidades:
+                </p>
+
+                <p>
+                    📁 <strong>Fixture</strong>
+                    → armazena os dados.
+                </p>
+
+                <p>
+                    🏷️ <strong>Alias</strong>
+                    → disponibiliza os dados dentro do fluxo Cypress.
+                </p>
+
+                <p>
+                    📦 <strong>Variáveis</strong>
+                    → armazenam os valores utilizados pelo cenário.
+                </p>
+
+                <p>
+                    🧪 <strong>Teste</strong>
+                    → executa as ações e valida o resultado.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o que são variáveis.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar const e let.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar variáveis em testes Cypress.
+                </p>
+
+                <p>
+                    ☐ Entendi como trabalhar com objetos.
+                </p>
+
+                <p>
+                    ☐ Entendi o que são aliases.
+                </p>
+
+                <p>
+                    ☐ Sei criar aliases utilizando as().
+                </p>
+
+                <p>
+                    ☐ Sei recuperar aliases utilizando @.
+                </p>
+
+                <p>
+                    ☐ Sei criar aliases para elementos.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar aliases com fixtures.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar aliases dentro de beforeEach().
+                </p>
+
+                <p>
+                    ☐ Entendi a diferença entre variável e alias.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar aliases com intercept().
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    📦 <strong>Variáveis</strong>
+                    → armazenam informações no JavaScript.
+                </p>
+
+                <p>
+                    🔒 <strong>const</strong>
+                    → utilizada quando a variável não será reatribuída.
+                </p>
+
+                <p>
+                    🔄 <strong>let</strong>
+                    → utilizada quando o valor pode ser alterado.
+                </p>
+
+                <p>
+                    🏷️ <strong>as()</strong>
+                    → cria um alias no Cypress.
+                </p>
+
+                <p>
+                    @ <strong>alias</strong>
+                    → permite referenciar um alias criado anteriormente.
+                </p>
+
+                <p>
+                    🔗 <strong>cy.get('@alias')</strong>
+                    → recupera um alias dentro do fluxo do Cypress.
+                </p>
+
+                <p>
+                    🧪 <strong>beforeEach()</strong>
+                    → pode preparar aliases antes de cada teste.
+                </p>
+
+                <p>
+                    🌐 <strong>cy.intercept()</strong>
+                    → pode utilizar aliases para identificar
+                    requisições interceptadas.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você sabe como utilizar variáveis e aliases
+                para organizar e compartilhar informações durante
+                a execução dos seus testes Cypress.
+            </p>
+
+            <p>
+                Na próxima aula vamos iniciar o módulo de
+                <strong>Testes de API</strong>, começando pelos
+                conceitos fundamentais para testar APIs.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     QUIZ
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 29
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 29 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe como utilizar variáveis e aliases
+                para armazenar, compartilhar e reutilizar informações
+                durante seus testes automatizados com Cypress.
+            </p>
+
+            <a href="../aulas/aula-30.html" class="cta-button">
+                Aula 30 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+ FOOTER
+
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 29 • Variáveis e Aliases
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+ JAVASCRIPT
+
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-29.js"></script>
+
+</body>
+
+</html>

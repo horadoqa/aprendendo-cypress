@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <title>Aula 32 — Validando Responses</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 32 • VALIDANDO RESPONSES
+            </span>
+
+            <h1>
+                Validando Responses
+            </h1>
+
+            <p>
+                Aprenda a validar status codes, headers e corpo das
+                respostas HTTP utilizando o Cypress.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS DA AULA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Na aula anterior, aprendemos a utilizar o
+                <strong>cy.request()</strong> para enviar requisições
+                HTTP diretamente pelo Cypress.
+            </p>
+
+            <p>
+                Agora vamos aprender como analisar a resposta recebida
+                pela API e criar validações para garantir que ela
+                esteja de acordo com o comportamento esperado.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔢
+                    </div>
+
+                    <h3>
+                        Validar status code
+                    </h3>
+
+                    <p>
+                        Verificar se a API retornou o código HTTP
+                        esperado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        Validar headers
+                    </h3>
+
+                    <p>
+                        Verificar informações presentes nos headers
+                        da resposta.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Validar body
+                    </h3>
+
+                    <p>
+                        Conferir os dados retornados no corpo
+                        da resposta.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Criar assertions
+                    </h3>
+
+                    <p>
+                        Utilizar asserções para verificar o resultado
+                        das requisições.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESPONSE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que é uma response?
+            </h2>
+
+            <p>
+                Quando uma aplicação envia uma requisição HTTP para
+                uma API, o servidor processa essa requisição e retorna
+                uma resposta.
+            </p>
+
+            <p>
+                Essa resposta normalmente possui informações como:
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔢
+                    </div>
+
+                    <h3>
+                        Status Code
+                    </h3>
+
+                    <p>
+                        Indica o resultado do processamento da requisição.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        Headers
+                    </h3>
+
+                    <p>
+                        Contêm metadados relacionados à resposta HTTP.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Body
+                    </h3>
+
+                    <p>
+                        Contém os dados retornados pela API.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <p>
+                No Cypress, podemos acessar essas informações a partir
+                do objeto retornado pelo <strong>cy.request()</strong>.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     ESTRUTURA RESPONSE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. Estrutura de uma response
+            </h2>
+
+            <p>
+                Uma resposta recebida pelo Cypress pode ser trabalhada
+                utilizando propriedades como <strong>status</strong>,
+                <strong>headers</strong> e <strong>body</strong>.
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios/1'</span>)
+.then((response) =&gt; {
+
+    cy.log(response.status)
+
+    cy.log(response.headers)
+
+    cy.log(response.body)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    <strong>response.status</strong>
+                    → código HTTP retornado.
+                </p>
+
+                <p>
+                    <strong>response.headers</strong>
+                    → headers enviados pelo servidor.
+                </p>
+
+                <p>
+                    <strong>response.body</strong>
+                    → conteúdo retornado pela API.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     STATUS CODE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. Validando o status code
+            </h2>
+
+            <p>
+                O status code é uma das primeiras informações que
+                devemos validar em um teste de API.
+            </p>
+
+            <p>
+                Podemos verificar se uma requisição retornou
+                <strong>200</strong>, por exemplo:
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios/1'</span>)
+.then((response) =&gt; {
+
+    expect(response.status)
+        .to.equal(200)
+
+})</code></pre>
+
+            <p>
+                Nesse caso, o teste espera que a API retorne o
+                status HTTP <strong>200</strong>.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    Se a API retornar outro status, a assertion
+                    falhará e o teste será considerado como falho.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PRINCIPAIS STATUS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. Principais status codes
+            </h2>
+
+            <p>
+                Durante os testes de API, alguns códigos HTTP aparecem
+                com bastante frequência.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Status</th>
+                            <th>Significado</th>
+                            <th>Exemplo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>200</strong>
+                            </td>
+
+                            <td>
+                                OK
+                            </td>
+
+                            <td>
+                                Requisição processada com sucesso.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>201</strong>
+                            </td>
+
+                            <td>
+                                Created
+                            </td>
+
+                            <td>
+                                Recurso criado com sucesso.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>204</strong>
+                            </td>
+
+                            <td>
+                                No Content
+                            </td>
+
+                            <td>
+                                Requisição processada sem conteúdo
+                                no corpo da resposta.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>400</strong>
+                            </td>
+
+                            <td>
+                                Bad Request
+                            </td>
+
+                            <td>
+                                Requisição inválida.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>401</strong>
+                            </td>
+
+                            <td>
+                                Unauthorized
+                            </td>
+
+                            <td>
+                                Requisição sem autenticação válida.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>404</strong>
+                            </td>
+
+                            <td>
+                                Not Found
+                            </td>
+
+                            <td>
+                                Recurso não encontrado.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>500</strong>
+                            </td>
+
+                            <td>
+                                Internal Server Error
+                            </td>
+
+                            <td>
+                                Erro interno no servidor.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     STATUS 201
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. Validando criação de recursos
+            </h2>
+
+            <p>
+                Quando uma API cria um novo recurso, é comum que
+                a resposta utilize o status <strong>201</strong>.
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'POST'</span>, <span class="sql-string">'/usuarios'</span>, {
+
+nome: <span class="sql-string">'Maria'</span>,
+email: <span class="sql-string">'maria@teste.com'</span>
+
+}).then((response) => {
+
+expect(response.status)
+    .to.equal(201)
+
+})</code></pre>
+
+            <p>
+                Dessa forma, o teste verifica se a operação de criação
+                retornou o código esperado.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     BODY
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. Validando o body
+            </h2>
+
+            <p>
+                Além do status code, podemos validar os dados retornados
+                pela API.
+            </p>
+
+            <p>
+                Considere uma resposta como:
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"id"</span>: 1,
+<span class="sql-string">"nome"</span>: <span class="sql-string">"Maria"</span>,
+<span class="sql-string">"email"</span>: <span class="sql-string">"maria@teste.com"</span>
+
+}</code></pre>
+
+            <p>
+                Podemos validar propriedades específicas:
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios/1'</span>)
+.then((response) =&gt; {
+
+    expect(response.body.nome)
+        .to.equal(<span class="sql-string">'Maria'</span>)
+
+    expect(response.body.email)
+        .to.equal(<span class="sql-string">'maria@teste.com'</span>)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Não é necessário validar todo o body.
+                    Podemos validar somente as propriedades relevantes
+                    para o cenário.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     INCLUDE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. Validando conteúdo com include
+            </h2>
+
+            <p>
+                Podemos verificar se determinado valor está presente
+                no retorno utilizando <strong>include</strong>.
+            </p>
+
+            <pre><code>expect(response.body.nome)
+.to.include(<span class="sql-string">'Maria'</span>)</code></pre>
+
+            <p>
+                Essa abordagem é útil quando não precisamos comparar
+                exatamente todo o conteúdo de um campo.
+            </p>
+
+            <p>
+                Também podemos verificar se um objeto possui uma
+                determinada propriedade:
+            </p>
+
+            <pre><code>expect(response.body)
+.to.have.property(<span class="sql-string">'email'</span>)</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+     PROPERTY
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Validando propriedades
+            </h2>
+
+            <p>
+                A assertion <strong>have.property</strong> permite
+                verificar se determinada propriedade existe no objeto.
+            </p>
+
+            <pre><code>expect(response.body)
+.to.have.property(<span class="sql-string">'id'</span>)
+
+expect(response.body)
+.to.have.property(<span class="sql-string">'nome'</span>)
+
+expect(response.body)
+.to.have.property(<span class="sql-string">'email'</span>)</code></pre>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔎
+                    </div>
+
+                    <h3>
+                        Verificar existência
+                    </h3>
+
+                    <p>
+                        Confirma se uma propriedade está presente
+                        no objeto retornado.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Validar conteúdo
+                    </h3>
+
+                    <p>
+                        Permite acessar a propriedade e verificar
+                        seu valor.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧪
+                    </div>
+
+                    <h3>
+                        Criar cenários
+                    </h3>
+
+                    <p>
+                        Ajuda a verificar o contrato esperado
+                        da resposta.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     HEADERS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Validando headers
+            </h2>
+
+            <p>
+                Os headers carregam informações adicionais sobre
+                a resposta HTTP.
+            </p>
+
+            <p>
+                Podemos acessar os headers através de:
+            </p>
+
+            <pre><code>response.headers</code></pre>
+
+            <p>
+                Por exemplo:
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios/1'</span>)
+.then((response) =&gt; {
+
+    expect(response.headers)
+        .to.have.property(<span class="sql-string">'content-type'</span>)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Os nomes e valores dos headers dependem da API
+                    e da infraestrutura utilizada pelo servidor.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CONTENT TYPE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Validando Content-Type
+            </h2>
+
+            <p>
+                APIs que retornam JSON normalmente informam o tipo
+                de conteúdo através do header <strong>Content-Type</strong>.
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios/1'</span>)
+.then((response) =&gt; {
+
+    expect(response.headers[<span class="sql-string">'content-type'</span>])
+        .to.include(<span class="sql-string">'application/json'</span>)
+
+})</code></pre>
+
+            <p>
+                O <strong>include</strong> permite validar apenas a
+                parte relevante do valor.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     MULTIPLAS ASSERTIONS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Criando múltiplas validações
+            </h2>
+
+            <p>
+                Um mesmo teste pode validar diferentes partes da
+                resposta.
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios/1'</span>)
+.then((response) =&gt; {
+
+    expect(response.status)
+        .to.equal(200)
+
+    expect(response.headers)
+        .to.have.property(<span class="sql-string">'content-type'</span>)
+
+    expect(response.body)
+        .to.have.property(<span class="sql-string">'id'</span>)
+
+    expect(response.body.nome)
+        .to.equal(<span class="sql-string">'Maria'</span>)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Dessa forma, o teste verifica status, headers
+                    e conteúdo da resposta em um único cenário.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ARRAYS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Validando listas
+            </h2>
+
+            <p>
+                APIs também podem retornar listas de objetos.
+            </p>
+
+            <p>
+                Exemplo:
+            </p>
+
+            <pre><code>{
+<span class="sql-string">"usuarios"</span>: [
+    {
+        <span class="sql-string">"id"</span>: 1,
+        <span class="sql-string">"nome"</span>: <span class="sql-string">"Maria"</span>
+    },
+    {
+        <span class="sql-string">"id"</span>: 2,
+        <span class="sql-string">"nome"</span>: <span class="sql-string">"João"</span>
+    }
+]
+
+}</code></pre>
+
+            <p>
+                Podemos acessar itens específicos do array:
+            </p>
+
+            <pre><code>expect(response.body.usuarios[0].nome)
+.to.equal(<span class="sql-string">'Maria'</span>)
+
+expect(response.body.usuarios[1].nome)
+.to.equal(<span class="sql-string">'João'</span>)</code></pre>
+
+            <p>
+                Também podemos validar a quantidade de elementos:
+            </p>
+
+            <pre><code>expect(response.body.usuarios)
+.to.have.length(2)</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+     RESPONSE COMPLETA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Validando uma response completa
+            </h2>
+
+            <p>
+                Podemos combinar diferentes assertions em um teste
+                mais completo.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Usuários'</span>, () =&gt; {
+
+it(<span class="sql-string">'deve retornar o usuário corretamente'</span>, () =&gt; {
+
+    cy.request(<span class="sql-string">'GET'</span>, <span class="sql-string">'/usuarios/1'</span>)
+        .then((response) =&gt; {
+
+            expect(response.status)
+                .to.equal(200)
+
+            expect(response.headers)
+                .to.have.property(<span class="sql-string">'content-type'</span>)
+
+            expect(response.body)
+                .to.have.property(<span class="sql-string">'id'</span>)
+
+            expect(response.body.id)
+                .to.equal(1)
+
+            expect(response.body.nome)
+                .to.equal(<span class="sql-string">'Maria'</span>)
+
+            expect(response.body.email)
+                .to.equal(<span class="sql-string">'maria@teste.com'</span>)
+
+        })
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Esse tipo de teste verifica diferentes aspectos
+                    do contrato esperado pela API.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CENARIOS NEGATIVOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Validando cenários negativos
+            </h2>
+
+            <p>
+                Testes de API também devem verificar situações em que
+                a requisição não é válida ou o recurso não existe.
+            </p>
+
+            <p>
+                Por exemplo, podemos consultar um usuário inexistente:
+            </p>
+
+            <pre><code>cy.request({
+method: <span class="sql-string">'GET'</span>,
+url: <span class="sql-string">'/usuarios/9999'</span>,
+failOnStatusCode: <span class="sql-string">false</span>
+
+}).then((response) => {
+
+expect(response.status)
+    .to.equal(404)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Em cenários negativos, a API pode retornar um
+                    status de erro de propósito. A opção
+                    <strong>failOnStatusCode: false</strong> permite
+                    que o teste continue para que possamos validar
+                    essa resposta.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     MENSAGEM DE ERRO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Validando mensagens de erro
+            </h2>
+
+            <p>
+                Além do status HTTP, podemos validar informações
+                presentes no body de uma resposta de erro.
+            </p>
+
+            <pre><code>cy.request({
+method: <span class="sql-string">'GET'</span>,
+url: <span class="sql-string">'/usuarios/9999'</span>,
+failOnStatusCode: <span class="sql-string">false</span>
+
+}).then((response) => {
+
+expect(response.status)
+    .to.equal(404)
+
+expect(response.body.message)
+    .to.equal(<span class="sql-string">'Usuário não encontrado'</span>)
+
+})</code></pre>
+
+            <p>
+                Assim, o teste verifica tanto o código HTTP quanto
+                a mensagem retornada pela API.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     POST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Validando resposta de um POST
+            </h2>
+
+            <p>
+                Podemos aplicar os mesmos conceitos em requisições
+                de criação.
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'POST'</span>, <span class="sql-string">'/usuarios'</span>, {
+
+nome: <span class="sql-string">'Maria'</span>,
+email: <span class="sql-string">'maria@teste.com'</span>
+
+}).then((response) => {
+
+expect(response.status)
+    .to.equal(201)
+
+expect(response.body)
+    .to.have.property(<span class="sql-string">'id'</span>)
+
+expect(response.body.nome)
+    .to.equal(<span class="sql-string">'Maria'</span>)
+
+expect(response.body.email)
+    .to.equal(<span class="sql-string">'maria@teste.com'</span>)
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O teste verifica se o recurso foi criado e se
+                    a API retornou os dados esperados.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     PUT
+====================================================== -->
+
+        <section>
+
+            <h2>
+                16. Validando resposta de um PUT
+            </h2>
+
+            <p>
+                O mesmo princípio pode ser utilizado para atualizações.
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'PUT'</span>, <span class="sql-string">'/usuarios/1'</span>, {
+
+nome: <span class="sql-string">'Maria Silva'</span>
+
+}).then((response) => {
+
+expect(response.status)
+    .to.equal(200)
+
+expect(response.body.nome)
+    .to.equal(<span class="sql-string">'Maria Silva'</span>)
+
+})</code></pre>
+
+            <p>
+                Dessa maneira, verificamos se a alteração foi
+                processada e retornou o valor esperado.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     DELETE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                17. Validando resposta de um DELETE
+            </h2>
+
+            <p>
+                Operações de exclusão também podem ser validadas.
+            </p>
+
+            <pre><code>cy.request(<span class="sql-string">'DELETE'</span>, <span class="sql-string">'/usuarios/1'</span>)
+.then((response) =&gt; {
+
+    expect(response.status)
+        .to.equal(204)
+
+})</code></pre>
+
+            <p>
+                Dependendo do contrato da API, a exclusão pode retornar
+                <strong>204</strong> ou outro status definido pelo serviço.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    O status esperado deve sempre refletir o contrato
+                    da API que está sendo testada.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CONTRATO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                18. Validando o contrato da API
+            </h2>
+
+            <p>
+                Validar uma response significa verificar se a API
+                está entregando aquilo que o teste espera.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔢
+                    </div>
+
+                    <h3>
+                        Status
+                    </h3>
+
+                    <p>
+                        O código HTTP deve representar o resultado
+                        esperado da operação.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        Headers
+                    </h3>
+
+                    <p>
+                        Os metadados importantes devem estar presentes
+                        e possuir os valores esperados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📦
+                    </div>
+
+                    <h3>
+                        Body
+                    </h3>
+
+                    <p>
+                        Os dados retornados devem possuir a estrutura
+                        e os valores esperados.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRÁTICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas para validar responses
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Valide o necessário
+                    </h3>
+
+                    <p>
+                        Concentre as assertions nas informações
+                        relevantes para o cenário.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📋
+                    </div>
+
+                    <h3>
+                        Conheça o contrato
+                    </h3>
+
+                    <p>
+                        Saiba quais status, headers e campos são
+                        esperados pela API.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Teste erros
+                    </h3>
+
+                    <p>
+                        Inclua cenários negativos para verificar
+                        respostas de erro.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Evite excesso
+                    </h3>
+
+                    <p>
+                        Não transforme um teste simples em uma
+                        coleção de validações desnecessárias.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ERROS COMUNS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Erros comuns ao validar responses
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Status incorreto
+                    </h3>
+
+                    <p>
+                        Esperar um código HTTP que não corresponde
+                        ao contrato da API.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Campo inexistente
+                    </h3>
+
+                    <p>
+                        Tentar acessar uma propriedade que não existe
+                        na resposta.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Ignorar erros
+                    </h3>
+
+                    <p>
+                        Testar somente cenários de sucesso e não
+                        verificar respostas negativas.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ❌
+                    </div>
+
+                    <h3>
+                        Assertions frágeis
+                    </h3>
+
+                    <p>
+                        Criar validações dependentes de informações
+                        que podem variar sem afetar o cenário.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o que é uma response HTTP.
+                </p>
+
+                <p>
+                    ☐ Sei acessar response.status.
+                </p>
+
+                <p>
+                    ☐ Sei validar status codes.
+                </p>
+
+                <p>
+                    ☐ Sei acessar response.headers.
+                </p>
+
+                <p>
+                    ☐ Sei validar headers.
+                </p>
+
+                <p>
+                    ☐ Sei acessar response.body.
+                </p>
+
+                <p>
+                    ☐ Sei validar propriedades do body.
+                </p>
+
+                <p>
+                    ☐ Sei validar listas e arrays.
+                </p>
+
+                <p>
+                    ☐ Sei testar respostas de erro.
+                </p>
+
+                <p>
+                    ☐ Sei combinar múltiplas assertions.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🔢 <strong>response.status</strong>
+                    → permite validar o status HTTP retornado.
+                </p>
+
+                <p>
+                    📋 <strong>response.headers</strong>
+                    → permite acessar os headers da resposta.
+                </p>
+
+                <p>
+                    📦 <strong>response.body</strong>
+                    → contém os dados retornados pela API.
+                </p>
+
+                <p>
+                    ✅ <strong>expect()</strong>
+                    → cria assertions para validar os resultados.
+                </p>
+
+                <p>
+                    🔎 <strong>have.property</strong>
+                    → verifica a existência de propriedades.
+                </p>
+
+                <p>
+                    🧪 <strong>Cenários negativos</strong>
+                    → permitem validar respostas de erro.
+                </p>
+
+                <p>
+                    📑 <strong>Contrato</strong>
+                    → define o comportamento esperado da API.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você sabe como analisar e validar as principais
+                informações retornadas por uma API utilizando Cypress.
+            </p>
+
+            <p>
+                Na próxima aula vamos aprender sobre
+                <strong>cy.intercept()</strong>, entendendo como
+                interceptar, observar e controlar requisições HTTP
+                durante os testes.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     QUIZ
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 32
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 32 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe como validar status codes,
+                headers, body e diferentes cenários de resposta
+                utilizando Cypress.
+            </p>
+
+            <a href="../aulas/aula-33.html" class="cta-button">
+                Aula 33 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+ FOOTER
+
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 32 • Validando Responses
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+ JAVASCRIPT
+
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-32.js"></script>
+
+</body>
+
+</html>

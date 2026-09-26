@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="icon" type="image/png" href="../assets/images/logo.png">
+    <title>Aula 37 — Hooks</title>
+
+</head>
+
+<body>
+    <header>
+
+        <img class="header-logo" src="../assets/images/logo.png" alt="Hora do QA">
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Alternar tema">
+
+            <span class="theme-icon" id="themeIcon">
+                ☀️
+            </span>
+
+            <span class="theme-label" id="themeLabel">
+                Modo claro
+            </span>
+
+        </button>
+
+        <div class="header-content">
+
+            <span class="eyebrow">
+                AULA 37 • HOOKS
+            </span>
+
+            <h1>
+                Hooks
+            </h1>
+
+            <p>
+                Aprenda a utilizar before, beforeEach, after e afterEach
+                para preparar e finalizar cenários de teste com Cypress.
+            </p>
+
+        </div>
+
+    </header>
+
+    <main>
+
+        <!-- =====================================================
+     OBJETIVOS DA AULA
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Objetivos da aula
+            </h2>
+
+            <p>
+                Nas aulas anteriores, aprendemos a criar comandos
+                personalizados e organizar comportamentos reutilizáveis
+                nos testes.
+            </p>
+
+            <p>
+                Agora vamos aprender como utilizar <strong>hooks</strong>
+                para executar automaticamente determinadas ações
+                antes ou depois dos testes.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🪝
+                    </div>
+
+                    <h3>
+                        Entender hooks
+                    </h3>
+
+                    <p>
+                        Compreender o que são hooks e por que eles
+                        são utilizados nos testes automatizados.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ▶️
+                    </div>
+
+                    <h3>
+                        before()
+                    </h3>
+
+                    <p>
+                        Executar uma preparação antes de todos os
+                        testes de uma suíte.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔄
+                    </div>
+
+                    <h3>
+                        beforeEach()
+                    </h3>
+
+                    <p>
+                        Executar uma preparação antes de cada teste.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧹
+                    </div>
+
+                    <h3>
+                        after e afterEach
+                    </h3>
+
+                    <p>
+                        Executar ações de finalização depois dos testes.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     O QUE SÃO HOOKS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                O que são hooks?
+            </h2>
+
+            <p>
+                Hooks são funções especiais utilizadas para executar
+                determinadas ações em momentos específicos do ciclo
+                de execução dos testes.
+            </p>
+
+            <p>
+                Eles são muito úteis quando precisamos preparar um
+                ambiente, criar dados, realizar login, limpar informações
+                ou executar alguma ação antes ou depois dos testes.
+            </p>
+
+            <pre><code>beforeEach(() =&gt; {
+
+// executado antes de cada teste
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    🪝 <strong>Hook</strong>
+                    → função executada automaticamente em um momento
+                    específico da suíte de testes.
+                </p>
+
+                <p>
+                    🎯 <strong>Objetivo</strong>
+                    → evitar repetição de código de preparação ou
+                    finalização.
+                </p>
+
+                <p>
+                    ♻️ <strong>Reutilização</strong>
+                    → uma mesma configuração pode ser aplicada
+                    a vários testes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     TIPOS DE HOOKS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Tipos de hooks
+            </h2>
+
+            <p>
+                O Cypress disponibiliza quatro hooks principais para
+                organizar a execução dos testes.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Hook</th>
+                            <th>Quando executa?</th>
+                            <th>Uso comum</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>before()</strong>
+                            </td>
+
+                            <td>
+                                Uma vez antes de todos os testes.
+                            </td>
+
+                            <td>
+                                Preparação geral da suíte.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>beforeEach()</strong>
+                            </td>
+
+                            <td>
+                                Antes de cada teste.
+                            </td>
+
+                            <td>
+                                Login e preparação individual.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>afterEach()</strong>
+                            </td>
+
+                            <td>
+                                Depois de cada teste.
+                            </td>
+
+                            <td>
+                                Limpeza de dados e estado.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>after()</strong>
+                            </td>
+
+                            <td>
+                                Uma vez depois de todos os testes.
+                            </td>
+
+                            <td>
+                                Finalização da suíte.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BEFORE
+====================================================== -->
+
+        <section>
+
+            <h2>
+                1. before()
+            </h2>
+
+            <p>
+                O hook <strong>before()</strong> é executado uma única
+                vez antes de todos os testes do bloco em que foi
+                definido.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Usuários'</span>, () =&gt; {
+
+before(() =&gt; {
+
+    cy.log(<span class="sql-string">'Preparando a suíte'</span>)
+
+})
+
+it(<span class="sql-string">'deve criar usuário'</span>, () =&gt; {
+
+    // teste
+
+})
+
+it(<span class="sql-string">'deve consultar usuário'</span>, () =&gt; {
+
+    // teste
+
+})
+
+})</code></pre>
+
+            <p>
+                Nesse exemplo, o <strong>before()</strong> será executado
+                antes do primeiro teste.
+            </p>
+
+            <p>
+                Ele não será executado novamente entre o primeiro e o
+                segundo teste.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Quando utilizar?</strong>
+
+                <p>
+                    Utilize <strong>before()</strong> quando a preparação
+                    precisa acontecer apenas uma vez para aquela suíte.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BEFORE EACH
+====================================================== -->
+
+        <section>
+
+            <h2>
+                2. beforeEach()
+            </h2>
+
+            <p>
+                O <strong>beforeEach()</strong> é executado antes de
+                cada teste dentro do bloco em que foi definido.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+beforeEach(() =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+})
+
+it(<span class="sql-string">'deve realizar login'</span>, () =&gt; {
+
+    // teste
+
+})
+
+it(<span class="sql-string">'deve exibir mensagem de erro'</span>, () =&gt; {
+
+    // teste
+
+})
+
+})</code></pre>
+
+            <p>
+                Nesse caso, a página de login será acessada antes
+                de cada teste.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🔄 <strong>beforeEach()</strong> é especialmente
+                    útil quando todos os testes precisam começar
+                    em um estado conhecido.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     AFTER EACH
+====================================================== -->
+
+        <section>
+
+            <h2>
+                3. afterEach()
+            </h2>
+
+            <p>
+                O <strong>afterEach()</strong> é executado depois de
+                cada teste.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Cadastro'</span>, () =&gt; {
+
+afterEach(() =&gt; {
+
+    cy.log(<span class="sql-string">'Finalizando teste'</span>)
+
+})
+
+it(<span class="sql-string">'deve cadastrar usuário'</span>, () =&gt; {
+
+    // teste
+
+})
+
+it(<span class="sql-string">'deve validar cadastro'</span>, () =&gt; {
+
+    // teste
+
+})
+
+})</code></pre>
+
+            <p>
+                O hook será executado após cada um dos testes.
+            </p>
+
+            <div class="highlight">
+
+                <strong>Uso comum:</strong>
+
+                <p>
+                    O <strong>afterEach()</strong> pode ser utilizado
+                    para limpeza de estado, remoção de dados de teste
+                    ou outras ações necessárias depois de cada cenário.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     AFTER
+====================================================== -->
+
+        <section>
+
+            <h2>
+                4. after()
+            </h2>
+
+            <p>
+                O <strong>after()</strong> é executado uma única vez
+                depois que todos os testes daquele bloco terminarem.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Produtos'</span>, () =&gt; {
+
+after(() =&gt; {
+
+    cy.log(<span class="sql-string">'Finalizando suíte de testes'</span>)
+
+})
+
+it(<span class="sql-string">'deve cadastrar produto'</span>, () =&gt; {
+
+    // teste
+
+})
+
+it(<span class="sql-string">'deve editar produto'</span>, () =&gt; {
+
+    // teste
+
+})
+
+})</code></pre>
+
+            <p>
+                Diferentemente do <strong>afterEach()</strong>, esse
+                hook não é executado depois de cada teste.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    🧹 <strong>after()</strong>
+                    → executado uma vez ao final do bloco.
+                </p>
+
+                <p>
+                    🔄 <strong>afterEach()</strong>
+                    → executado depois de cada teste.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     COMPARAÇÃO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                5. before x beforeEach
+            </h2>
+
+            <p>
+                Uma dúvida comum é entender quando utilizar
+                <strong>before()</strong> ou <strong>beforeEach()</strong>.
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Característica</th>
+                            <th>before()</th>
+                            <th>beforeEach()</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                Execução
+                            </td>
+
+                            <td>
+                                Uma vez.
+                            </td>
+
+                            <td>
+                                Antes de cada teste.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Preparação
+                            </td>
+
+                            <td>
+                                Geral para a suíte.
+                            </td>
+
+                            <td>
+                                Individual para cada teste.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                Exemplo
+                            </td>
+
+                            <td>
+                                Configuração inicial.
+                            </td>
+
+                            <td>
+                                Login ou navegação.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="highlight">
+
+                <p>
+                    Se cada teste precisa começar com a mesma preparação,
+                    <strong>beforeEach()</strong> geralmente representa
+                    melhor essa intenção.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     COMPARAÇÃO AFTER
+====================================================== -->
+
+        <section>
+
+            <h2>
+                6. after x afterEach
+            </h2>
+
+            <p>
+                O mesmo conceito vale para os hooks de finalização.
+            </p>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧹
+                    </div>
+
+                    <h3>
+                        after()
+                    </h3>
+
+                    <p>
+                        Executa uma única vez depois de todos os
+                        testes do bloco.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔄
+                    </div>
+
+                    <h3>
+                        afterEach()
+                    </h3>
+
+                    <p>
+                        Executa depois de cada teste individual.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <pre><code>describe(<span class="sql-string">'Pedidos'</span>, () =&gt; {
+
+afterEach(() =&gt; {
+
+    cy.log(<span class="sql-string">'Limpando estado'</span>)
+
+})
+
+after(() =&gt; {
+
+    cy.log(<span class="sql-string">'Finalizando suíte'</span>)
+
+})
+
+})</code></pre>
+
+        </section>
+
+        <!-- =====================================================
+     LOGIN
+====================================================== -->
+
+        <section>
+
+            <h2>
+                7. Utilizando beforeEach() para login
+            </h2>
+
+            <p>
+                Um dos usos mais comuns de hooks é preparar a autenticação
+                antes de cada cenário.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Área autenticada'</span>, () =&gt; {
+
+beforeEach(() =&gt; {
+
+    cy.visit(<span class="sql-string">'/login'</span>)
+
+    cy.get(<span class="sql-string">'#email'</span>)
+        .type(<span class="sql-string">'usuario@teste.com'</span>)
+
+    cy.get(<span class="sql-string">'#senha'</span>)
+        .type(<span class="sql-string">'123456'</span>)
+
+    cy.get(<span class="sql-string">'#login'</span>)
+        .click()
+
+})
+
+it(<span class="sql-string">'deve acessar o dashboard'</span>, () =&gt; {
+
+    cy.url()
+        .should(<span class="sql-string">'include'</span>, <span class="sql-string">'dashboard'</span>)
+
+})
+
+it(<span class="sql-string">'deve visualizar o perfil'</span>, () =&gt; {
+
+    cy.visit(<span class="sql-string">'/perfil'</span>)
+
+    cy.contains(<span class="sql-string">'Meu perfil'</span>)
+        .should(<span class="sql-string">'be.visible'</span>)
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A preparação do login foi centralizada no hook,
+                    evitando repetir o mesmo código em cada teste.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     FIXTURES
+====================================================== -->
+
+        <section>
+
+            <h2>
+                8. Hooks com fixtures
+            </h2>
+
+            <p>
+                Hooks também podem ser combinados com fixtures para
+                carregar dados antes dos testes.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Login'</span>, () =&gt; {
+
+beforeEach(() =&gt; {
+
+    cy.fixture(<span class="sql-string">'usuario.json'</span>)
+        .as(<span class="sql-string">'usuario'</span>)
+
+})
+
+it(<span class="sql-string">'deve realizar login'</span>, () =&gt; {
+
+    cy.get(<span class="sql-string">'@usuario'</span>).then((usuario) =&gt; {
+
+        cy.visit(<span class="sql-string">'/login'</span>)
+
+        cy.get(<span class="sql-string">'#email'</span>)
+            .type(usuario.email)
+
+        cy.get(<span class="sql-string">'#senha'</span>)
+            .type(usuario.senha)
+
+    })
+
+})
+
+})</code></pre>
+
+            <p>
+                Dessa forma, cada teste começa com os dados necessários
+                carregados.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     HOOKS ANINHADOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                9. Hooks em blocos aninhados
+            </h2>
+
+            <p>
+                Os hooks podem ser utilizados dentro de diferentes
+                blocos <strong>describe()</strong>.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Sistema'</span>, () =&gt; {
+
+beforeEach(() =&gt; {
+
+    cy.log(<span class="sql-string">'Hook externo'</span>)
+
+})
+
+describe(<span class="sql-string">'Usuários'</span>, () =&gt; {
+
+    beforeEach(() =&gt; {
+
+        cy.log(<span class="sql-string">'Hook de usuários'</span>)
+
+    })
+
+    it(<span class="sql-string">'deve consultar usuário'</span>, () =&gt; {
+
+        // teste
+
+    })
+
+})
+
+})</code></pre>
+
+            <p>
+                Um hook definido em um bloco externo pode participar
+                da preparação dos testes dos blocos internos.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    Hooks aninhados devem ser utilizados com organização
+                    para que a preparação dos testes continue fácil
+                    de entender.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ORDEM
+====================================================== -->
+
+        <section>
+
+            <h2>
+                10. Ordem de execução
+            </h2>
+
+            <p>
+                É importante entender a sequência em que os hooks
+                participam da execução dos testes.
+            </p>
+
+            <pre><code>before()
+
+beforeEach()
+
+it()
+
+afterEach()
+
+beforeEach()
+
+it()
+
+afterEach()
+
+after()</code></pre>
+
+            <p>
+                Considerando uma suíte com dois testes, o fluxo geral
+                pode ser representado dessa forma.
+            </p>
+
+            <div class="highlight">
+
+                <p>
+                    1️⃣ Preparação geral
+                </p>
+
+                <p>
+                    2️⃣ Preparação do primeiro teste
+                </p>
+
+                <p>
+                    3️⃣ Execução do primeiro teste
+                </p>
+
+                <p>
+                    4️⃣ Finalização do primeiro teste
+                </p>
+
+                <p>
+                    5️⃣ Preparação do segundo teste
+                </p>
+
+                <p>
+                    6️⃣ Execução do segundo teste
+                </p>
+
+                <p>
+                    7️⃣ Finalização do segundo teste
+                </p>
+
+                <p>
+                    8️⃣ Finalização geral
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     ORGANIZAÇÃO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                11. Organizando uma suíte com hooks
+            </h2>
+
+            <p>
+                Hooks podem ajudar a deixar os testes menores e mais
+                focados no comportamento que realmente está sendo
+                validado.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Produtos'</span>, () =&gt; {
+
+beforeEach(() =&gt; {
+
+    cy.visit(<span class="sql-string">'/produtos'</span>)
+
+})
+
+it(<span class="sql-string">'deve listar produtos'</span>, () =&gt; {
+
+    cy.get(<span class="sql-string">'[data-testid="produto"]'</span>)
+        .should(<span class="sql-string">'have.length.greaterThan'</span>, 0)
+
+})
+
+it(<span class="sql-string">'deve abrir produto'</span>, () =&gt; {
+
+    cy.get(<span class="sql-string">'[data-testid="produto"]'</span>)
+        .first()
+        .click()
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    O hook concentra a navegação inicial, enquanto
+                    cada teste permanece responsável pela validação
+                    do seu próprio comportamento.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EVITANDO REPETIÇÃO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                12. Reduzindo duplicação
+            </h2>
+
+            <p>
+                Sem hooks, podemos acabar repetindo a mesma preparação
+                em vários testes.
+            </p>
+
+            <pre><code>it(<span class="sql-string">'teste 1'</span>, () =&gt; {
+
+cy.visit(<span class="sql-string">'/produtos'</span>)
+
+// teste
+
+})
+
+it(<span class="sql-string">'teste 2'</span>, () => {
+
+cy.visit(<span class="sql-string">'/produtos'</span>)
+
+// teste
+
+})
+
+it(<span class="sql-string">'teste 3'</span>, () => {
+
+cy.visit(<span class="sql-string">'/produtos'</span>)
+
+// teste
+
+})</code></pre>
+
+            <p>
+                Podemos centralizar a preparação:
+            </p>
+
+            <pre><code>beforeEach(() =&gt; {
+
+cy.visit(<span class="sql-string">'/produtos'</span>)
+
+})
+
+it(<span class="sql-string">'teste 1'</span>, () => {
+
+// teste
+
+})
+
+it(<span class="sql-string">'teste 2'</span>, () => {
+
+// teste
+
+})
+
+it(<span class="sql-string">'teste 3'</span>, () => {
+
+// teste
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    A centralização reduz repetição, mas o hook deve
+                    continuar representando uma preparação realmente
+                    compartilhada pelos testes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CUIDADOS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                13. Cuidados ao utilizar hooks
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        ⚠️
+                    </div>
+
+                    <h3>
+                        Não exagere
+                    </h3>
+
+                    <p>
+                        Evite colocar toda a lógica do teste dentro
+                        de hooks.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧩
+                    </div>
+
+                    <h3>
+                        Mantenha o contexto
+                    </h3>
+
+                    <p>
+                        O hook deve ter relação clara com os testes
+                        do bloco.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🔍
+                    </div>
+
+                    <h3>
+                        Facilite a leitura
+                    </h3>
+
+                    <p>
+                        Quem lê o teste deve conseguir entender
+                        quais pré-condições estão sendo aplicadas.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Evite duplicação
+                    </h3>
+
+                    <p>
+                        Use hooks quando eles realmente reduzirem
+                        código repetido.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BEFORE X BEFORE EACH X AFTER
+====================================================== -->
+
+        <section>
+
+            <h2>
+                14. Quando utilizar cada hook?
+            </h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Hook</th>
+                            <th>Objetivo</th>
+                            <th>Exemplo</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <strong>before()</strong>
+                            </td>
+
+                            <td>
+                                Preparação única.
+                            </td>
+
+                            <td>
+                                Criar configuração inicial.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>beforeEach()</strong>
+                            </td>
+
+                            <td>
+                                Preparação por teste.
+                            </td>
+
+                            <td>
+                                Login ou navegação.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>afterEach()</strong>
+                            </td>
+
+                            <td>
+                                Limpeza por teste.
+                            </td>
+
+                            <td>
+                                Remover estado criado.
+                            </td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>
+                                <strong>after()</strong>
+                            </td>
+
+                            <td>
+                                Finalização única.
+                            </td>
+
+                            <td>
+                                Encerrar preparação global.
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     EXEMPLO COMPLETO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                15. Exemplo completo
+            </h2>
+
+            <p>
+                Agora vamos combinar os quatro hooks em uma mesma
+                suíte para visualizar o fluxo completo.
+            </p>
+
+            <pre><code>describe(<span class="sql-string">'Usuários'</span>, () =&gt; {
+
+before(() =&gt; {
+
+    cy.log(<span class="sql-string">'Preparação geral'</span>)
+
+})
+
+beforeEach(() =&gt; {
+
+    cy.visit(<span class="sql-string">'/usuarios'</span>)
+
+})
+
+it(<span class="sql-string">'deve listar usuários'</span>, () =&gt; {
+
+    cy.get(<span class="sql-string">'[data-testid="usuario"]'</span>)
+        .should(<span class="sql-string">'exist'</span>)
+
+})
+
+it(<span class="sql-string">'deve abrir usuário'</span>, () =&gt; {
+
+    cy.get(<span class="sql-string">'[data-testid="usuario"]'</span>)
+        .first()
+        .click()
+
+})
+
+afterEach(() =&gt; {
+
+    cy.log(<span class="sql-string">'Finalizando teste'</span>)
+
+})
+
+after(() =&gt; {
+
+    cy.log(<span class="sql-string">'Finalizando suíte'</span>)
+
+})
+
+})</code></pre>
+
+            <div class="highlight">
+
+                <p>
+                    Esse padrão permite separar claramente as ações
+                    de preparação, execução e finalização dos testes.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     BOAS PRÁTICAS
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Boas práticas com hooks
+            </h2>
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <div class="icon">
+                        🎯
+                    </div>
+
+                    <h3>
+                        Tenha um propósito claro
+                    </h3>
+
+                    <p>
+                        Cada hook deve executar ações relacionadas
+                        à preparação ou finalização dos testes.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        🧹
+                    </div>
+
+                    <h3>
+                        Mantenha a limpeza
+                    </h3>
+
+                    <p>
+                        Utilize hooks de finalização quando houver
+                        estado que precise ser limpo.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        📖
+                    </div>
+
+                    <h3>
+                        Preserve a legibilidade
+                    </h3>
+
+                    <p>
+                        Evite esconder comportamentos importantes
+                        dentro de hooks muito complexos.
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <div class="icon">
+                        ♻️
+                    </div>
+
+                    <h3>
+                        Reutilize com equilíbrio
+                    </h3>
+
+                    <p>
+                        Centralize somente aquilo que realmente
+                        é compartilhado entre os testes.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CHECKLIST
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Checklist da aula
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    ☐ Entendi o que são hooks.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar before().
+                </p>
+
+                <p>
+                    ☐ Sei utilizar beforeEach().
+                </p>
+
+                <p>
+                    ☐ Sei utilizar afterEach().
+                </p>
+
+                <p>
+                    ☐ Sei utilizar after().
+                </p>
+
+                <p>
+                    ☐ Entendi a diferença entre before e beforeEach.
+                </p>
+
+                <p>
+                    ☐ Entendi a diferença entre after e afterEach.
+                </p>
+
+                <p>
+                    ☐ Sei utilizar hooks para preparar um login.
+                </p>
+
+                <p>
+                    ☐ Sei combinar hooks com fixtures.
+                </p>
+
+                <p>
+                    ☐ Entendi a ordem básica de execução dos hooks.
+                </p>
+
+                <p>
+                    ☐ Sei identificar quando um hook pode reduzir
+                    duplicação de código.
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     RESUMO
+====================================================== -->
+
+        <section>
+
+            <h2>
+                Resumindo
+            </h2>
+
+            <div class="highlight">
+
+                <p>
+                    🪝 <strong>Hooks</strong>
+                    → executam ações em momentos específicos da suíte.
+                </p>
+
+                <p>
+                    ▶️ <strong>before()</strong>
+                    → executa uma vez antes dos testes do bloco.
+                </p>
+
+                <p>
+                    🔄 <strong>beforeEach()</strong>
+                    → executa antes de cada teste.
+                </p>
+
+                <p>
+                    🧹 <strong>afterEach()</strong>
+                    → executa depois de cada teste.
+                </p>
+
+                <p>
+                    🏁 <strong>after()</strong>
+                    → executa uma vez depois dos testes do bloco.
+                </p>
+
+                <p>
+                    ♻️ <strong>Organização</strong>
+                    → hooks podem reduzir repetição e centralizar
+                    preparações compartilhadas.
+                </p>
+
+            </div>
+
+            <p>
+                Agora você sabe como utilizar os principais hooks
+                do Cypress para organizar a preparação e a finalização
+                dos seus testes.
+            </p>
+
+            <p>
+                Na próxima aula vamos aprender sobre
+                <strong>Page Objects</strong>, uma estratégia para
+                organizar páginas e comportamentos reutilizáveis
+                em projetos de automação.
+            </p>
+
+        </section>
+
+        <!-- =====================================================
+     QUIZ
+====================================================== -->
+
+        <section class="quiz-section">
+
+            <div id="quiz-container">
+
+                <div id="tela-quiz">
+
+                    <h1>
+                        QUIZ sobre a aula 37
+                    </h1>
+
+                    <div id="contador"></div>
+
+                    <div id="pergunta"></div>
+
+                    <div id="opcoes"></div>
+
+                    <div id="feedback"></div>
+
+                    <button id="proxima-btn">
+                        Próxima pergunta →
+                    </button>
+
+                </div>
+
+                <div id="tela-resultado">
+
+                    <h2>
+                        Quiz finalizado!
+                    </h2>
+
+                    <div id="pontuacao-final"></div>
+
+                    <div id="mensagem-final"></div>
+
+                    <button id="reiniciar-btn">
+                        Jogar novamente
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+     CTA
+====================================================== -->
+
+        <section class="cta">
+
+            <h2>
+                Aula 37 concluída!
+            </h2>
+
+            <p>
+                Agora você já sabe utilizar before, beforeEach,
+                afterEach e after para organizar a execução dos
+                seus testes Cypress.
+            </p>
+
+            <a href="../aulas/aula-38.html" class="cta-button">
+                Aula 38 →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- =====================================================
+ FOOTER
+
+====================================================== -->
+
+    <footer>
+
+        <p>
+            Curso de Cypress - Hora do QA
+        </p>
+
+        <p>
+            Aula 37 • Hooks
+        </p>
+
+    </footer>
+
+    <!-- =====================================================
+ JAVASCRIPT
+
+====================================================== -->
+
+    <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/aula-37.js"></script>
+
+</body>
+
+</html>
